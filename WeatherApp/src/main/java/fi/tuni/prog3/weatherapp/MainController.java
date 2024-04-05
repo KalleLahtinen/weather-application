@@ -1,6 +1,7 @@
 package fi.tuni.prog3.weatherapp;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
@@ -26,7 +28,8 @@ import javafx.stage.Stage;
 class MainController {
     private Stage stage;
     private Label cityTextLabel; // For dynamic text updates
-    private BorderPane rootLayout; // 
+    private BorderPane rootLayout; // The main layout for the elements
+    private StackPane viewContainer; // This will hold the views to enable transition effects
 
     /**
      * Constructs a new MainController with a reference to the primary stage.
@@ -40,16 +43,33 @@ class MainController {
     }
 
     /**
-     * Initializes the main view of the application by setting up the initial
-     * layout, including a toolbar and the default content area. The default
-     * view presented is the forecast view.
+     * Initializes the main view of the application.
+     *
+     * This method sets up the primary layout structure, including a toolbar at the top, 
+     * a container for switching between different views in the center, and a view selector 
+     * tab bar at the bottom. The main view container is designed to hold multiple views, 
+     * but initially displays only the first view to the user.
      */
     public void initMainView() {
         rootLayout = new BorderPane();
-        ToolBar toolBar = createToolBar();
-        rootLayout.setTop(toolBar);
+        // Create a toolbar at top of layout
+        createToolbar();
+
+        // Initialize the views in the application
+        viewContainer = new StackPane();
+        Node view1Content = new Label("View 1 Content"); // Replace with actual view
+        Node view2Content = new Label("View 2 Content"); // Replace with actual view
+        Node view3Content = new Label("View 3 Content"); // Replace with actual view
+
+        // Only the first view is initially visible
+        viewContainer.getChildren().addAll(view1Content, view2Content, view3Content);
+        view2Content.setVisible(false);
+        view3Content.setVisible(false);
         
-        switchToForecastView(); // Default view
+        rootLayout.setCenter(viewContainer);
+
+        // Create a view selector at bottom of layout
+        createBottomTabBar();
 
         Scene scene = new Scene(rootLayout, 400, 300);
         stage.setScene(scene);
@@ -62,7 +82,7 @@ class MainController {
      *
      * @return A configured ToolBar instance with navigation buttons and a "city" label.
      */
-    private ToolBar createToolBar() {
+    private void createToolbar() {
         ToolBar toolbar = new ToolBar();
         
         Button forecastButton = new Button("Forecast");
@@ -90,7 +110,37 @@ class MainController {
 
         toolbar.getItems().addAll(forecastButton, leftSpacer, labelContainer, rightSpacer, weatherMapButton);
         
-        return toolbar;
+        rootLayout.setTop(toolbar);
+    }
+    
+    /**
+    * Creates and initializes the bottom tab bar for view selection.
+    * 
+    * This method sets up a horizontal box with buttons to switch between different application views.
+    * Each button is configured with an action to switch views when clicked. The bottom tab bar is 
+    * added to the bottom of the root layout, and the first view is selected by default.
+    */
+    private void createBottomTabBar() {
+        HBox bottomToolbar = new HBox(10); // Spacing between buttons
+        bottomToolbar.setAlignment(Pos.CENTER);
+        
+        Button btnView1, btnView2, btnView3; // Buttons to switch views
+
+        // Initialize buttons
+        btnView1 = new Button("View 1");
+        btnView2 = new Button("View 2");
+        btnView3 = new Button("View 3");
+
+        // Button actions
+        btnView1.setOnAction(e -> switchToForecastView());
+        btnView2.setOnAction(e -> switchToWeatherMapView());
+        btnView3.setOnAction(e -> switchToForecastView());
+
+        bottomToolbar.getChildren().addAll(btnView1, btnView2, btnView3);
+        rootLayout.setBottom(bottomToolbar);
+
+        // Initially select the first view
+        switchToForecastView();
     }
 
     /**

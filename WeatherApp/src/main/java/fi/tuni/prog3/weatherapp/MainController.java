@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
  * @author Kalle Lahtinen
  */
 class MainController {
-    private Stage stage;
+    private final Stage stage;
     private Label cityTextLabel; // For dynamic text updates
     private BorderPane rootLayout; // The main layout for the elements
     private StackPane viewContainer; // This will hold the views to enable transition effects
@@ -85,13 +86,11 @@ class MainController {
     private void createToolbar() {
         ToolBar toolbar = new ToolBar();
         
-        Button forecastButton = new Button("Forecast");
-        forecastButton.setOnAction(e -> switchToForecastView());
+        Button exampleButton = new Button("Placeholder");
 
-        Button weatherMapButton = new Button("Weather Map");
-        weatherMapButton.setOnAction(e -> switchToWeatherMapView());
+        TextField searchBar = Utils.createSearchBarWithSuggestions();
 
-        cityTextLabel = new Label("Welcome");
+        cityTextLabel = new Label("City here");
 
         // Use Regions as flexible spacers
         Region leftSpacer = new Region();
@@ -108,7 +107,7 @@ class MainController {
         leftSpacer.setMaxWidth(Double.MAX_VALUE);
         rightSpacer.setMaxWidth(Double.MAX_VALUE);
 
-        toolbar.getItems().addAll(forecastButton, leftSpacer, labelContainer, rightSpacer, weatherMapButton);
+        toolbar.getItems().addAll(exampleButton, leftSpacer, labelContainer, rightSpacer, searchBar);
         
         rootLayout.setTop(toolbar);
     }

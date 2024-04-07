@@ -1,5 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
+import com.google.gson.JsonArray;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,6 +35,7 @@ public class WeatherData {
       connection.disconnect();
       
       rawData = response.toString();
+      System.out.println(rawData);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -44,6 +46,14 @@ public class WeatherData {
       // Parse JSON response
       JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
       
+      // Get current weather description
+      JsonArray weatherArray = jsonObject.getAsJsonArray("weather");
+      JsonObject weatherObject = weatherArray.get(0).getAsJsonObject();
+      
+      String mainWeather = weatherObject.get("main").getAsString();
+      String weatherDescription = weatherObject.get("description").getAsString();
+      String iconId = weatherObject.get("icon").getAsString();
+      
       // Get current temperature and feels like temperature
       JsonObject mainObject = jsonObject.getAsJsonObject("main");
       double temperature = mainObject.get("temp").getAsDouble();
@@ -52,15 +62,12 @@ public class WeatherData {
       // Get the speed of wind
       JsonObject windObject = jsonObject.getAsJsonObject("wind");
       double windSpeed = windObject.get("speed").getAsDouble();
-        
-      System.out.println("London:");
-      System.out.println(temperature);
-      System.out.println(feelsLike);
-      System.out.println(windSpeed);
       
-      
-      
-      
+      // If it's raining get rain in millimeters
+      if (mainWeather.equals("Rain")) {
+        JsonObject rainObject = jsonObject.getAsJsonObject("rain");
+        double rainAmount = rainObject.get("1h").getAsDouble();
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

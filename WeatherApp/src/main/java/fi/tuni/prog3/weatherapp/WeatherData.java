@@ -35,7 +35,6 @@ public class WeatherData {
       connection.disconnect();
       
       rawData = response.toString();
-      System.out.println(rawData);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -63,11 +62,26 @@ public class WeatherData {
       JsonObject windObject = jsonObject.getAsJsonObject("wind");
       double windSpeed = windObject.get("speed").getAsDouble();
       
+      // Initialize rain with default value
+      double rainAmount = 0.0;
+      
       // If it's raining get rain in millimeters
       if (mainWeather.equals("Rain")) {
         JsonObject rainObject = jsonObject.getAsJsonObject("rain");
-        double rainAmount = rainObject.get("1h").getAsDouble();
+        rainAmount = rainObject.get("1h").getAsDouble();
       }
+      
+      Weather finalObject = new Weather(
+        mainWeather,
+        weatherDescription,
+        iconId,
+        temperature,
+        feelsLike,
+        windSpeed,
+        rainAmount
+      );
+      
+      System.out.println(finalObject);
     } catch (Exception e) {
       e.printStackTrace();
     }

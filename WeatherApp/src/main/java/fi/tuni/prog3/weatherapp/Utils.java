@@ -17,7 +17,20 @@ public class Utils {
      * @return A configured TextField with autocomplete and clear functionalities.
      */
     public static TextField createSearchBarWithSuggestions() {
-        var suggestions = FXCollections.observableArrayList("Apple", "Banana", "Cherry", "Date");
+        var suggestions = FXCollections.observableArrayList(
+                "Tampere",
+                "Helsinki",
+                "Turku",
+                "Amsterdam",
+                "Paris",
+                "New York",
+                "Tokyo",
+                "London",
+                "Sydney",
+                "Moscow",
+                "Rio de Janeiro",
+                "Beijing",
+                "Cape Town");
 
         // Create a clearable TextField
         TextField searchField = TextFields.createClearableTextField();

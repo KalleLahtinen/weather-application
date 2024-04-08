@@ -58,7 +58,7 @@ public class WeatherData {
       double temperature = mainObject.get("temp").getAsDouble();
       double feelsLike = mainObject.get("feels_like").getAsDouble();
       
-      // Get the speed of wind
+      // Get the wind speed
       JsonObject windObject = jsonObject.getAsJsonObject("wind");
       double windSpeed = windObject.get("speed").getAsDouble();
       
@@ -82,6 +82,7 @@ public class WeatherData {
       );
       
       System.out.println(finalObject);
+      
     } catch (Exception e) {
       e.printStackTrace();
     }

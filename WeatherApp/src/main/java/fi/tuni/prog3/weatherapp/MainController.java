@@ -28,7 +28,9 @@ import javafx.stage.Stage;
  */
 class MainController {
     private final Stage stage;
+    private final ViewController viewController;
     private Label cityTextLabel; // For dynamic text updates
+    private TextField searchBar;
     private BorderPane rootLayout; // The main layout for the elements
     private StackPane viewContainer; // This will hold the views to enable transition effects
 
@@ -41,6 +43,7 @@ class MainController {
      */
     public MainController(Stage stage) {
         this.stage = stage;
+        viewController = new ViewController();
     }
 
     /**
@@ -57,15 +60,7 @@ class MainController {
         createToolbar();
 
         // Initialize the views in the application
-        viewContainer = new StackPane();
-        Node view1Content = new Label("View 1 Content"); // Replace with actual view
-        Node view2Content = new Label("View 2 Content"); // Replace with actual view
-        Node view3Content = new Label("View 3 Content"); // Replace with actual view
-
-        // Only the first view is initially visible
-        viewContainer.getChildren().addAll(view1Content, view2Content, view3Content);
-        view2Content.setVisible(false);
-        view3Content.setVisible(false);
+        viewContainer = viewController.initViewContainer();
         
         rootLayout.setCenter(viewContainer);
 
@@ -88,7 +83,8 @@ class MainController {
         
         Button exampleButton = new Button("Placeholder");
 
-        TextField searchBar = Utils.createSearchBarWithSuggestions();
+        searchBar = Utils.createSearchBarWithSuggestions();
+        searchBar.setOnAction(e -> searchHandler());
 
         cityTextLabel = new Label("City here");
 
@@ -131,29 +127,20 @@ class MainController {
         btnView3 = new Button("View 3");
 
         // Button actions
-        btnView1.setOnAction(e -> switchToForecastView());
-        btnView2.setOnAction(e -> switchToWeatherMapView());
-        btnView3.setOnAction(e -> switchToForecastView());
+        btnView1.setOnAction(e -> viewController.switchView(ViewController.View.FORECAST));
+        btnView2.setOnAction(e -> viewController.switchView(ViewController.View.WEATHERMAP));
+        btnView3.setOnAction(e -> viewController.switchView(ViewController.View.HISTORY));
 
         bottomToolbar.getChildren().addAll(btnView1, btnView2, btnView3);
         rootLayout.setBottom(bottomToolbar);
-
-        // Initially select the first view
-        switchToForecastView();
     }
-
-    /**
-     * Switches the main content area of the application to the weather forecast view.
-     */
-    public void switchToForecastView() {
-        rootLayout.setCenter(new Label("Forecast View")); // Placeholder for actual forecast view content.
-    }
-
-    /**
-     * Switches the main content area of the application to the weather map view.
-     */
-    public void switchToWeatherMapView() {
-        rootLayout.setCenter(new Label("Weather Map View")); // Placeholder for actual weather map view content.
+    
+    public void searchHandler() {
+        //Weather weatherData = WeatherData.parseWeatherData(searchBar.getText());
+        //if (weatherData != null) {
+        //    viewContainer = viewController.initViewContainer();
+        //}
+        
     }
 
     /**

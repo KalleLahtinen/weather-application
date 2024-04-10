@@ -42,6 +42,12 @@ public class WeatherData {
   
   public void parseWeatherData() {
     try {
+      // TODO:
+      // Temperature MIN & MAX
+      // Location to LONGITUDE LATITUDE with Geocoding API
+      // AIR QUALITY
+      // METRIC TO IMPERIAL AND OTHERWAY AROUND
+        
       // Parse JSON response
       JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
       
@@ -71,18 +77,29 @@ public class WeatherData {
         rainAmount = rainObject.get("1h").getAsDouble();
       }
       
+      // Get current weather min and max temperature
+      double maxTemperature = mainObject.get("temp_max").getAsDouble();
+      double minTemperature = mainObject.get("temp_min").getAsDouble();
+      
+      // Get longitude and latitude
+      JsonObject coordObject = jsonObject.getAsJsonObject("coord");
+      double longitude = coordObject.get("lon").getAsDouble();
+      double latitude = coordObject.get("lat").getAsDouble();
+      
+      
       Weather finalObject = new Weather(
+        longitude,
+        latitude,
         mainWeather,
         weatherDescription,
         iconId,
         temperature,
+        maxTemperature,
+        minTemperature,
         feelsLike,
         windSpeed,
         rainAmount
       );
-      
-      System.out.println(finalObject);
-      
     } catch (Exception e) {
       e.printStackTrace();
     }

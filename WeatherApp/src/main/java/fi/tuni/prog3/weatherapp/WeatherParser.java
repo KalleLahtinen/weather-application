@@ -5,6 +5,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.DayOfWeek;
+import java.time.format.DateTimeFormatter;
+
 
 public class WeatherParser {
     public ArrayList<Double> parseLookUpLocation(String rawData) {
@@ -29,7 +37,7 @@ public class WeatherParser {
     
     public Weather parseCurrentWeather(String rawData) {
         try {
-            // Parse JSON response in String
+            // Parse JSON response
             JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
             
             // Get longitude and latitude
@@ -83,9 +91,43 @@ public class WeatherParser {
     }
     
     public List<Weather> parseForecast(String rawData) {
+        System.out.println(rawData);
         // Parse raw data into a list of Weather objects for forecast
         // Example: extract temperature, humidity, weather description for each forecast period
+        
         List<Weather> forecast = new ArrayList<>();
+        
+        // Parse JSON response
+        JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
+        
+        JsonArray daysArray = jsonObject.getAsJsonArray("list");
+        
+        for (int i = 0; i < daysArray.size(); i++) {
+            
+            JsonObject dayObject = daysArray.get(i).getAsJsonObject();
+            
+            long timestamp = dayObject.get("dt").getAsLong();
+            
+            LocalDateTime dateTime = LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(timestamp),
+                ZoneId.systemDefault()
+            );
+                        
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");                        
+            DayOfWeek dayOfWeek = dateTime.getDayOfWeek();
+
+            String formattedDate = dayOfWeek + " " + dateTime.format(formatter);
+
+            System.out.println(formattedDate);
+             
+            JsonObject mainObject = dayObject.getAsJsonObject("temp");
+            double minTemp = mainObject.get("min").getAsDouble();
+            double maxTemp = mainObject.get("max").getAsDouble();
+            
+            Map<String, List<Weather>> days = new HashMap<>();
+        }
+        
+
         // Populate forecast list with parsed data
         return forecast;
     }

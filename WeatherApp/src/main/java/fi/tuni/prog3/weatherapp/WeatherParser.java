@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherParser {
-    public ArrayList<String> parseLookUpLocation(String rawData) {
+    public ArrayList<Double> parseLookUpLocation(String rawData) {
         try {
             JsonArray jsonArray = JsonParser.parseString(rawData).getAsJsonArray();
             
             JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
-            String latitude = locationObject.get("lat").getAsString();
-            String longitude = locationObject.get("lon").getAsString();
+            double latitude = locationObject.get("lat").getAsDouble();
+            double longitude = locationObject.get("lon").getAsDouble();
             
-            ArrayList<String> coordinates = new ArrayList<String>();
-            
+            ArrayList<Double> coordinates = new ArrayList<Double>();
+
             coordinates.add(latitude);
             coordinates.add(longitude);
             

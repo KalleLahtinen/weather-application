@@ -1,107 +1,66 @@
 package fi.tuni.prog3.weatherapp;
 
-import com.google.gson.JsonArray;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-public class WeatherData {
-  private static final String API_KEY = "70cbfe7c86c4f2fcdd9fb493ace70183";
-  private static final String API_URL = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s&units=metric";
-  
-  private String rawData = "";
-
-  public void fetchWeatherData(String location) {
-    String urlString = String.format(API_URL, location, API_KEY);
+public class WeatherData implements iAPI {
+    private static final String API_KEY = "70cbfe7c86c4f2fcdd9fb493ace70183"; // Replace with your actual API key
+    private static final String GEOLOCATION_API = "http://api.openweathermap.org/geo/1.0/direct";
+    private static final String CURRENT_WEATHER_API = "http://api.openweathermap.org/data/2.5/weather";
+    private static final String FORECAST_API = "http://api.openweathermap.org/data/2.5/forecast";
     
-    try {
-      URL url = new URL(urlString);
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      
-      BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      String inputLine;
-      StringBuilder response = new StringBuilder();
-      
-      while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine);
-      }
-      in.close();
-      
-      connection.disconnect();
-      
-      rawData = response.toString();
-    } catch (IOException e) {
-      e.printStackTrace();
+    @Override
+    public String lookUpLocation(String loc) {
+        try {
+            String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, loc, API_KEY);
+            return fetchDataFromAPI(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-  }
-  
-  public void parseWeatherData() {
-    try {
-      // TODO:
-      // Temperature MIN & MAX
-      // Location to LONGITUDE LATITUDE with Geocoding API
-      // AIR QUALITY
-      // METRIC TO IMPERIAL AND OTHERWAY AROUND
+    
+    @Override
+    public String getCurrentWeather(double lat, double lon) {
+        try {
+            String url = String.format("%s?lat=%s&lon=%s&appid=%s", CURRENT_WEATHER_API, lat, lon, API_KEY);
+            return fetchDataFromAPI(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String getForecast(double lat, double lon) {
+        try {
+            String url = String.format("%s?lat=%s&lon=%s&appid=%s", FORECAST_API, lat, lon, API_KEY);
+            return fetchDataFromAPI(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    
+    private String fetchDataFromAPI(String apiUrl) throws IOException {
+        URL url = new URL(apiUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
         
-      // Parse JSON response
-      JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
-      
-      // Get current weather description
-      JsonArray weatherArray = jsonObject.getAsJsonArray("weather");
-      JsonObject weatherObject = weatherArray.get(0).getAsJsonObject();
-      
-      String mainWeather = weatherObject.get("main").getAsString();
-      String weatherDescription = weatherObject.get("description").getAsString();
-      String iconId = weatherObject.get("icon").getAsString();
-      
-      // Get current temperature and feels like temperature
-      JsonObject mainObject = jsonObject.getAsJsonObject("main");
-      double temperature = mainObject.get("temp").getAsDouble();
-      double feelsLike = mainObject.get("feels_like").getAsDouble();
-      
-      // Get the wind speed
-      JsonObject windObject = jsonObject.getAsJsonObject("wind");
-      double windSpeed = windObject.get("speed").getAsDouble();
-      
-      // Initialize rain with default value
-      double rainAmount = 0.0;
-      
-      // If it's raining get rain in millimeters
-      if (mainWeather.equals("Rain")) {
-        JsonObject rainObject = jsonObject.getAsJsonObject("rain");
-        rainAmount = rainObject.get("1h").getAsDouble();
-      }
-      
-      // Get current weather min and max temperature
-      double maxTemperature = mainObject.get("temp_max").getAsDouble();
-      double minTemperature = mainObject.get("temp_min").getAsDouble();
-      
-      // Get longitude and latitude
-      JsonObject coordObject = jsonObject.getAsJsonObject("coord");
-      double longitude = coordObject.get("lon").getAsDouble();
-      double latitude = coordObject.get("lat").getAsDouble();
-      
-      
-      Weather finalObject = new Weather(
-        longitude,
-        latitude,
-        mainWeather,
-        weatherDescription,
-        iconId,
-        temperature,
-        maxTemperature,
-        minTemperature,
-        feelsLike,
-        windSpeed,
-        rainAmount
-      );
-    } catch (Exception e) {
-      e.printStackTrace();
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        } 
+        in.close();
+        connection.disconnect();
+        System.out.println(response.toString());
+        return response.toString();
     }
-  }
 }

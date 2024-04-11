@@ -32,6 +32,7 @@ public class WeatherParser {
             coordinates.add(latitude);
             coordinates.add(longitude);
             
+            // TODO: Check for enum, pair etc.
             return coordinates;
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +79,8 @@ public class WeatherParser {
             }
             
             // Create and return a Weather object with the extracted data
+            // Jokainen Mapin avain vastaisi yhtä arvoa
+            
             return new Weather(
                         longitude,
                         latitude,
@@ -111,13 +114,14 @@ public class WeatherParser {
             // Extract timestamp for the day
             long timestamp = dayObject.get("dt").getAsLong();
             
-            // Convert timestamp to LocalDateTime
+            // Convert integer value 32bit timestamp to LocalDateTime
             LocalDateTime dateTime = LocalDateTime.ofInstant(
                 Instant.ofEpochSecond(timestamp),
                 ZoneId.systemDefault()
             );
                 
             // Format date as day of the week and date
+            // TODO: DateTime object
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");                        
             DayOfWeek dayOfWeek = dateTime.getDayOfWeek();
             String formattedDate = dayOfWeek + " " + dateTime.format(formatter);
@@ -135,4 +139,18 @@ public class WeatherParser {
 
         return days;
     }
+    
+    /*
+    Palauttaa HashMapin jossa on päivämääräolioita avaimena ja DailyWeather arvon
+    HashMap<PVM, DailyWeather>
+        - DailyWeather
+            - avgTemp
+            - minTemp
+            - maxTemp
+            - HashMap<(0,1,2,3 jne.) HourlyWeather> hourlyWeathers
+                - HourlyWeather
+                    - HourlyWeather näkymän arvoja
+                    - temp
+                    - wind jne. jne.
+    */
 }

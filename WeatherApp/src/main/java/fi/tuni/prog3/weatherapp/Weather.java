@@ -5,7 +5,6 @@ public class Weather {
     private double latitude;
     private String mainWeather;
     private String weatherDescription;
-    private String iconId;
     private double temperature;
     private double maxTemperature;
     private double minTemperature;
@@ -18,7 +17,6 @@ public class Weather {
       double latitude,
       String mainWeather,
       String weatherDescription,
-      String iconId,
       double temperature,
       double maxTemperature,
       double minTemperature,
@@ -30,7 +28,6 @@ public class Weather {
         this.latitude = latitude;
         this.mainWeather = mainWeather;
         this.weatherDescription = weatherDescription;
-        this.iconId = iconId;
         this.temperature = temperature;
         this.maxTemperature = maxTemperature;
         this.minTemperature = minTemperature;
@@ -53,10 +50,6 @@ public class Weather {
 
     public String getWeatherDescription() {
       return weatherDescription;
-    }
-
-    public String getIconId() {
-      return iconId;
     }
 
     public double getTemperature() {

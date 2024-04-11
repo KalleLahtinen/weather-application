@@ -15,16 +15,20 @@ import java.time.format.DateTimeFormatter;
 
 
 public class WeatherParser {
+    
+    // Method to parse location data from the API response
     public ArrayList<Double> parseLookUpLocation(String rawData) {
         try {
+            // Parse JSON response
             JsonArray jsonArray = JsonParser.parseString(rawData).getAsJsonArray();
             
+            // Extract latitude and longitude
             JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
             double latitude = locationObject.get("lat").getAsDouble();
             double longitude = locationObject.get("lon").getAsDouble();
             
+            // Create an ArrayList to store coordinates and add latitude and longitude
             ArrayList<Double> coordinates = new ArrayList<Double>();
-
             coordinates.add(latitude);
             coordinates.add(longitude);
             
@@ -35,43 +39,45 @@ public class WeatherParser {
         }
     }
     
+    // Method to parse current weather data from the API response
     public Weather parseCurrentWeather(String rawData) {
         try {
             // Parse JSON response
             JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
             
-            // Get longitude and latitude
+            // Extract longitude and latitude
             JsonObject coordObject = jsonObject.getAsJsonObject("coord");
             double longitude = coordObject.get("lon").getAsDouble();
             double latitude = coordObject.get("lat").getAsDouble();
             
-            // Get current weather description
+            // Extract current weather description
             JsonArray weatherArray = jsonObject.getAsJsonArray("weather");
             JsonObject weatherObject = weatherArray.get(0).getAsJsonObject();
             
             String mainWeather = weatherObject.get("main").getAsString();
             String weatherDescription = weatherObject.get("description").getAsString();
             
-            // Get current temperature, feels like temperature, min and max
+            // Extract current temperature, feels like temperature, min and max
             JsonObject mainObject = jsonObject.getAsJsonObject("main");
             double temperature = mainObject.get("temp").getAsDouble();
             double feelsLike = mainObject.get("feels_like").getAsDouble();
             double minTemp = mainObject.get("temp_min").getAsDouble();
             double maxTemp = mainObject.get("temp_max").getAsDouble();
             
-            // Get the wind speed
+            // Extract wind speed
             JsonObject windObject = jsonObject.getAsJsonObject("wind");
             double windSpeed = windObject.get("speed").getAsDouble();
             
             // Initialize rain with default value
             double rainAmount = 0.0;
             
-            
+            // Check if it's raining and extract rain amount
             if (mainWeather.equals("Rain")) {
                 JsonObject rainObject = jsonObject.getAsJsonObject("rain");
                 rainAmount = rainObject.get("1h").getAsDouble();
             }
             
+            // Create and return a Weather object with the extracted data
             return new Weather(
                         longitude,
                         latitude,
@@ -90,45 +96,43 @@ public class WeatherParser {
         }
     }
     
-    public List<Weather> parseForecast(String rawData) {
-        System.out.println(rawData);
-        // Parse raw data into a list of Weather objects for forecast
-        // Example: extract temperature, humidity, weather description for each forecast period
-        
-        List<Weather> forecast = new ArrayList<>();
+    // Method to parse forecast data from the API response
+    public Map<String, List<Double>> parseForecast(String rawData) {
+        Map<String, List<Double>> days = new HashMap<>();
         
         // Parse JSON response
         JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
         
+        // Extract forecast data for each day
         JsonArray daysArray = jsonObject.getAsJsonArray("list");
-        
-        for (int i = 0; i < daysArray.size(); i++) {
-            
+        for (int i = 0; i < daysArray.size(); i++) {   
             JsonObject dayObject = daysArray.get(i).getAsJsonObject();
             
+            // Extract timestamp for the day
             long timestamp = dayObject.get("dt").getAsLong();
             
+            // Convert timestamp to LocalDateTime
             LocalDateTime dateTime = LocalDateTime.ofInstant(
                 Instant.ofEpochSecond(timestamp),
                 ZoneId.systemDefault()
             );
-                        
+                
+            // Format date as day of the week and date
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");                        
             DayOfWeek dayOfWeek = dateTime.getDayOfWeek();
-
             String formattedDate = dayOfWeek + " " + dateTime.format(formatter);
-
-            System.out.println(formattedDate);
-             
+            
+            // Extract min and max temperature for the day
             JsonObject mainObject = dayObject.getAsJsonObject("temp");
             double minTemp = mainObject.get("min").getAsDouble();
             double maxTemp = mainObject.get("max").getAsDouble();
-            
-            Map<String, List<Weather>> days = new HashMap<>();
-        }
         
+            // Add temperature range to the map with the formatted date as key
+            days.put(formattedDate, new ArrayList<>());
+            days.get(formattedDate).add(minTemp);
+            days.get(formattedDate).add(maxTemp);     
+        }
 
-        // Populate forecast list with parsed data
-        return forecast;
+        return days;
     }
 }

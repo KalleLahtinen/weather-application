@@ -1,6 +1,7 @@
 package fi.tuni.prog3.weatherapp;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for extracting data from the OpenWeatherMap API.
@@ -28,5 +29,5 @@ public interface iAPI {
      * @param lon The longitude of the location.
      * @return String.
      */
-    public List<Weather> getForecast(double lat, double lon);
+    public Map<String, List<Double>> getForecast(double lat, double lon);
 }

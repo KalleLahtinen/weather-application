@@ -1,156 +1,96 @@
 package fi.tuni.prog3.weatherapp;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.DayOfWeek;
-import java.time.format.DateTimeFormatter;
 
-
+/**
+ * A class containing parse functions for turning a Json response into weather objects
+ */
 public class WeatherParser {
-    
-    // Method to parse location data from the API response
-    public ArrayList<Double> parseLookUpLocation(String rawData) {
-        try {
-            // Parse JSON response
-            JsonArray jsonArray = JsonParser.parseString(rawData).getAsJsonArray();
-            
-            // Extract latitude and longitude
-            JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
-            double latitude = locationObject.get("lat").getAsDouble();
-            double longitude = locationObject.get("lon").getAsDouble();
-            
-            // Create an ArrayList to store coordinates and add latitude and longitude
-            ArrayList<Double> coordinates = new ArrayList<Double>();
-            coordinates.add(latitude);
-            coordinates.add(longitude);
-            
-            // TODO: Check for enum, pair etc.
-            return coordinates;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    
-    // Method to parse current weather data from the API response
-    public Weather parseCurrentWeather(String rawData) {
-        try {
-            // Parse JSON response
-            JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
-            
-            // Extract longitude and latitude
-            JsonObject coordObject = jsonObject.getAsJsonObject("coord");
-            double longitude = coordObject.get("lon").getAsDouble();
-            double latitude = coordObject.get("lat").getAsDouble();
-            
-            // Extract current weather description
-            JsonArray weatherArray = jsonObject.getAsJsonArray("weather");
-            JsonObject weatherObject = weatherArray.get(0).getAsJsonObject();
-            
-            String mainWeather = weatherObject.get("main").getAsString();
-            String weatherDescription = weatherObject.get("description").getAsString();
-            
-            // Extract current temperature, feels like temperature, min and max
-            JsonObject mainObject = jsonObject.getAsJsonObject("main");
-            double temperature = mainObject.get("temp").getAsDouble();
-            double feelsLike = mainObject.get("feels_like").getAsDouble();
-            double minTemp = mainObject.get("temp_min").getAsDouble();
-            double maxTemp = mainObject.get("temp_max").getAsDouble();
-            
-            // Extract wind speed
-            JsonObject windObject = jsonObject.getAsJsonObject("wind");
-            double windSpeed = windObject.get("speed").getAsDouble();
-            
-            // Initialize rain with default value
-            double rainAmount = 0.0;
-            
-            // Check if it's raining and extract rain amount
-            if (mainWeather.equals("Rain")) {
-                JsonObject rainObject = jsonObject.getAsJsonObject("rain");
-                rainAmount = rainObject.get("1h").getAsDouble();
-            }
-            
-            // Create and return a Weather object with the extracted data
-            // Jokainen Mapin avain vastaisi yhtä arvoa
-            
-            return new Weather(
-                        longitude,
-                        latitude,
-                        mainWeather,
-                        weatherDescription,
-                        temperature,
-                        minTemp,
-                        maxTemp,
-                        feelsLike,
-                        windSpeed,
-                        rainAmount
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    
-    // Method to parse forecast data from the API response
-    public Map<String, List<Double>> parseForecast(String rawData) {
-        Map<String, List<Double>> days = new HashMap<>();
-        
-        // Parse JSON response
-        JsonObject jsonObject = JsonParser.parseString(rawData).getAsJsonObject();
-        
-        // Extract forecast data for each day
-        JsonArray daysArray = jsonObject.getAsJsonArray("list");
-        for (int i = 0; i < daysArray.size(); i++) {   
-            JsonObject dayObject = daysArray.get(i).getAsJsonObject();
-            
-            // Extract timestamp for the day
-            long timestamp = dayObject.get("dt").getAsLong();
-            
-            // Convert integer value 32bit timestamp to LocalDateTime
-            LocalDateTime dateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochSecond(timestamp),
-                ZoneId.systemDefault()
-            );
-                
-            // Format date as day of the week and date
-            // TODO: DateTime object
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");                        
-            DayOfWeek dayOfWeek = dateTime.getDayOfWeek();
-            String formattedDate = dayOfWeek + " " + dateTime.format(formatter);
-            
-            // Extract min and max temperature for the day
-            JsonObject mainObject = dayObject.getAsJsonObject("temp");
-            double minTemp = mainObject.get("min").getAsDouble();
-            double maxTemp = mainObject.get("max").getAsDouble();
-        
-            // Add temperature range to the map with the formatted date as key
-            days.put(formattedDate, new ArrayList<>());
-            days.get(formattedDate).add(minTemp);
-            days.get(formattedDate).add(maxTemp);     
-        }
+    /**
+     * A method for parsing a Json string into individual DailyWeather objects
+     * @param jsonResponse The Json response string containing weather data
+     * @param units The units of measurement the data is to be represented in.
+     * @return A Map of DailyWeather objects sorted by time as Instant
+     */
+    public static Map<Instant, DailyWeather> parseDailyForecast(String jsonResponse, String units) {
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
+        JsonArray days = jsonObject.getAsJsonArray("list");
+        // Save the DailyWeather objects in a map sorted by time as Instant
+        Map<Instant, DailyWeather> weatherMap = new HashMap<>();
 
-        return days;
+        // Create a DailyWeather object for every day in json response
+        for (int i = 0; i < days.size(); i++) {
+            // Use Instant to represent universal UTC time, as with API
+            JsonObject day = days.get(i).getAsJsonObject();
+            Instant date = Instant.ofEpochSecond(day.get("dt").getAsLong());
+            JsonObject temp = day.getAsJsonObject("temp");
+            JsonObject feelsLike = day.getAsJsonObject("feels_like");
+            
+            DailyWeather weather = new DailyWeather(
+                    date, 
+                    temp.get("day").getAsDouble(), 
+                    temp.get("min").getAsDouble(), 
+                    temp.get("max").getAsDouble(), 
+                    feelsLike.get("day").getAsDouble(), 
+                    day.get("speed").getAsDouble(), 
+                    day.has("rain") ? day.get("rain").getAsDouble() : 0.0, 
+                    day.getAsJsonArray("weather").get(0)
+                    .getAsJsonObject().get("description").getAsString(), 
+                    units
+            );
+            weatherMap.put(date, weather);
+        }
+        return weatherMap;
     }
     
-    /*
-    Palauttaa HashMapin jossa on päivämääräolioita avaimena ja DailyWeather arvon
-    HashMap<PVM, DailyWeather>
-        - DailyWeather
-            - avgTemp
-            - minTemp
-            - maxTemp
-            - HashMap<(0,1,2,3 jne.) HourlyWeather> hourlyWeathers
-                - HourlyWeather
-                    - HourlyWeather näkymän arvoja
-                    - temp
-                    - wind jne. jne.
-    */
+    /**
+     * A method for parsing a Json string into individual HourlyWeather objects
+     * @param jsonResponse The Json response string containing weather data
+     * @param units The units of measurement the data is to be represented in.
+     * @return A Map of HourlyWeather objects sorted by time as Instant
+     */
+    public static Map<Instant, HourlyWeather> parseHourlyForecast(String jsonResponse, String units) {
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
+        JsonArray hours = jsonObject.getAsJsonArray("list");
+        // Save the HourlyWeather objects in a map sorted by time as Instant
+        Map<Instant, HourlyWeather> weatherData = new HashMap<>();
+        
+        // Create a DailyWeather object for every day in json response
+        for (int i = 0; i < hours.size(); i++) {
+            JsonObject element = hours.getAsJsonObject();
+            JsonObject main = element.getAsJsonObject("main");
+            JsonObject wind = element.getAsJsonObject("wind");
+            JsonArray weatherArray = element.getAsJsonArray("weather");
+            JsonObject weather = weatherArray.get(0).getAsJsonObject();
+            JsonObject rain = element.getAsJsonObject("rain");
+            
+            // Use Instant to represent universal UTC time, as with API
+            long epochSeconds = element.get("dt").getAsLong();
+            Instant date = Instant.ofEpochSecond(epochSeconds);
+            
+            HourlyWeather hourlyWeather = new HourlyWeather(
+                    date,
+                    main.get("temp").getAsDouble(),
+                    main.get("feels_like").getAsDouble(),
+                    main.get("pressure").getAsInt(),
+                    main.get("humidity").getAsInt(),
+                    wind.get("speed").getAsDouble(),
+                    wind.get("deg").getAsInt(),
+                    weather.get("description").getAsString(),
+                    weather.get("icon").getAsString(),
+                    // Take into consideration places with no rain
+                    rain != null ? rain.get("1h").getAsDouble() : 0.0,
+                    units
+            );
+            weatherData.put(date, hourlyWeather);
+        }
+        return weatherData;
+    }
 }

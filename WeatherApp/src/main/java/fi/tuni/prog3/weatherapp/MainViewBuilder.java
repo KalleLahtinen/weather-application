@@ -1,7 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,7 +15,7 @@ import javafx.stage.Stage;
 
 
 /**
- * Controller for the main application window in a JavaFX application.
+ * A builder for the main application window in the WeatherApp application.
  * 
  * This class is responsible for initializing the application's main window,
  * setting up the initial view, and managing transitions between different

@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * Class implementing the iAPI interface to interact with OpenWeatherMap API
+ * author Roope Kärkkäinen & Kalle Lahtinen
  */
 public class WeatherDataService implements iAPI {
     
@@ -38,9 +39,11 @@ public class WeatherDataService implements iAPI {
             String jsonResponse = fetchDataFromAPI(url);
             
             // Parse JSON response
-            JsonObject locationObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
             
-            // Extract latitude and longitude  
+            // Extract latitude and longitude
+            JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
+
             double latitude = locationObject.get("lat").getAsDouble();
             double longitude = locationObject.get("lon").getAsDouble();
             Coordinate coords = new Coordinate(latitude, longitude);

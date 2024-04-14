@@ -9,6 +9,7 @@ import java.time.Instant;
 
 /**
  * A class containing parse functions for turning a Json response into weather objects
+ * author Roope Kärkkäinen & Kalle Lahtinen
  */
 public class WeatherParser {
     /**
@@ -64,7 +65,7 @@ public class WeatherParser {
         
         // Create a DailyWeather object for every day in json response
         for (int i = 0; i < hours.size(); i++) {
-            JsonObject element = hours.getAsJsonObject();
+            JsonObject element = hours.get(i).getAsJsonObject();
             JsonObject main = element.getAsJsonObject("main");
             JsonObject wind = element.getAsJsonObject("wind");
             JsonArray weatherArray = element.getAsJsonArray("weather");

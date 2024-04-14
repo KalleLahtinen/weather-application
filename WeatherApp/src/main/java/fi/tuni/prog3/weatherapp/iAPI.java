@@ -21,7 +21,7 @@ public interface iAPI {
      * @param units The units of measurement the data is to be represented in.
      * @return Forecast as a map of Instant and DailyWeather pairs.
      */
-    public Map<Instant, DailyWeather> GetDailyForecast(String loc, String units);
+    public Map<Instant, DailyWeather> getDailyForecast(String loc, String units);
     
     /**
      * Returns a Hourly forecast for the given location.
@@ -29,5 +29,5 @@ public interface iAPI {
      * @param units The units of measurement the data is to be represented in.
      * @return Forecast as a map of Instant and HourlyWeather pairs.
      */
-    public Map<Instant, HourlyWeather> GetHourlyForecast(String loc, String units);
+    public Map<Instant, HourlyWeather> getHourlyForecast(String loc, String units);
 }

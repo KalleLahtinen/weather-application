@@ -3,9 +3,7 @@ package fi.tuni.prog3.weatherapp;
 import java.time.Instant;
 
 /**
- * Represents daily weather conditions with detailed meteorological data.
- * This class stores information about the weather conditions on a specific day including temperature,
- * wind speed, and precipitation.
+ * Represents daily weather data including min and max temperature and other weather conditions.
  */
 public class DailyWeather {
     private final Instant date;

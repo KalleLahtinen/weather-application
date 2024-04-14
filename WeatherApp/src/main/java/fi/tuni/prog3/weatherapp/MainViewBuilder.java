@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  * 
  * @author Kalle Lahtinen
  */
-class MainController {
+class MainViewBuilder {
     private final Stage stage;
     private final ViewController viewController;
     private Label cityTextLabel; // For dynamic text updates
@@ -41,7 +41,7 @@ class MainController {
      *
      * @param stage The primary stage of the JavaFX application.
      */
-    public MainController(Stage stage) {
+    public MainViewBuilder(Stage stage) {
         this.stage = stage;
         viewController = new ViewController();
     }
@@ -84,7 +84,7 @@ class MainController {
         Button exampleButton = new Button("Placeholder");
 
         searchBar = Utils.createSearchBarWithSuggestions();
-        searchBar.setOnAction(e -> searchHandler());
+        searchBar.setOnAction(e -> viewController.searchHandler());
 
         cityTextLabel = new Label("City here");
 
@@ -133,14 +133,6 @@ class MainController {
 
         bottomToolbar.getChildren().addAll(btnView1, btnView2, btnView3);
         rootLayout.setBottom(bottomToolbar);
-    }
-    
-    public void searchHandler() {
-        //Weather weatherData = WeatherData.parseWeatherData(searchBar.getText());
-        //if (weatherData != null) {
-        //    viewContainer = viewController.initViewContainer();
-        //}
-        
     }
 
     /**

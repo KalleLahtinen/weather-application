@@ -17,8 +17,8 @@ public class WeatherApp extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Weather Application");
 
-        MainController controller = new MainController(primaryStage);
-        controller.initMainView();
+        MainViewBuilder builder = new MainViewBuilder(primaryStage);
+        builder.initMainView();
         
         primaryStage.show();
     }

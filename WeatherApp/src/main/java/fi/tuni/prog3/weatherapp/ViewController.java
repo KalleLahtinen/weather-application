@@ -7,7 +7,7 @@ import javafx.scene.layout.StackPane;
 
 /**
  * 
- * @author kalle
+ * @author Kalle Lahtinen
  */
 public class ViewController {
     public enum View {
@@ -27,10 +27,15 @@ public class ViewController {
         }
     }
     
+    private MainViewBuilder mainViewBuilder;
+    private WeatherDataService weatherDataService;
     private StackPane viewContainer; // Holds the views
     private View currentView = View.FORECAST; // Default to the FORECAST view being visible
+    private String currentCity;
 
-    public ViewController() {
+    public ViewController(MainViewBuilder builder) {
+        mainViewBuilder = builder;
+        weatherDataService = new WeatherDataService();
     }
 
     /**
@@ -80,5 +85,13 @@ public class ViewController {
 
         // Remember the current view
         currentView = newView;
+    }
+    
+    public void searchHandler(String query) {
+        String cityName = weatherDataService.getCity(query);
+        if (cityName != null) {
+            currentCity = cityName;
+            mainViewBuilder.updateCityLabel(currentCity);
+        }
     }
 }

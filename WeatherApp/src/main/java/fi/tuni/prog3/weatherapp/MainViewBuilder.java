@@ -25,7 +25,7 @@ import javafx.stage.Stage;
  * 
  * @author Kalle Lahtinen
  */
-class MainViewBuilder {
+public class MainViewBuilder {
     private final Stage stage;
     private final ViewController viewController;
     private Label cityTextLabel; // For dynamic text updates
@@ -42,7 +42,7 @@ class MainViewBuilder {
      */
     public MainViewBuilder(Stage stage) {
         this.stage = stage;
-        viewController = new ViewController();
+        viewController = new ViewController(this);
     }
 
     /**
@@ -83,7 +83,7 @@ class MainViewBuilder {
         Button exampleButton = new Button("Placeholder");
 
         searchBar = Utils.createSearchBarWithSuggestions();
-        searchBar.setOnAction(e -> viewController.searchHandler());
+        searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
         cityTextLabel = new Label("City here");
 

@@ -38,11 +38,9 @@ public class WeatherDataService implements iAPI {
             String jsonResponse = fetchDataFromAPI(url);
             
             // Parse JSON response
-            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+            JsonObject locationObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
             
-            // Extract latitude and longitude
-            JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
-            
+            // Extract latitude and longitude  
             double latitude = locationObject.get("lat").getAsDouble();
             double longitude = locationObject.get("lon").getAsDouble();
             Coordinate coords = new Coordinate(latitude, longitude);
@@ -62,7 +60,7 @@ public class WeatherDataService implements iAPI {
      * @return A forecast as a map of Instant and DailyWeather pairs.
      */
     @Override
-    public Map<Instant, DailyWeather> GetDailyForecast(String loc, String units) {
+    public Map<Instant, DailyWeather> getDailyForecast(String loc, String units) {
         try {
             Coordinate coords = getCoordinates(loc);          
             String url = String.format("%s?lat=%s&lon=%s&appid=%s&units=%s&cnt=%s", 
@@ -88,7 +86,7 @@ public class WeatherDataService implements iAPI {
      * @return A map of Instant and HourlyWeather pairs.
      */
     @Override
-    public Map<Instant, HourlyWeather> GetHourlyForecast(String loc, String units) {
+    public Map<Instant, HourlyWeather> getHourlyForecast(String loc, String units) {
         try {
             Coordinate coords = getCoordinates(loc);          
             String url = String.format("%s?lat=%s&lon=%s&appid=%s&units=%s", HOURLY_FORECAST_API, 

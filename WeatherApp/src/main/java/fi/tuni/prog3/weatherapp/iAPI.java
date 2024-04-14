@@ -1,5 +1,8 @@
 package fi.tuni.prog3.weatherapp;
 
+import java.time.Instant;
+import java.util.Map;
+
 /**
  * Interface for extracting data from the OpenWeatherMap API.
  */
@@ -8,23 +11,23 @@ public interface iAPI {
     /**
      * Returns coordinates for a location.
      * @param loc Name of the location for which coordinates should be fetched.
-     * @return String.
+     * @return Coordinate record that contains latitude and longitude as double.
      */
-    public String lookUpLocation(String loc);
+    public Coordinate getCoordinates(String loc);
 
     /**
-     * Returns the current weather for the given coordinates.
-     * @param lat The latitude of the location.
-     * @param lon The longitude of the location.
-     * @return String.
+     * Returns a daily forecast for the given location.
+     * @param loc Name of the location for which weather should be fetched.
+     * @param units The units of measurement the data is to be represented in.
+     * @return Forecast as a map of Instant and DailyWeather pairs.
      */
-    public String getCurrentWeather(double lat, double lon);
-
+    public Map<Instant, DailyWeather> getDailyForecast(String loc, String units);
+    
     /**
-     * Returns a forecast for the given coordinates.
-     * @param lat The latitude of the location.
-     * @param lon The longitude of the location.
-     * @return String.
+     * Returns a Hourly forecast for the given location.
+     * @param loc Name of the location for which weather should be fetched.
+     * @param units The units of measurement the data is to be represented in.
+     * @return Forecast as a map of Instant and HourlyWeather pairs.
      */
-    public String getForecast(double lat, double lon);
+    public Map<Instant, HourlyWeather> getHourlyForecast(String loc, String units);
 }

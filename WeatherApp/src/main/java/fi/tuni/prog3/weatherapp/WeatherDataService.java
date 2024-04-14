@@ -4,8 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -26,6 +24,31 @@ public class WeatherDataService implements iAPI {
     private static final String GEOLOCATION_API = "http://api.openweathermap.org/geo/1.0/direct";
     private static final String DAILY_FORECAST_API = "http://api.openweathermap.org/data/2.5/forecast/daily";
     private static final String HOURLY_FORECAST_API = "https://pro.openweathermap.org/data/2.5/forecast/hourly";
+    
+    /**
+     * Check if there is a city with this name in some language.
+     * @param query The search term for a city.
+     * @return The name of the queried city if found, null otherwise.
+     */
+    public String getCity(String query) {
+        try {
+            String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, query, API_KEY);
+            String jsonResponse = fetchDataFromAPI(url);
+            
+            // Parse JSON response
+            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+            
+            // Extract city name in English
+            JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
+            String cityName = locationObject.get("name").getAsString();
+            
+            return cityName;
+        
+        } catch (IOException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
     /**
      * Get coordinates for a location by name.
@@ -49,8 +72,8 @@ public class WeatherDataService implements iAPI {
             Coordinate coords = new Coordinate(latitude, longitude);
             
             return coords;
-            
-        } catch (IOException e) {
+        
+        } catch (IOException | IndexOutOfBoundsException e) {
             e.printStackTrace();
             return null;
         }

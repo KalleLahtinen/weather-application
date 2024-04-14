@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -11,7 +13,9 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Map;
 
-// Class implementing the iAPI interface to interact with OpenWeatherMap API
+/**
+ * Class implementing the iAPI interface to interact with OpenWeatherMap API
+ */
 public class WeatherDataService implements iAPI {
     
     // API key for OpenWeatherMap
@@ -19,8 +23,8 @@ public class WeatherDataService implements iAPI {
     
     // URLs for different API endpoints
     private static final String GEOLOCATION_API = "http://api.openweathermap.org/geo/1.0/direct";
-    private static final String HOURLY_FORECAST_API = "https://pro.openweathermap.org/data/2.5/forecast/hourly";
     private static final String DAILY_FORECAST_API = "http://api.openweathermap.org/data/2.5/forecast/daily";
+    private static final String HOURLY_FORECAST_API = "https://pro.openweathermap.org/data/2.5/forecast/hourly";
     
     /**
      * Get coordinates for a location by name.
@@ -31,10 +35,10 @@ public class WeatherDataService implements iAPI {
     public Coordinate getCoordinates(String loc) {
         try {
             String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, loc, API_KEY);
-            String rawData = fetchDataFromAPI(url);
+            String jsonResponse = fetchDataFromAPI(url);
             
             // Parse JSON response
-            JsonArray jsonArray = JsonParser.parseString(rawData).getAsJsonArray();
+            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
             
             // Extract latitude and longitude
             JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
@@ -67,6 +71,7 @@ public class WeatherDataService implements iAPI {
             
             // Fetch data from API
             String jsonResponse = fetchDataFromAPI(url);
+            
             // Parse and return current weather data
             return WeatherParser.parseDailyForecast(jsonResponse, units);
             
@@ -86,11 +91,12 @@ public class WeatherDataService implements iAPI {
     public Map<Instant, HourlyWeather> GetHourlyForecast(String loc, String units) {
         try {
             Coordinate coords = getCoordinates(loc);          
-            String url = String.format("%s?lat=%s&lon=%s&appid=%s", HOURLY_FORECAST_API, 
-                    coords.getLatitude(), coords.getLongitude(), API_KEY);
+            String url = String.format("%s?lat=%s&lon=%s&appid=%s&units=%s", HOURLY_FORECAST_API, 
+                    coords.getLatitude(), coords.getLongitude(), API_KEY, units);
             
             // Fetch data from API
             String jsonResponse = fetchDataFromAPI(url);
+
             // Parse and return location data
             return WeatherParser.parseHourlyForecast(jsonResponse, units);
             
@@ -106,7 +112,7 @@ public class WeatherDataService implements iAPI {
      * @return A Json API response containing in string format
      * @throws IOException On issues during HTTP connection
      */
-    private String fetchDataFromAPI(String apiUrl) throws IOException {
+    public String fetchDataFromAPI(String apiUrl) throws IOException {
         URL url = new URL(apiUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");

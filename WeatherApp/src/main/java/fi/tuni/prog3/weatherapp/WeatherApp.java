@@ -21,7 +21,6 @@ public class WeatherApp extends Application {
 
     @Override
     public void start(Stage stage) {
-
         //Creating a new BorderPane.
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10, 10, 10, 10));

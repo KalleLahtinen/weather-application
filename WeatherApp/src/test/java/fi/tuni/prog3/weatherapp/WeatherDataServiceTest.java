@@ -16,6 +16,11 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Map;
 
+/*
+    ChatGPT 3.5 was utilized in the planning, implementation and commenting of
+    the tests below. It speeded up "grunt-work" and taught about new techniques.
+*/
+
 /**
  * Tests for the methods in WeatherDataService using Mockito to fake API responses
  * @author Kalle Lahtinen
@@ -37,9 +42,69 @@ public class WeatherDataServiceTest {
     }
     
     /**
+    * Tests that {@code getCity} successfully retrieves and returns the city name
+    * for a valid geographical query. This test uses a sample response from a
+    * predefined JSON file which includes data for "Helsinki".
+    * 
+    * @throws Exception If reading the sample JSON file fails or any unexpected
+    *                   exceptions occur during the execution of the test.
+    */
+    @Test
+    void testGetCity_ReturnsCityName() throws Exception {
+        String sampleGeoLocation = new String(Files.readAllBytes(
+                Paths.get("src/test/resources/coordinate_api_response.json")));
+        String query = "Helsinki";
+        doReturn(sampleGeoLocation).when(weatherDataService).fetchDataFromAPI(contains("geo"));
+
+        String result = weatherDataService.getCity(query);
+        // Check that the result was correct
+        assertEquals("Helsinki", result);
+    }
+
+    /**
+    * Tests that {@code getCity} returns null when the API response is empty,
+    * indicating that no valid city was found for the given query. This scenario
+    * simulates a lookup for a nonexistent city ("NowhereCity").
+    *
+    * @throws Exception If any unexpected exceptions occur during the execution of
+    *                   the test.
+    */
+    @Test
+    void testGetCity_ReturnsNullForInvalidCity() throws Exception {
+        String emptyJsonResponse = "[]";  // No results
+        String query = "NowhereCity";
+        doReturn(emptyJsonResponse).when(weatherDataService).fetchDataFromAPI(contains("geo"));
+
+        String result = weatherDataService.getCity(query);
+        // Check that null was returned on invalid query
+        assertNull(result);
+    }
+
+    /**
+    * Tests that {@code getCity} properly handles exceptions thrown during the
+    * API fetch operation. This test checks if the method returns null when an
+    * IOException is thrown, simulating a failure in data fetching for the query
+    * "ThrowsError".
+    *
+    * @throws Exception If the test setup itself throws an IOException or any other
+    *                   unexpected exceptions occur.
+    */
+    @Test
+    void testGetCity_HandlesException() throws Exception {
+        String query = "ThrowsError";
+        doThrow(new IOException("Failed to fetch data")).
+                when(weatherDataService).fetchDataFromAPI(contains(query));
+        
+        String result = weatherDataService.getCity(query);
+        // Check that null was returned on exception
+        assertNull(result);
+    }
+    
+    /**
      * Tests the retrieval of geographic coordinates for a given city.
      * This test verifies that the {@link WeatherDataService#getCoordinates(String)} method
      * returns accurate longitude and latitude for the city of Helsinki.
+     * 
      * @throws IOException if fetching coordinates fails
      */
     @Test
@@ -48,20 +113,25 @@ public class WeatherDataServiceTest {
         Coordinate result = weatherDataService.getCoordinates("Helsinki");
         
         assertNotNull(result, "The result should not be null.");
-        assertEquals(24.9427, result.getLongitude(), 0.01, "Longitude should match the expected value.");
-        assertEquals(60.1675, result.getLatitude(), 0.01, "Latitude should match the expected value.");
+        assertEquals(24.9427, result.getLongitude(), 0.01, 
+                "Longitude should match the expected value.");
+        assertEquals(60.1675, result.getLatitude(), 0.01, 
+                "Latitude should match the expected value.");
     }
 
     /**
      * Tests the retrieval of daily weather forecast data.
      * This test mocks the API responses to fetch geographic data and the daily forecast,
      * then verifies the correctness of the parsed weather data for a specific date.
+     * 
      * @throws IOException if reading from resources or fetching forecast fails
      */
     @Test
     public void testGetDailyForecast() throws IOException {
-        String sampleGeoLocation = new String(Files.readAllBytes(Paths.get("src/test/resources/coordinate_api_response.json")));
-        String sampleDailyForecast = new String(Files.readAllBytes(Paths.get("src/test/resources/daily_api_response.json")));
+        String sampleGeoLocation = new String(Files.readAllBytes(
+                Paths.get("src/test/resources/coordinate_api_response.json")));
+        String sampleDailyForecast = new String(Files.readAllBytes(
+                Paths.get("src/test/resources/daily_api_response.json")));
         
         // Mocking fetchDataFromAPI for different API endpoint calls
         doReturn(sampleGeoLocation).when(weatherDataService).fetchDataFromAPI(contains("geo"));
@@ -96,12 +166,15 @@ public class WeatherDataServiceTest {
      * Tests the retrieval of hourly weather forecast data.
      * This test mocks the API responses for geographic and hourly forecast data,
      * and verifies the temperature and rain volume for the first hour of the available data.
+     * 
      * @throws IOException if reading from resources or fetching forecast fails
      */
     @Test
     public void testGetHourlyForecast() throws IOException {
-        String sampleGeoLocation = new String(Files.readAllBytes(Paths.get("src/test/resources/coordinate_api_response.json")));
-        String sampleHourlyForecast = new String(Files.readAllBytes(Paths.get("src/test/resources/hourly_api_response.json")));
+        String sampleGeoLocation = new String(Files.readAllBytes(
+                Paths.get("src/test/resources/coordinate_api_response.json")));
+        String sampleHourlyForecast = new String(Files.readAllBytes(
+                Paths.get("src/test/resources/hourly_api_response.json")));
         
         // Mocking fetchDataFromAPI for different API endpoint calls
         doReturn(sampleGeoLocation).when(weatherDataService).fetchDataFromAPI(contains("geo"));

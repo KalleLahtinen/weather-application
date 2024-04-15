@@ -19,6 +19,12 @@
             <version>2.9.0</version>
             <type>jar</type>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.2.1</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -60,6 +66,12 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>fi.tuni.prog3.weatherapp.WeatherApp</mainClass>
+                    <options>
+                        // The org.controlsfx.controls library needs access 
+                        // to javafx.event to work
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+                     </options>
                 </configuration>
                 <executions>
                     <execution>

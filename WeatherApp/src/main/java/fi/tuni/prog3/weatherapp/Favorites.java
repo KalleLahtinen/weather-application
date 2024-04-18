@@ -12,6 +12,8 @@ import java.util.List;
  * Class representing a list of favorite cities in the WeatherApp.
  * Implements the iReadAndWriteToFile interface for reading and writing 
  * from/to a file.
+ * 
+ * @author Roope Kärkkäinen
  */
 public class Favorites implements iReadAndWriteToFile {
     private List<City> favoriteCities; // List to store favorite cities

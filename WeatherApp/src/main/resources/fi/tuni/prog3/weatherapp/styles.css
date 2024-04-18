@@ -1,0 +1,14 @@
+/* 
+    Author     : Kalle Lahtinen
+*/
+
+.normal-text {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+}
+
+.bold-text {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

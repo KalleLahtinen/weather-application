@@ -1,9 +1,14 @@
-
 package fi.tuni.prog3.weatherapp;
 
+import java.time.Instant;
+import java.util.TreeMap;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * 
@@ -15,7 +20,7 @@ public class ViewController {
         WEATHERMAP,
         HISTORY,
         FAVOURITES,
-        NOVIEW;
+        NO_VIEW;
 
         public static View fromIndex(int index) {
             for (View v : View.values()) {
@@ -27,15 +32,17 @@ public class ViewController {
         }
     }
     
-    private MainViewBuilder mainViewBuilder;
-    private WeatherDataService weatherDataService;
+    private final MainViewBuilder mainViewBuilder;
+    private final WeatherDataService weatherDataService;
     private StackPane viewContainer; // Holds the views
     private View currentView = View.FORECAST; // Default to the FORECAST view being visible
     private String currentCity;
+    private String units;
 
     public ViewController(MainViewBuilder builder) {
         mainViewBuilder = builder;
         weatherDataService = new WeatherDataService();
+        units = "metric";
     }
 
     /**
@@ -50,11 +57,11 @@ public class ViewController {
 
         // Create the views
         viewContainer = new StackPane();
-        Node view1Content = new Label("View 1 Content"); // Replace with actual view
+        VBox forecastView = initForecastView();
         Node view2Content = new Label("View 2 Content"); // Replace with actual view
         Node view3Content = new Label("View 3 Content"); // Replace with actual view
         
-        viewContainer.getChildren().addAll(view1Content, view2Content, view3Content);
+        viewContainer.getChildren().addAll(forecastView, view2Content, view3Content);
         switchView(currentView);
         
         return viewContainer;
@@ -92,6 +99,58 @@ public class ViewController {
         if (cityName != null) {
             currentCity = cityName;
             mainViewBuilder.updateCityLabel(currentCity);
+            mainViewBuilder.viewContainer = initViewContainer();
         }
+    }
+    
+    public VBox initForecastView() {
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);  // Set space between elements
+        
+        VBox currentWeather = createCurrentWeatherSection();
+        vbox.getChildren().add(currentWeather);
+        
+        return vbox;
+    }
+    
+    public VBox createCurrentWeatherSection() {
+        TreeMap<Instant, DailyWeather> dailyWeathers = 
+                new TreeMap<>(weatherDataService.getDailyForecast(currentCity, units));
+        DailyWeather currentWeather = dailyWeathers.firstEntry().getValue();
+        
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);  // Set space between elements
+        vbox.setAlignment(Pos.CENTER);  // Center align all elements in VBox
+
+        // Day Temperature
+        Text dayTemperatureText = new Text(currentWeather.getDayTemp() + "°C");
+        dayTemperatureText.getStyleClass().add("bold-text");
+        vbox.getChildren().add(dayTemperatureText);
+
+        // Feels Like Temperature
+        Text feelsLikeText = new Text("Feels like: " + currentWeather.getDayFeelsLike() + "°C");
+        feelsLikeText.getStyleClass().add("normal-text");
+
+        Text feelsLikeTemp = new Text("" + currentWeather.getDayFeelsLike());
+        feelsLikeText.getStyleClass().add("bold-text");
+        
+        Text Text = new Text("Feels like: " + currentWeather.getDayFeelsLike() + "°C");
+        feelsLikeText.getStyleClass().add("normal-text");
+        
+        vbox.getChildren().add(feelsLikeText);
+
+        // HBox for Air Quality, Rain Amount, and Wind Speed
+        HBox hbox = new HBox();
+        hbox.setSpacing(15);  // Set space between elements in the HBox
+        hbox.setAlignment(Pos.CENTER);  // Center align all elements in HBox
+
+        Text airQualityText = new Text("Air Quality: ???"); // Placeholder for actual data
+        Text rainAmountText = new Text("Rain: " + currentWeather.getRainVolume() + "mm");
+        Text windSpeedText = new Text("Wind Speed: " + currentWeather.getWindSpeed() + "km/h");
+
+        hbox.getChildren().addAll(airQualityText, rainAmountText, windSpeedText);
+        vbox.getChildren().add(hbox);
+
+        return vbox;
     }
 }

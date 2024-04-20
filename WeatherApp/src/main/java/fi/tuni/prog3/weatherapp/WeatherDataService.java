@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.Map;
 
 /**
- * Class implementing the iAPI interface to interact with OpenWeatherMap API
+ * Class for interracting with OpenWeatherMap API and returning weather data
  * author Roope Kärkkäinen & Kalle Lahtinen
  */
 public class WeatherDataService implements iAPI {

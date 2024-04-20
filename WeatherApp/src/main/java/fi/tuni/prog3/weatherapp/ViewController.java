@@ -1,22 +1,35 @@
-
 package fi.tuni.prog3.weatherapp;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
 
 /**
+ * Manages the views and the switching mechanism for different weather-related views
+ * in the application.
  * 
  * @author Kalle Lahtinen
  */
-public class ViewController {
+public final class ViewController {
+    /**
+     * Enum representing the different types of views available in the application.
+     */
     public enum View {
         FORECAST,
         WEATHERMAP,
         HISTORY,
         FAVOURITES,
-        NOVIEW;
+        NO_VIEW;
 
+        /**
+         * Retrieves a View enum based on its ordinal index.
+         *
+         * @param index the ordinal index of the View enum.
+         * @return the View enum corresponding to the given index.
+         * @throws IllegalArgumentException if no View corresponds to the given index.
+         */
         public static View fromIndex(int index) {
             for (View v : View.values()) {
                 if (v.ordinal() == index) {
@@ -27,20 +40,36 @@ public class ViewController {
         }
     }
     
-    private MainViewBuilder mainViewBuilder;
-    private WeatherDataService weatherDataService;
+    private final MainViewBuilder mainViewBuilder;
+    private final WeatherDataService weatherDataService;
     private StackPane viewContainer; // Holds the views
     private View currentView = View.FORECAST; // Default to the FORECAST view being visible
     private String currentCity;
+    private String currentUnits;
+    
+    private final ForecastView forecastView;
 
+    /**
+     * Constructs a ViewController with the specified main view builder.
+     * Initializes the forecast view with data for the default city and unit.
+     * 
+     * @param builder the main view builder used for creating and managing UI components.
+     */
     public ViewController(MainViewBuilder builder) {
         mainViewBuilder = builder;
         weatherDataService = new WeatherDataService();
+        currentCity = "Helsinki";      // Get this from history
+        currentUnits = "metric";       // Get this from history
+        forecastView = new ForecastView(weatherDataService.getDailyForecast(currentCity, currentUnits),
+                                        weatherDataService.getHourlyForecast(currentCity, currentUnits));
+        initViewContainer();
     }
 
     /**
-     * Initializes or reinitializes the view container with views.
-     * @return a stackPane containing the created views
+     * Initializes or reinitializes the container holding the different views.
+     * If the viewContainer already exists, it preserves the currently visible view.
+     *
+     * @return A StackPane containing all the views managed by this controller.
      */
     public StackPane initViewContainer() {
         // Before recreating the views, remember the visible one
@@ -50,11 +79,11 @@ public class ViewController {
 
         // Create the views
         viewContainer = new StackPane();
-        Node view1Content = new Label("View 1 Content"); // Replace with actual view
+        VBox forecastInstant = this.forecastView.getView();
         Node view2Content = new Label("View 2 Content"); // Replace with actual view
         Node view3Content = new Label("View 3 Content"); // Replace with actual view
         
-        viewContainer.getChildren().addAll(view1Content, view2Content, view3Content);
+        viewContainer.getChildren().addAll(forecastInstant, view2Content, view3Content);
         switchView(currentView);
         
         return viewContainer;
@@ -73,8 +102,9 @@ public class ViewController {
     }
     
     /**
+     * Switches the visible view in the application to the specified new view.
      * 
-     * @param newView 
+     * @param newView the view to switch to.
      */
     public void switchView(View newView) {
         // Make all views invisible first
@@ -87,11 +117,19 @@ public class ViewController {
         currentView = newView;
     }
     
+    /**
+     * Handles the search operation initiated by the user. Updates all views with
+     * the new city's weather data if the city exists.
+     *
+     * @param query the search query entered by the user, typically a city name.
+     */
     public void searchHandler(String query) {
-        String cityName = weatherDataService.getCity(query);
-        if (cityName != null) {
-            currentCity = cityName;
+        String city = weatherDataService.getCity(query);
+        if (city != null) {
+            currentCity = city;
             mainViewBuilder.updateCityLabel(currentCity);
+            forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(currentCity, currentUnits));
+            forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(currentCity, currentUnits));
         }
     }
 }

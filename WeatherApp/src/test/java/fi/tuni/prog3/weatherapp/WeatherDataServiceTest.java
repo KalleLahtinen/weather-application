@@ -151,14 +151,14 @@ public class WeatherDataServiceTest {
         // Check the values of the first DailyWeather are correct
         DailyWeather firstDay = forecast.get(firstInstant);
         
-        assertEquals(6.1, firstDay.getDayTemp(), 0.01, "First day temperature "
+        assertEquals(6.1, firstDay.dayTempProperty().get(), 0.01, "First day temperature "
                 + "should match the expected value.");
-        assertEquals(8.23, firstDay.getRainVolume(), 0.01, "First day rain volume "
+        assertEquals(8.23, firstDay.rainVolumeProperty().get(), 0.01, "First day rain volume "
                 + "should match the expected value.");
 
         // Check that all days have a temperature
         forecast.forEach((date, weather) -> {
-            assertNotNull(weather.getDayTemp(), "Temperature data should not be null.");
+            assertNotNull(weather.dayTempProperty().get(), "Temperature data should not be null.");
         });
     }
 
@@ -189,15 +189,15 @@ public class WeatherDataServiceTest {
         // Check the values of the first DailyWeather are correct
         HourlyWeather firstHour = forecast.get(firstInstant);
         
-        assertEquals(5.6, firstHour.getTemperature(), 0.01, "First hour temperature "
+        assertEquals(5.6, firstHour.temperatureProperty().get(), 0.01, "First hour temperature "
                 + "should match the expected value.");
-        assertEquals(0.25, firstHour.getRain1h(), 0.01, "First hour rain volume "
+        assertEquals(0.25, firstHour.rain1hProperty().get(), 0.01, "First hour rain volume "
                 + "should match the expected value.");
         
         // Check that every hour contains data
         forecast.forEach((date, weather) -> {
-            assertNotNull(weather.getTemperature(), "Temperature data should not be null.");
-            assertNotNull(weather.getWeatherIcon(), "Weather icon data should not be null.");
+            assertNotNull(weather.temperatureProperty().get(), "Temperature data should not be null.");
+            assertNotNull(weather.weatherIconProperty().get(), "Weather icon data should not be null.");
         });
     }
 }

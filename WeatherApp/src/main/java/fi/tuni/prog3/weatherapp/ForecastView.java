@@ -3,14 +3,23 @@ package fi.tuni.prog3.weatherapp;
 import javafx.scene.layout.VBox;
 import java.util.TreeMap;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -28,9 +37,12 @@ import javafx.scene.text.Text;
  */
 public final class ForecastView {
     // Property values that update binded elements when value changes
-    private ObjectProperty<DailyWeather> todayWeather = new SimpleObjectProperty<>();
-    private MapProperty<Instant, DailyWeather> dailyWeathers = new SimpleMapProperty<>(FXCollections.observableHashMap());
-    private MapProperty<Instant, HourlyWeather> hourlyWeathers = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    private final ObjectProperty<DailyWeather> todayWeather = new SimpleObjectProperty<>();
+    private final MapProperty<Instant, DailyWeather> dailyWeathers = 
+            new SimpleMapProperty<>(FXCollections.observableHashMap());
+    private final MapProperty<Instant, HourlyWeather> hourlyWeathers = 
+            new SimpleMapProperty<>(FXCollections.observableHashMap());
+    private final List<ObjectProperty<DailyWeather>> displayedDays = new ArrayList<>();
     private final VBox view;
 
     /**
@@ -53,27 +65,29 @@ public final class ForecastView {
      * @return the combined VBox containing all sections of the weather forecast.
      */
     public VBox initForecastView() {
-        VBox dailySection = createDailyWeatherSection();
-        //VBox hourlySection = createHourlyWeatherSection();
-        // More sections can be added here if needed
+        VBox currentSection = createCurrentWeatherSection();
+        HBox dailySection = createDailyWeatherSection();
+        // VBox hourlySection = createHourlyWeatherSection();
 
         // Combine all sections into a single VBox
-        VBox root = new VBox(10); // You can adjust spacing as needed
-        root.getChildren().addAll(dailySection);
+        VBox root = new VBox();
+        root.getChildren().addAll(currentSection, dailySection);
         root.setAlignment(Pos.CENTER);
 
         return root;
     }
 
     /**
-     * Creates and returns the VBox containing the daily weather information.
-     * This includes temperature, "feels like" temperature, air quality, rain volume, and wind speed.
+     * Creates and returns a VBox containing weather information for the current day.
+     * This includes temperature, "feels like" temperature, rain volume, and wind speed.
      *
-     * @return a VBox filled with Text nodes displaying daily weather data.
+     * @return a VBox filled with Text nodes displaying weather data for current day.
      */
-    private VBox createDailyWeatherSection() {
-        VBox vbox = new VBox(10);
-        vbox.setAlignment(Pos.CENTER);
+    private VBox createCurrentWeatherSection() {
+        VBox CurrWeatherBox = new VBox(10);
+        CurrWeatherBox.setAlignment(Pos.CENTER);
+        CurrWeatherBox.setPadding(new Insets(10));
+        CurrWeatherBox.getStyleClass().add("curr-box");
 
         // Day Temperature Text
         Text dayTemperatureText = new Text();
@@ -81,7 +95,7 @@ public final class ForecastView {
             Bindings.format("%.1f°C", Bindings.selectDouble(todayWeather, "dayTemp"))
         );
         dayTemperatureText.getStyleClass().add("bold-text");
-        vbox.getChildren().add(dayTemperatureText);
+        CurrWeatherBox.getChildren().add(dayTemperatureText);
 
         // Feels Like Temperature Text
         Text feelsLikeText = new Text();
@@ -89,7 +103,7 @@ public final class ForecastView {
             Bindings.format("Feels like: %.1f°C", Bindings.selectDouble(todayWeather, "dayFeelsLike"))
         );
         feelsLikeText.getStyleClass().add("normal-text");
-        vbox.getChildren().add(feelsLikeText);
+        CurrWeatherBox.getChildren().add(feelsLikeText);
 
         // HBox for additional weather data
         HBox hbox = new HBox(15);
@@ -106,11 +120,102 @@ public final class ForecastView {
         );
 
         hbox.getChildren().addAll(airQualityText, rainAmountText, windSpeedText);
-        vbox.getChildren().add(hbox);
+        CurrWeatherBox.getChildren().add(hbox);
 
-        return vbox;
+        return CurrWeatherBox;
     }
+    
+    /**
+     * Creates and returns a HBox containing the daily weather information.
+     * This includes min and max temperature for the day.
+     *
+     * @return a HBox filled with Text nodes displaying daily weather data.
+     */
+    private HBox createDailyWeatherSection() {
+        HBox daysBox = new HBox();
+        daysBox.setAlignment(Pos.CENTER);
+        daysBox.getStyleClass().add("days-box");
 
+        // Use AtomicReference to safely store reference to current selection
+        AtomicReference<VBox> lastSelected = new AtomicReference<>();
+
+        setupWeatherBindings();  // Initialize bindings
+
+        for (ObjectProperty<DailyWeather> weatherProp : displayedDays) {
+            VBox dayBox = new VBox(10);
+            dayBox.setAlignment(Pos.CENTER);
+            dayBox.getStyleClass().add("day-box");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E dd.MM")
+                                            .withLocale(Locale.getDefault());
+
+            // Bind and display date and temperature range
+            Label dateLabel = new Label();
+            dateLabel.getStyleClass().add("date-label");
+            dateLabel.textProperty().bind(Bindings.createStringBinding(
+                () -> formatter.format(weatherProp.get().getDate().atZone(ZoneId.systemDefault())),
+                weatherProp));
+
+            Label tempRange = new Label();
+            tempRange.getStyleClass().add("temp-range");
+            tempRange.textProperty().bind(
+                    Bindings.format("%.0f°C ... %.0f°C",
+                        Bindings.selectDouble(weatherProp, "minTemp"),
+                        Bindings.selectDouble(weatherProp, "maxTemp")
+                    ));
+
+            dayBox.getChildren().addAll(dateLabel, tempRange);
+            daysBox.getChildren().add(dayBox);
+
+            // Click event for selecting a day
+            dayBox.setOnMouseClicked(event -> {
+                if (lastSelected.get() != null) {
+                    lastSelected.get().getStyleClass().remove("selected-day");
+                }
+                dayBox.getStyleClass().add("selected-day");
+                lastSelected.set(dayBox);
+            });
+        }
+        
+        // Select the first day by default if it exists
+        if (!daysBox.getChildren().isEmpty()) {
+            VBox firstDayBox = (VBox) daysBox.getChildren().get(0);
+            firstDayBox.getStyleClass().add("selected-day");
+            lastSelected.set(firstDayBox);
+        }
+        
+        return daysBox;
+    }
+    
+    /**
+     * Binds the items in {@code displayedDays} to the first five days in {@code dailyWeathers}.
+     */
+    private void setupWeatherBindings() {
+        // Assume we care about the first 5 days
+        List<Instant> keys = dailyWeathers.keySet().stream()
+                .sorted()
+                .limit(5)
+                .collect(Collectors.toList());
+
+        // Setup or update ObjectProperties for each day
+        for (int i = 0; i < keys.size(); i++) {
+            Instant key = keys.get(i);
+            if (i < displayedDays.size()) {
+                // Update existing property
+                displayedDays.get(i).set(dailyWeathers.get(key));
+            } else {
+                // Add new property
+                ObjectProperty<DailyWeather> prop = 
+                        new SimpleObjectProperty<>(dailyWeathers.get(key));
+                displayedDays.add(prop);
+            }
+        }
+
+        // Adjust list size in case of fewer entries than before
+        if (keys.size() < displayedDays.size()) {
+            displayedDays.subList(keys.size(), displayedDays.size()).clear();
+        }
+    }
+    
     /**
      * Updates the daily weather data with the given map and 
      * sets the current weather to the earliest date available.
@@ -123,6 +228,7 @@ public final class ForecastView {
         if (!dailyWeathers.isEmpty()) {
             todayWeather.set(new TreeMap<>(dailyWeathers).firstEntry().getValue());
         }
+        setupWeatherBindings();  // Update bindings for the HBox with daily weather data
     }
 
     /**

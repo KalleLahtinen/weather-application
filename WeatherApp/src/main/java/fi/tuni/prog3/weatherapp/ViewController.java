@@ -85,7 +85,7 @@ public final class ViewController {
         
         viewContainer.getChildren().addAll(forecastInstant, view2Content, view3Content);
         switchView(currentView);
-        
+                
         return viewContainer;
     }
 

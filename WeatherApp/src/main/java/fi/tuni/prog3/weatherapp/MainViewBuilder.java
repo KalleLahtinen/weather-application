@@ -69,6 +69,8 @@ public class MainViewBuilder {
         Scene scene = new Scene(rootLayout, 400, 300);
         // Link CSS file for formatting
         scene.getStylesheets().add(getClass().getResource("/fi/tuni/prog3/weatherapp/styles.css").toExternalForm());
+        stage.setMinWidth(650);
+        stage.setMinHeight(330);
         stage.setScene(scene);
     }
 

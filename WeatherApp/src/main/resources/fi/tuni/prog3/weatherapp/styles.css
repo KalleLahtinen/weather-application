@@ -1,5 +1,6 @@
+
 /* 
-    Author     : Kalle Lahtinen
+    Author: Kalle Lahtinen
 */
 
 .normal-text {
@@ -11,4 +12,30 @@
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+}
+
+.curr-box {
+    -fx-background-color: #fae49f;
+}
+
+.day-box {
+    -fx-cursor: hand; /* Changes cursor to a pointer when hovering */
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-min-width: 120px;   /* Minimum width */
+    -fx-min-height: 150px;  /* Minimum height */
+}
+
+.selected-day {
+    -fx-background-color: #a5c2f9;
+}
+
+.date-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.temp-range {
+    -fx-font-size: 14px;
 }

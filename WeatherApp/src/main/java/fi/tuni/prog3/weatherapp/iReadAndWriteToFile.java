@@ -21,5 +21,5 @@ public interface iReadAndWriteToFile {
      * @return true if the write was successful, otherwise false.
      * @throws Exception if the method e.g., cannot write to a file.
      */
-    public void writeToFile(String fileName, List<String> data) throws Exception;
+    public void writeToFile(String fileName) throws Exception;
 }

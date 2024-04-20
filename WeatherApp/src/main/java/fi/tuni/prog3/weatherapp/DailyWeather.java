@@ -1,25 +1,31 @@
 package fi.tuni.prog3.weatherapp;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 import java.time.Instant;
 
 /**
- * Represents daily weather data including min and max temperature and other weather conditions.
+ * This class represents detailed daily weather data, encapsulating various weather parameters.
+ * Properties are used for all data fields to allow easy integration with JavaFX binding mechanisms,
+ * enabling automatic UI updates when data changes.
  */
 public class DailyWeather {
     private final Instant date;
-    private final double dayTemp;
-    private final double minTemp;
-    private final double maxTemp;
-    private final double dayFeelsLike;
-    private final double windSpeed;
-    private final double rainVolume;
-    private final String description;
+    private final DoubleProperty dayTemp = new SimpleDoubleProperty();
+    private final DoubleProperty minTemp = new SimpleDoubleProperty();
+    private final DoubleProperty maxTemp = new SimpleDoubleProperty();
+    private final DoubleProperty dayFeelsLike = new SimpleDoubleProperty();
+    private final DoubleProperty windSpeed = new SimpleDoubleProperty();
+    private final DoubleProperty rainVolume = new SimpleDoubleProperty();
+    private final StringProperty description = new SimpleStringProperty();
     private final String units;
-
+    
     /**
      * Constructs a new {@code DailyWeather} instance.
      * 
-     * @param date The specific date of the weather data, not null.
+     * @param date The date and time of the weather data
      * @param dayTemp The average temperature for the day in {@code units}.
      * @param minTemp The minimum recorded temperature for the day in {@code units}.
      * @param maxTemp The maximum recorded temperature for the day in {@code units}.
@@ -28,88 +34,89 @@ public class DailyWeather {
      * @param rainVolume The volume of rainfall in {@code units}.
      * @param description A textual description of the weather conditions.
      * @param units The units of measurement the data is represented in.
+     *              (metric, imperial, standard ( = Kelvin in temperature))
      */
-    public DailyWeather(Instant date, double dayTemp, double minTemp, 
-            double maxTemp, double dayFeelsLike, double windSpeed, 
-            double rainVolume, String description, String units) {
+    public DailyWeather(Instant date, double dayTemp, double minTemp, double maxTemp, 
+                        double dayFeelsLike, double windSpeed, double rainVolume, 
+                        String description, String units) {
         this.date = date;
-        this.dayTemp = dayTemp;
-        this.minTemp = minTemp;
-        this.maxTemp = maxTemp;
-        this.dayFeelsLike = dayFeelsLike;
-        this.windSpeed = windSpeed;
-        this.rainVolume = rainVolume;
-        this.description = description;
+        this.dayTemp.set(dayTemp);
+        this.minTemp.set(minTemp);
+        this.maxTemp.set(maxTemp);
+        this.dayFeelsLike.set(dayFeelsLike);
+        this.windSpeed.set(windSpeed);
+        this.rainVolume.set(rainVolume);
+        this.description.set(description);
         this.units = units;
     }
 
     /**
-     * Returns the date of the weather data.
-     * @return the date as an {@code Instant}.
+     * Returns the date of this DailyWeather object.
+     * @return the date as an Instant
      */
     public Instant getDate() {
         return date;
     }
 
     /**
-     * Returns the average day temperature.
-     * @return the day temperature in {@code units}.
+     * Returns the property for the average day temperature.
+     * @return the day temperature property
      */
-    public double getDayTemp() {
+    public DoubleProperty dayTempProperty() {
         return dayTemp;
     }
 
     /**
-     * Returns the minimum temperature of the day.
-     * @return the minimum temperature in {@code units}.
+     * Returns the property for the minimum temperature.
+     * @return the minimum temperature property
      */
-    public double getMinTemp() {
+    public DoubleProperty minTempProperty() {
         return minTemp;
     }
 
     /**
-     * Returns the maximum temperature of the day.
-     * @return the maximum temperature in {@code units}.
+     * Returns the property for the maximum temperature.
+     * @return the maximum temperature property
      */
-    public double getMaxTemp() {
+    public DoubleProperty maxTempProperty() {
         return maxTemp;
     }
 
     /**
-     * Returns the feels-like temperature for the day.
-     * @return the feels-like temperature in {@code units}.
+     * Returns the property for the feels-like temperature.
+     * @return the day feels-like temperature property
      */
-    public double getDayFeelsLike() {
+    public DoubleProperty dayFeelsLikeProperty() {
         return dayFeelsLike;
     }
 
     /**
-     * Returns the wind speed.
-     * @return the wind speed in {@code units}.
+     * Returns the property for the wind speed.
+     * @return the wind speed property
      */
-    public double getWindSpeed() {
+    public DoubleProperty windSpeedProperty() {
         return windSpeed;
     }
 
     /**
-     * Returns the volume of rain for the day.
-     * @return the rain volume in {@code units}.
+     * Returns the property for the rain volume.
+     * @return the rain volume property
      */
-    public double getRainVolume() {
+    public DoubleProperty rainVolumeProperty() {
         return rainVolume;
     }
 
     /**
-     * Returns a description of the weather conditions.
-     * @return the textual weather description.
+     * Returns the property for the weather description.
+     * @return the description property
      */
-    public String getDescription() {
+    public StringProperty descriptionProperty() {
         return description;
     }
 
     /**
      * Returns the units of measurement this object uses.
-     * @return the units of measurement this object uses.
+     * @return the units of measurement this object uses
      */
     public String getUnits() {
         return units;

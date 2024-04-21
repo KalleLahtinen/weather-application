@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * A class for logging information, including errors, and saving errors to a file.
- * Author: Roope Kärkkäinen
+ * @author Roope Kärkkäinen
  */
 public class LoggingInformation {
     private static final Logger logger = LogManager.getLogger(LoggingInformation.class);
@@ -33,7 +33,8 @@ public class LoggingInformation {
      * @param exception The exception causing the error.
      */
     private static void saveErrorToFile(String message, Throwable exception) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(ERROR_LOG_FILE, true))) {
+        String fileName = "error_" + LocalDateTime.now() + ".log";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
             writer.println("Timestamp: " + LocalDateTime.now());
             writer.println("Message: " + message);
             writer.println("Exception:");

@@ -57,7 +57,8 @@ public class ReadAndWriteToFile implements iReadAndWriteToFile {
         try (FileWriter writer = new FileWriter("/appstate.json")) { // Open a FileWriter to write to the file
             writer.write(json); // Write JSON string to file
         } catch (IOException e) { // Catch IOException if file writing fails
-            e.printStackTrace(); // Print stack trace for the IOException
+            String errorMessage = "Error writing to file: " + filename;
+            LoggingInformation.logError(errorMessage, e);
         }
     }
 }

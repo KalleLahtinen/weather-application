@@ -1,6 +1,5 @@
 package fi.tuni.prog3.weatherapp;
 
-import javafx.beans.property.MapProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -15,7 +14,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 
@@ -24,20 +22,17 @@ import javafx.collections.ObservableList;
  * for each hour within a specified period.
  * @author Kalle Lahtinen
  */
-public class ForecastViewHourlySection {
-    private final ForecastView root;
-    private ObservableList<VBox> hourlyBoxes = FXCollections.observableArrayList();
-    private final MapProperty<Instant, HourlyWeather> hourlyWeathers =
-            new SimpleMapProperty<>(FXCollections.observableHashMap());
+public final class ForecastViewHourlySection {
+    private final ObservableList<VBox> hourlyBoxes = FXCollections.observableArrayList();
+    private final ForecastView fv;
 
     /**
      * Constructs a new ForecastViewHourlySection associated with the given ForecastView.
      *
-     * @param fv the root ForecastView associated with this section.
-     * @param newHourlyWeathers the initial set of hourly weather data to be displayed.
+     * @param forecastView the root forecast view the section is part of.
      */
-    public ForecastViewHourlySection(ForecastView fv, Map<Instant, HourlyWeather> newHourlyWeathers) {
-        this.root = fv;
+    public ForecastViewHourlySection(ForecastView forecastView) {
+        this.fv = forecastView;
     }
 
     /**
@@ -70,11 +65,11 @@ public class ForecastViewHourlySection {
      *
      * @param selectedDayStart the start instant of the day for which to display weather.
      */
-    private void setupHourlyWeatherBindings(Instant selectedDayStart) {
+    public void setupHourlyWeatherBindings(Instant selectedDayStart) {
         Instant endDay = selectedDayStart.plus(5, ChronoUnit.DAYS);
         hourlyBoxes.clear();
 
-        hourlyWeathers.entrySet().stream()
+        fv.hourlyWeathers.entrySet().stream()
             .filter(entry -> !entry.getKey().isBefore(selectedDayStart) && entry.getKey().isBefore(endDay))
             .sorted(Map.Entry.comparingByKey())
             .forEach(entry -> hourlyBoxes.add(createHourBox(entry.getKey(), new SimpleObjectProperty<>(entry.getValue()))));
@@ -110,19 +105,5 @@ public class ForecastViewHourlySection {
 
         hourBox.getChildren().addAll(hourLabel, tempLabel, windLabel, rainLabel, humidityLabel);
         return hourBox;
-    }
-
-    /**
-     * Updates the hourly weather data with the given map.
-     *
-     * @param newHourlyWeathers the new map of hourly weather data.
-     */
-    public void updateHourlyWeathers(Map<Instant, HourlyWeather> newHourlyWeathers) {
-        hourlyWeathers.clear();
-        hourlyWeathers.putAll(newHourlyWeathers);
-        Instant earliestHour = hourlyWeathers.get().keySet().stream()
-                             .min(Instant::compareTo)
-                             .orElse(null);
-        setupHourlyWeatherBindings(earliestHour);
     }
 }

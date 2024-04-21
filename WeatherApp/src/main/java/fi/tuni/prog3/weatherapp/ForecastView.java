@@ -6,10 +6,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -18,8 +19,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 
 /*
- * ChatGPT 3.5 was heavily utilized in learning the usage of JavaFX
- * properties and iterating methods until solutions were found. This has enabled
+   ChatGPT 3.5 was heavily utilized in learning the usage of JavaFX
+   properties and iterating methods until solutions were found. This has enabled
    updating screen content dynamically without recreating all elements.
  */
 
@@ -39,6 +40,8 @@ public final class ForecastView {
     
     public final MapProperty<Instant, HourlyWeather> hourlyWeathers =
             new SimpleMapProperty<>(FXCollections.observableHashMap());
+    
+    public final IntegerProperty currentDayIndex = new SimpleIntegerProperty(-1);
 
     public final List<ObjectProperty<DailyWeather>> displayedDays = new ArrayList<>();
     public final VBox view;
@@ -46,10 +49,6 @@ public final class ForecastView {
     public ForecastViewCurrentSection currentSection;
     public ForecastViewDailySection dailySection;
     public ForecastViewHourlySection hourlySection;
-
-    
-    // Use AtomicReference to safely store reference to current selection
-    public AtomicReference<VBox> selectedDay = new AtomicReference<>();
 
     /**
      * Constructs a ForecastView instance with the given daily and hourly weather data maps.
@@ -59,6 +58,11 @@ public final class ForecastView {
      */
     public ForecastView(Map<Instant, DailyWeather> newDailyWeathers, 
                         Map<Instant, HourlyWeather> newHourlyWeathers) {
+        
+        // Keep track of which day is selected
+        currentDayIndex.addListener((obs, oldIndex, newIndex) -> {
+            updateSelectedDayVisual((int) oldIndex, (int) newIndex);
+        });
         
         this.currentSection = new ForecastViewCurrentSection();
         this.dailySection = new ForecastViewDailySection();
@@ -116,6 +120,21 @@ public final class ForecastView {
         // Adjust list size in case of fewer entries than before
         if (keys.size() < displayedDays.size()) {
             displayedDays.subList(keys.size(), displayedDays.size()).clear();
+        }
+    }
+    
+    /**
+     * Updates the highlight styling to the selected day.
+     * @param oldIndex The old selection's index.
+     * @param newIndex The new selection's index.
+     */
+    private void updateSelectedDayVisual(int oldIndex, int newIndex) {
+        HBox daysBox = dailySection.getDaysBox();
+        if (oldIndex >= 0 && oldIndex < daysBox.getChildren().size()) {
+            ((VBox) daysBox.getChildren().get(oldIndex)).getStyleClass().remove("selected-day");
+        }
+        if (newIndex >= 0 && newIndex < daysBox.getChildren().size()) {
+            ((VBox) daysBox.getChildren().get(newIndex)).getStyleClass().add("selected-day");
         }
     }
     

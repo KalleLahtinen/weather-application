@@ -17,9 +17,17 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 
+/*
+    ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
+    courses of action, best practises, javaFX features and then iterating 
+    code to make work more efficient. This made it possible to focus on 
+    the bigger picture and architecture, with cleaner class division and code.
+ */
+
 /**
  * Represents the hourly section of a forecast view, displaying weather information 
  * for each hour within a specified period.
+ * 
  * @author Kalle Lahtinen
  */
 public final class ForecastViewHourlySection {

@@ -39,3 +39,12 @@
 .temp-range {
     -fx-font-size: 14px;
 }
+
+.forecast-hour {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.forecast-basic {
+    -fx-font-size: 14px;
+}

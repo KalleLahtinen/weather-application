@@ -55,7 +55,10 @@ public class ForecastViewHourlySection {
         scrollPane.setFitToHeight(true);
         // Ensure that the HBox can extend beyond the width of the ScrollPane
         scrollPane.setFitToWidth(false);
-
+        
+        // Make space for the scrollbar
+        scrollPane.prefHeightProperty().bind(hoursBox.heightProperty().add(20));
+        
         // Bind hoursBox children to hourlyBoxes list
         Bindings.bindContent(hoursBox.getChildren(), hourlyBoxes);
 
@@ -83,18 +86,27 @@ public class ForecastViewHourlySection {
      * @param selectedDayStart the start instant of the day for which to display weather.
      */
     private VBox createHourBox(Instant hour, ObjectProperty<HourlyWeather> weatherProp) {
-        VBox hourBox = new VBox(4);
+        VBox hourBox = new VBox(6);
         hourBox.setAlignment(Pos.CENTER);
 
         Label hourLabel = new Label(DateTimeFormatter.ofPattern("HH").format(hour.atZone(ZoneId.systemDefault())));
+        hourLabel.getStyleClass().add("forecast-hour");
+
         Label tempLabel = new Label();
-        tempLabel.textProperty().bind(Bindings.format("%.1f°C", Bindings.selectDouble(weatherProp, "temperature")));
+        tempLabel.textProperty().bind(Bindings.format("%.0f", Bindings.selectDouble(weatherProp, "temperature")));
+        tempLabel.getStyleClass().add("forecast-basic");
+        
         Label windLabel = new Label();
-        windLabel.textProperty().bind(Bindings.format("%.1f m/s", Bindings.selectDouble(weatherProp, "windSpeed")));
+        windLabel.textProperty().bind(Bindings.format("%.0f", Bindings.selectDouble(weatherProp, "windSpeed")));
+        windLabel.getStyleClass().add("forecast-basic");
+
         Label rainLabel = new Label();
-        rainLabel.textProperty().bind(Bindings.format("%.1f mm", Bindings.selectDouble(weatherProp, "rain1h")));
+        rainLabel.textProperty().bind(Bindings.format("%.1f", Bindings.selectDouble(weatherProp, "rain1h")));
+        rainLabel.getStyleClass().add("forecast-basic");
+
         Label humidityLabel = new Label();
-        humidityLabel.textProperty().bind(Bindings.format("%d%%", Bindings.selectInteger(weatherProp, "humidity")));
+        humidityLabel.textProperty().bind(Bindings.format("%d", Bindings.selectInteger(weatherProp, "humidity")));
+        humidityLabel.getStyleClass().add("forecast-basic");
 
         hourBox.getChildren().addAll(hourLabel, tempLabel, windLabel, rainLabel, humidityLabel);
         return hourBox;

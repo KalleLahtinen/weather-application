@@ -47,7 +47,7 @@ public final class ViewController {
     private String currentCity;
     private String currentUnits;
     
-    private final ForecastView forecastView;
+    private final ForecastViewController forecastView;
 
     /**
      * Constructs a ViewController with the specified main view builder.
@@ -60,8 +60,9 @@ public final class ViewController {
         weatherDataService = new WeatherDataService();
         currentCity = "Helsinki";      // Get this from history
         currentUnits = "metric";       // Get this from history
-        forecastView = new ForecastView(weatherDataService.getDailyForecast(currentCity, currentUnits),
-                                        weatherDataService.getHourlyForecast(currentCity, currentUnits));
+        forecastView = new ForecastViewController(
+                weatherDataService.getDailyForecast(currentCity, currentUnits),
+                weatherDataService.getHourlyForecast(currentCity, currentUnits));
         initViewContainer();
     }
 
@@ -79,11 +80,11 @@ public final class ViewController {
 
         // Create the views
         viewContainer = new StackPane();
-        VBox forecastInstant = this.forecastView.getView();
+        VBox forecast = this.forecastView.getView();
         Node view2Content = new Label("View 2 Content"); // Replace with actual view
         Node view3Content = new Label("View 3 Content"); // Replace with actual view
         
-        viewContainer.getChildren().addAll(forecastInstant, view2Content, view3Content);
+        viewContainer.getChildren().addAll(forecast, view2Content, view3Content);
         switchView(currentView);
                 
         return viewContainer;

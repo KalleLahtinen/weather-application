@@ -30,7 +30,7 @@ import javafx.scene.layout.HBox;
  * 
  * @author Kalle Lahtinen
  */
-public final class ForecastView {
+public final class ForecastViewController {
     // Property values that update binded elements when value changes
     public final ObjectProperty<DailyWeather> todayWeather = 
             new SimpleObjectProperty<>();
@@ -56,7 +56,7 @@ public final class ForecastView {
      * @param newDailyWeathers a map of daily weather data keyed by date.
      * @param newHourlyWeathers a map of hourly weather data keyed by time.
      */
-    public ForecastView(Map<Instant, DailyWeather> newDailyWeathers, 
+    public ForecastViewController(Map<Instant, DailyWeather> newDailyWeathers, 
                         Map<Instant, HourlyWeather> newHourlyWeathers) {
         
         // Keep track of which day is selected

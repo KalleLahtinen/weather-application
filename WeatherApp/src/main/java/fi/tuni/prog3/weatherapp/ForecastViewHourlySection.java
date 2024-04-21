@@ -32,14 +32,14 @@ import javafx.collections.ObservableList;
  */
 public final class ForecastViewHourlySection {
     private final ObservableList<VBox> hourlyBoxes = FXCollections.observableArrayList();
-    private final ForecastView fv;
+    private final ForecastViewController fv;
 
     /**
-     * Constructs a new ForecastViewHourlySection associated with the given ForecastView.
+     * Constructs a new ForecastViewHourlySection associated with the given ForecastViewController.
      *
      * @param forecastView the root forecast view the section is part of.
      */
-    public ForecastViewHourlySection(ForecastView forecastView) {
+    public ForecastViewHourlySection(ForecastViewController forecastView) {
         this.fv = forecastView;
     }
 

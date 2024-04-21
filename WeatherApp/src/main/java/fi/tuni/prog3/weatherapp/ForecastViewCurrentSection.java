@@ -7,8 +7,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+/*
+    ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
+    courses of action, best practises, javaFX features and then iterating 
+    code to make work more efficient. This made it possible to focus on 
+    the bigger picture and architecture, with cleaner class division and code.
+ */
+
 /**
- *
+ * A class for creating the current weather section of the forecast view with 
+ * styling and values binded to corresponding data in forecastView.
+ * 
  * @author Kalle Lahtinen
  */
 public class ForecastViewCurrentSection {
@@ -19,7 +28,7 @@ public class ForecastViewCurrentSection {
      *
      * @return a VBox filled with Text nodes displaying weather data for current day.
      */
-    VBox createCurrentWeatherSection(ForecastView forecastView) {
+    VBox createCurrentWeatherSection(ForecastViewController forecastView) {
         VBox CurrWeatherBox = new VBox(10);
         CurrWeatherBox.setAlignment(Pos.CENTER);
         CurrWeatherBox.setPadding(new Insets(10));

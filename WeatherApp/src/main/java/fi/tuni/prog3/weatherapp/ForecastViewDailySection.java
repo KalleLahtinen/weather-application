@@ -10,6 +10,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/*
+    ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
+    courses of action, best practises, javaFX features and then iterating 
+    code to make work more efficient. This made it possible to focus on 
+    the bigger picture and architecture, with cleaner class division and code.
+ */
+
 /**
  * A class for creating the daily weather section of the forecast view with 
  * styling and values binded to corresponding data in forecastView.
@@ -29,7 +36,7 @@ public class ForecastViewDailySection {
      *
      * @return a HBox filled with Text nodes displaying daily weather data.
      */
-    HBox createDailyWeatherSection(ForecastView forecastView) {
+    HBox createDailyWeatherSection(ForecastViewController forecastView) {
         daysBox = new HBox();
         daysBox.setAlignment(Pos.CENTER);
         daysBox.getStyleClass().add("days-box");
@@ -61,6 +68,7 @@ public class ForecastViewDailySection {
             final int index = i;
             dayBox.setOnMouseClicked(event -> {
                 forecastView.currentDayIndex.set(index);
+                forecastView.scrollToHour();
             });
         }
 

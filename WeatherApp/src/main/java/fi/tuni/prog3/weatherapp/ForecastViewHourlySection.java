@@ -1,16 +1,19 @@
 package fi.tuni.prog3.weatherapp;
 
+import java.time.Duration;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import static java.time.temporal.TemporalQueries.zoneId;
 import java.util.Map;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -32,7 +35,9 @@ import javafx.collections.ObservableList;
  */
 public final class ForecastViewHourlySection {
     private final ObservableList<VBox> hourlyBoxes = FXCollections.observableArrayList();
+    private ScrollPane scrollPane;
     private final ForecastViewController fv;
+    private final Integer hourWidth = 35;
 
     /**
      * Constructs a new ForecastViewHourlySection associated with the given ForecastViewController.
@@ -52,7 +57,7 @@ public final class ForecastViewHourlySection {
         HBox hoursBox = new HBox(5);
         hoursBox.setAlignment(Pos.CENTER);
 
-        ScrollPane scrollPane = new ScrollPane(hoursBox);
+        scrollPane = new ScrollPane(hoursBox);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setFitToHeight(true);
@@ -90,6 +95,7 @@ public final class ForecastViewHourlySection {
      */
     private VBox createHourBox(Instant hour, ObjectProperty<HourlyWeather> weatherProp) {
         VBox hourBox = new VBox(6);
+        hourBox.setPrefWidth(hourWidth);
         hourBox.setAlignment(Pos.CENTER);
 
         Label hourLabel = new Label(DateTimeFormatter.ofPattern("HH").format(hour.atZone(ZoneId.systemDefault())));
@@ -113,5 +119,33 @@ public final class ForecastViewHourlySection {
 
         hourBox.getChildren().addAll(hourLabel, tempLabel, windLabel, rainLabel, humidityLabel);
         return hourBox;
+    }
+    
+    public void scrollToHour() {
+        Integer currentDayIndex = fv.currentDayIndex.get();
+        
+        Instant earliestHour = fv.hourlyWeathers.get().keySet().stream()
+                             .min(Instant::compareTo)
+                             .orElse(null);
+        
+        if (currentDayIndex == 0) {
+            scrollPane.setHvalue(0);
+            
+        } else if (currentDayIndex < 4) {
+            // Convert the instant to a ZonedDateTime
+            ZonedDateTime zonedDateTime = earliestHour.atZone(ZoneId.of("Europe/Helsinki"));
+
+            // Retrieve the hour as an integer between 0 and 23
+            int hour = zonedDateTime.getHour();
+            int timeToNextDay = 24 - hour;
+            
+            double scrollTo = (1 - (96 - timeToNextDay) / 96.0) * currentDayIndex;
+            scrollPane.setHvalue(scrollTo);
+            System.out.println("Scroll to proportion: " + scrollTo);
+            
+        } else {
+            scrollPane.setHvalue(1);
+        }
+        //             double scrollTo = (96.0 / (96 - timeToNextDay)) - 1;
     }
 }

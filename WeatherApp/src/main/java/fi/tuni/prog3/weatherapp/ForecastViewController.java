@@ -138,6 +138,10 @@ public final class ForecastViewController {
         }
     }
     
+    public void scrollToHour() {
+        
+    }
+    
     /**
      * Updates the daily weather data with the given map and 
      * sets the current weather to the earliest date available.

@@ -128,8 +128,9 @@ public final class ViewController {
         if (city != null) {
             currentCity = city;
             mainViewBuilder.updateCityLabel(currentCity);
-            forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(currentCity, currentUnits));
-            forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(currentCity, currentUnits));
+            
+            forecastView.updateSections(weatherDataService.getDailyForecast(currentCity, currentUnits),
+                                        weatherDataService.getHourlyForecast(currentCity, currentUnits));
         }
     }
 }

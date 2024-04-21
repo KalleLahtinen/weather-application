@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -40,10 +41,14 @@ public final class ForecastView {
     private final ObjectProperty<DailyWeather> todayWeather = new SimpleObjectProperty<>();
     private final MapProperty<Instant, DailyWeather> dailyWeathers = 
             new SimpleMapProperty<>(FXCollections.observableHashMap());
-    private final MapProperty<Instant, HourlyWeather> hourlyWeathers = 
-            new SimpleMapProperty<>(FXCollections.observableHashMap());
+
     private final List<ObjectProperty<DailyWeather>> displayedDays = new ArrayList<>();
     private final VBox view;
+    
+    private ForecastViewHourlySection hourlySection;
+    
+    // Use AtomicReference to safely store reference to current selection
+    public AtomicReference<VBox> selectedDay = new AtomicReference<>();
 
     /**
      * Constructs a ForecastView instance with the given daily and hourly weather data maps.
@@ -54,7 +59,10 @@ public final class ForecastView {
     public ForecastView(Map<Instant, DailyWeather> newDailyWeathers, 
                         Map<Instant, HourlyWeather> newHourlyWeathers) {
         updateDailyWeathers(newDailyWeathers);
-        updateHourlyWeathers(newHourlyWeathers);
+        
+        this.hourlySection = new ForecastViewHourlySection(this, newHourlyWeathers);
+        hourlySection.updateHourlyWeathers(newHourlyWeathers);
+        
         view = initForecastView();
     }
 
@@ -67,11 +75,11 @@ public final class ForecastView {
     public VBox initForecastView() {
         VBox currentSection = createCurrentWeatherSection();
         HBox dailySection = createDailyWeatherSection();
-        // VBox hourlySection = createHourlyWeatherSection();
+        ScrollPane hourly = hourlySection.createHourlyWeatherSection();
 
         // Combine all sections into a single VBox
         VBox root = new VBox();
-        root.getChildren().addAll(currentSection, dailySection);
+        root.getChildren().addAll(currentSection, dailySection, hourly);
         root.setAlignment(Pos.CENTER);
 
         return root;
@@ -109,17 +117,16 @@ public final class ForecastView {
         HBox hbox = new HBox(15);
         hbox.setAlignment(Pos.CENTER);
 
-        Text airQualityText = new Text("Air Quality: Good"); // Placeholder
         Text rainAmountText = new Text();
         rainAmountText.textProperty().bind(
             Bindings.format("Rain: %.1f mm", Bindings.selectDouble(todayWeather, "rainVolume"))
         );
         Text windSpeedText = new Text();
         windSpeedText.textProperty().bind(
-            Bindings.format("Wind Speed: %.1f km/h", Bindings.selectDouble(todayWeather, "windSpeed"))
+            Bindings.format("Wind Speed: %.1f m/s", Bindings.selectDouble(todayWeather, "windSpeed"))
         );
 
-        hbox.getChildren().addAll(airQualityText, rainAmountText, windSpeedText);
+        hbox.getChildren().addAll(rainAmountText, windSpeedText);
         CurrWeatherBox.getChildren().add(hbox);
 
         return CurrWeatherBox;
@@ -135,9 +142,6 @@ public final class ForecastView {
         HBox daysBox = new HBox();
         daysBox.setAlignment(Pos.CENTER);
         daysBox.getStyleClass().add("days-box");
-
-        // Use AtomicReference to safely store reference to current selection
-        AtomicReference<VBox> lastSelected = new AtomicReference<>();
 
         setupWeatherBindings();  // Initialize bindings
 
@@ -168,11 +172,11 @@ public final class ForecastView {
 
             // Click event for selecting a day
             dayBox.setOnMouseClicked(event -> {
-                if (lastSelected.get() != null) {
-                    lastSelected.get().getStyleClass().remove("selected-day");
+                if (selectedDay.get() != null) {
+                    selectedDay.get().getStyleClass().remove("selected-day");
                 }
                 dayBox.getStyleClass().add("selected-day");
-                lastSelected.set(dayBox);
+                selectedDay.set(dayBox);
             });
         }
         
@@ -180,7 +184,7 @@ public final class ForecastView {
         if (!daysBox.getChildren().isEmpty()) {
             VBox firstDayBox = (VBox) daysBox.getChildren().get(0);
             firstDayBox.getStyleClass().add("selected-day");
-            lastSelected.set(firstDayBox);
+            selectedDay.set(firstDayBox);
         }
         
         return daysBox;
@@ -230,15 +234,11 @@ public final class ForecastView {
         }
         setupWeatherBindings();  // Update bindings for the HBox with daily weather data
     }
-
-    /**
-     * Updates the hourly weather data with the given map.
-     *
-     * @param newHourlyWeathers the new map of hourly weather data.
-     */
-    public void updateHourlyWeathers(Map<Instant, HourlyWeather> newHourlyWeathers) {
-        hourlyWeathers.clear();
-        hourlyWeathers.putAll(newHourlyWeathers);
+    
+    public void updateSections(Map<Instant, DailyWeather> newDailyWeathers,
+                               Map<Instant, HourlyWeather> newHourlyWeathers) {
+        updateDailyWeathers(newDailyWeathers);
+        hourlySection.updateHourlyWeathers(newHourlyWeathers);
     }
     
     /**

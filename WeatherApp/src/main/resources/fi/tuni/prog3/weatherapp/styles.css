@@ -48,3 +48,18 @@
 .forecast-basic {
     -fx-font-size: 14px;
 }
+
+.switch-label-left {
+    -fx-font-size: 12px;
+    -fx-padding: 5px 0px 5px 10px;
+}
+
+.switch-label-right {
+    -fx-font-size: 12px;
+    -fx-padding: 5px 0px 5px 0px;
+}
+
+.toggle-switch {
+    /* Left padding to push the control towards the center of it's internal container' */
+    -fx-padding: 0 0 0 20px;
+}

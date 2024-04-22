@@ -1,5 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -84,7 +85,7 @@ public class MainViewBuilder {
     private void createToolbar() {
         ToolBar toolbar = new ToolBar();
         
-        Button exampleButton = new Button("Placeholder");
+        HBox unitToggle = Utils.createUnitToggle();
 
         searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
@@ -106,7 +107,7 @@ public class MainViewBuilder {
         leftSpacer.setMaxWidth(Double.MAX_VALUE);
         rightSpacer.setMaxWidth(Double.MAX_VALUE);
 
-        toolbar.getItems().addAll(exampleButton, leftSpacer, labelContainer, rightSpacer, searchBar);
+        toolbar.getItems().addAll(unitToggle, leftSpacer, labelContainer, rightSpacer, searchBar);
         
         rootLayout.setTop(toolbar);
     }

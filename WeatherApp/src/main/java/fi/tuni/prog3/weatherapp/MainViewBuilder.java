@@ -1,6 +1,5 @@
 package fi.tuni.prog3.weatherapp;
 
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,7 +27,9 @@ import javafx.stage.Stage;
  */
 public class MainViewBuilder {
     private final Stage stage;
-    private final ViewController viewController;
+    private final ReadAndWriteToFile fileHandler = new ReadAndWriteToFile();
+    public ApplicationStateManager appState;
+    public final ViewController viewController;
     public final MeasurementSystem measurementSystem;
     private Label cityTextLabel; // For dynamic text updates
     private BorderPane rootLayout; // The main layout for the elements
@@ -43,8 +44,15 @@ public class MainViewBuilder {
      */
     public MainViewBuilder(Stage stage) {
         this.stage = stage;
-        measurementSystem = new MeasurementSystem();
-        viewController = new ViewController(this, measurementSystem);
+
+        appState = fileHandler.readFromFile();
+        measurementSystem = new MeasurementSystem(appState.getUnits());
+        viewController = new ViewController(this, measurementSystem, appState);
+        
+        // Save the appState object to file when application is closed
+        stage.setOnCloseRequest(event -> {
+            fileHandler.writeToFile(appState);
+        });
     }
 
     /**
@@ -91,7 +99,7 @@ public class MainViewBuilder {
         TextField searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
-        cityTextLabel = new Label("City here");
+        cityTextLabel = new Label(appState.getCurrentCity());
 
         // Use Regions as flexible spacers
         Region leftSpacer = new Region();

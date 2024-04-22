@@ -47,7 +47,7 @@ public final class ViewController {
     
     private final WeatherDataService weatherDataService = new WeatherDataService();
     private final MeasurementSystem measurementSystem;
-    private final ApplicationStateManager appState = new ApplicationStateManager();
+    private final ApplicationStateManager appState;
 
     /**
      * Constructs a ViewController with the specified main view builder.
@@ -56,10 +56,13 @@ public final class ViewController {
      * @param builder the main view builder used for creating and managing UI components.
      * @param measurementSystem the MeasurementSystem object keeping track of 
      *        current system of measurement and measurement unit properties.
+     * @param appState The ApplicationStateManager object containing session data.
      */
-    public ViewController(MainViewBuilder builder, MeasurementSystem measurementSystem) {
+    public ViewController(MainViewBuilder builder, MeasurementSystem measurementSystem, 
+                          ApplicationStateManager appState) {
         this.mainViewBuilder = builder;
         this.measurementSystem = measurementSystem;
+        this.appState = appState;
                 
         forecastView = new ForecastViewController(measurementSystem,
                 weatherDataService.getDailyForecast(appState.currentCity, appState.getUnits()),
@@ -121,6 +124,16 @@ public final class ViewController {
     }
     
     /**
+     * Updates all weather views with a new API call using current selections.
+     */
+    public void updateWeather() {
+        forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(
+                appState.currentCity, appState.getUnits()));
+        forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(
+                appState.currentCity, appState.getUnits()));
+    }
+    
+    /**
      * Handles the search operation initiated by the user. Updates all views with
      * the new city's weather data if the city exists.
      *
@@ -131,9 +144,7 @@ public final class ViewController {
         if (city != null) {
             appState.setCurrentCity(city);
             mainViewBuilder.updateCityLabel(city);
-            
-            forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(city, appState.getUnits()));
-            forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(city, appState.getUnits()));
+            updateWeather();
         }
     }
 }

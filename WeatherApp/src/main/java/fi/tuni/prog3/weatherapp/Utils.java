@@ -59,6 +59,12 @@ public class Utils {
         // Create the ToggleSwitch
         ToggleSwitch toggleSwitch = new ToggleSwitch();
         toggleSwitch.getStyleClass().add("toggle-switch");
+        
+        if (mwBuilder.appState.units.equals("imperial")) {
+            toggleSwitch.setSelected(true);
+        } else {
+            toggleSwitch.setSelected(false);
+        }
 
         // Create labels for Metric and Imperial
         Label labelLeft = new Label("Metric");
@@ -76,8 +82,12 @@ public class Utils {
         toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == true) {
                 mwBuilder.measurementSystem.changeSystem("imperial");
+                mwBuilder.appState.setUnits("imperial");
+                mwBuilder.viewController.updateWeather();
             } else {
                 mwBuilder.measurementSystem.changeSystem("metric");
+                mwBuilder.appState.setUnits("metric");
+                mwBuilder.viewController.updateWeather();
             }
         });
         

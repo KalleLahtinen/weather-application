@@ -23,9 +23,11 @@ public final class MeasurementSystem {
 
     /**
      * Constructs a new MeasurementSystem and initializes it to use the metric system.
+     * 
+     * @param units The units of measurement the object is initialized to.
      */
-    public MeasurementSystem() {
-        changeSystem("metric");
+    public MeasurementSystem(String units) {
+        changeSystem(units);
     }
 
     /**

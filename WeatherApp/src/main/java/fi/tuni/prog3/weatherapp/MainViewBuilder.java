@@ -29,8 +29,8 @@ import javafx.stage.Stage;
 public class MainViewBuilder {
     private final Stage stage;
     private final ViewController viewController;
+    public final MeasurementSystem measurementSystem;
     private Label cityTextLabel; // For dynamic text updates
-    private TextField searchBar;
     private BorderPane rootLayout; // The main layout for the elements
     public StackPane viewContainer; // This will hold the views to enable transition effects
 
@@ -43,7 +43,8 @@ public class MainViewBuilder {
      */
     public MainViewBuilder(Stage stage) {
         this.stage = stage;
-        viewController = new ViewController(this);
+        measurementSystem = new MeasurementSystem();
+        viewController = new ViewController(this, measurementSystem);
     }
 
     /**
@@ -70,7 +71,7 @@ public class MainViewBuilder {
         Scene scene = new Scene(rootLayout, 400, 300);
         // Link CSS file for formatting
         scene.getStylesheets().add(getClass().getResource("/fi/tuni/prog3/weatherapp/styles.css").toExternalForm());
-        stage.setMinWidth(650);
+        stage.setMinWidth(615);
         stage.setMinHeight(500);
         stage.setScene(scene);
     }
@@ -85,9 +86,9 @@ public class MainViewBuilder {
     private void createToolbar() {
         ToolBar toolbar = new ToolBar();
         
-        HBox unitToggle = Utils.createUnitToggle();
+        HBox unitToggle = Utils.createUnitToggle(this);
 
-        searchBar = Utils.createSearchBarWithSuggestions();
+        TextField searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
         cityTextLabel = new Label("City here");

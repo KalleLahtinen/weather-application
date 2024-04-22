@@ -58,9 +58,11 @@ public class ForecastViewDailySection {
             
             Label tempRange = new Label();
             tempRange.getStyleClass().add("temp-range");
-            tempRange.textProperty().bind(Bindings.format("%.0f\u00b0C ... %.0f\u00b0C",
+            tempRange.textProperty().bind(Bindings.format("%.0f%s ... %.0f%s",
                 Bindings.selectDouble(weatherProp, "minTemp"),
-                Bindings.selectDouble(weatherProp, "maxTemp")));
+                Bindings.selectString(forecastView.measurementSystem, "tempUnit"),
+                Bindings.selectDouble(weatherProp, "maxTemp"),
+                Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
             
             dayBox.getChildren().addAll(dateLabel, tempRange);
             daysBox.getChildren().add(dayBox);

@@ -11,7 +11,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 
 /**
- * A class for the utility functions of the Weatherapp application
+ * A class for the utility functions of the Weatherapp application.
  */
 public class Utils {
 
@@ -51,9 +51,11 @@ public class Utils {
      * Creates and returns a custom ControlsFX ToggleSwitch for switching 
      * between metric and imperial units.
      * 
+     * @param mwBuilder A reference to the MainViewBuilder class for access 
+     *                  to currently used MeasurementSystem object.
      * @return A ToggleSwitch with the labels "Metric" and "Imperial".
      */
-    public static HBox createUnitToggle() {
+    public static HBox createUnitToggle(MainViewBuilder mwBuilder) {
         // Create the ToggleSwitch
         ToggleSwitch toggleSwitch = new ToggleSwitch();
         toggleSwitch.getStyleClass().add("toggle-switch");
@@ -68,13 +70,14 @@ public class Utils {
 
         // Align labels and switch in a horizontal box
         HBox toggleBox = new HBox(labelLeft, toggleSwitch, labelRight);        
-        toggleBox.setAlignment(Pos.CENTER);  // Center-align elements vertically
+        toggleBox.setAlignment(Pos.CENTER);
         
+        // Toggle between selectable measurement systems
         toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                System.out.println("Switched to Imperial");
+            if (newValue == true) {
+                mwBuilder.measurementSystem.changeSystem("imperial");
             } else {
-                System.out.println("Switched to Metric");
+                mwBuilder.measurementSystem.changeSystem("metric");
             }
         });
         

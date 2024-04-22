@@ -44,20 +44,28 @@ public final class ForecastViewController {
     public final IntegerProperty currentDayIndex = new SimpleIntegerProperty(-1);
 
     public final List<ObjectProperty<DailyWeather>> displayedDays = new ArrayList<>();
-    public final VBox view;
+    
+    public final ObjectProperty<MeasurementSystem> measurementSystem =
+        new SimpleObjectProperty<>();; 
     
     public ForecastViewCurrentSection currentSection;
     public ForecastViewDailySection dailySection;
     public ForecastViewHourlySection hourlySection;
+    
+    public final VBox view;
 
     /**
      * Constructs a ForecastView instance with the given daily and hourly weather data maps.
      * 
+     * @param measurementSystem the MeasurementSystem object keeping track of 
+     *        current system of measurement and measurement unit properties.
      * @param newDailyWeathers a map of daily weather data keyed by date.
      * @param newHourlyWeathers a map of hourly weather data keyed by time.
      */
-    public ForecastViewController(Map<Instant, DailyWeather> newDailyWeathers, 
+    public ForecastViewController(MeasurementSystem measurementSystem,
+                        Map<Instant, DailyWeather> newDailyWeathers, 
                         Map<Instant, HourlyWeather> newHourlyWeathers) {
+        this.measurementSystem.set(measurementSystem);
         
         // Keep track of which day is selected
         currentDayIndex.addListener((obs, oldIndex, newIndex) -> {
@@ -136,10 +144,6 @@ public final class ForecastViewController {
         if (newIndex >= 0 && newIndex < daysBox.getChildren().size()) {
             ((VBox) daysBox.getChildren().get(newIndex)).getStyleClass().add("selected-day");
         }
-    }
-    
-    public void scrollToHour() {
-        
     }
     
     /**

@@ -54,13 +54,15 @@ public final class ViewController {
      * Initializes the forecast view with data for the default city and unit.
      * 
      * @param builder the main view builder used for creating and managing UI components.
+     * @param measurementSystem the MeasurementSystem object keeping track of 
+     *        current system of measurement and measurement unit properties.
      */
-    public ViewController(MainViewBuilder builder) {
-        mainViewBuilder = builder;
+    public ViewController(MainViewBuilder builder, MeasurementSystem measurementSystem) {
+        this.mainViewBuilder = builder;
         weatherDataService = new WeatherDataService();
         currentCity = "Helsinki";      // Get this from history
         currentUnits = "metric";       // Get this from history
-        forecastView = new ForecastViewController(
+        forecastView = new ForecastViewController(measurementSystem,
                 weatherDataService.getDailyForecast(currentCity, currentUnits),
                 weatherDataService.getHourlyForecast(currentCity, currentUnits));
         initViewContainer();

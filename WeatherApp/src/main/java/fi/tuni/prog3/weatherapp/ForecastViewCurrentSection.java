@@ -37,16 +37,18 @@ public class ForecastViewCurrentSection {
         // Day Temperature Text
         Text dayTemperatureText = new Text();
         dayTemperatureText.textProperty().
-                bind(Bindings.format("%.1f\u00b0C",
-                Bindings.selectDouble(forecastView.todayWeather, "dayTemp")));
+                bind(Bindings.format("%.1f%s",
+                Bindings.selectDouble(forecastView.todayWeather, "dayTemp"),
+                Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
         dayTemperatureText.getStyleClass().add("bold-text");
         CurrWeatherBox.getChildren().add(dayTemperatureText);
         
         // Feels Like Temperature Text
         Text feelsLikeText = new Text();
         feelsLikeText.textProperty().
-                bind(Bindings.format("Feels like: %.1f\u00b0C",
-                Bindings.selectDouble(forecastView.todayWeather, "dayFeelsLike")));
+                bind(Bindings.format("Feels like: %.1f%s",
+                Bindings.selectDouble(forecastView.todayWeather, "dayFeelsLike"),
+                Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
         feelsLikeText.getStyleClass().add("normal-text");
         CurrWeatherBox.getChildren().add(feelsLikeText);
         
@@ -56,18 +58,19 @@ public class ForecastViewCurrentSection {
         
         Text rainAmountText = new Text();
         rainAmountText.textProperty().
-                bind(Bindings.format("Rain: %.1f mm",
-                Bindings.selectDouble(forecastView.todayWeather, "rainVolume")));
+                bind(Bindings.format("Rain: %.1f %s",
+                Bindings.selectDouble(forecastView.todayWeather, "rainVolume"),
+                Bindings.selectString(forecastView.measurementSystem, "rainUnit")));
         
         Text windSpeedText = new Text();
         windSpeedText.textProperty().
-                bind(Bindings.format("Wind Speed: %.1f m/s",
-                Bindings.selectDouble(forecastView.todayWeather, "windSpeed")));
+                bind(Bindings.format("Wind Speed: %.1f %s",
+                Bindings.selectDouble(forecastView.todayWeather, "windSpeed"),
+                Bindings.selectString(forecastView.measurementSystem, "windUnit")));
         
         hbox.getChildren().addAll(rainAmountText, windSpeedText);
         CurrWeatherBox.getChildren().add(hbox);
         
         return CurrWeatherBox;
     }
-    
 }

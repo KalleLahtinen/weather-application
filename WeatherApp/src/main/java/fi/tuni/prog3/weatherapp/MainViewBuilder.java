@@ -31,7 +31,7 @@ public class MainViewBuilder {
     private Label cityTextLabel; // For dynamic text updates
     private TextField searchBar;
     private BorderPane rootLayout; // The main layout for the elements
-    private StackPane viewContainer; // This will hold the views to enable transition effects
+    public StackPane viewContainer; // This will hold the views to enable transition effects
 
     /**
      * Constructs a new MainController with a reference to the primary stage.
@@ -67,6 +67,8 @@ public class MainViewBuilder {
         createBottomTabBar();
 
         Scene scene = new Scene(rootLayout, 400, 300);
+        // Link CSS file for formatting
+        scene.getStylesheets().add(getClass().getResource("/fi/tuni/prog3/weatherapp/styles.css").toExternalForm());
         stage.setScene(scene);
     }
 

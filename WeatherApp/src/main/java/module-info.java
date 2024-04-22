@@ -4,4 +4,5 @@ module fi.tuni.progthree.weatherapp {
     
     exports fi.tuni.prog3.weatherapp;
     requires com.google.gson;
+    requires org.apache.logging.log4j;
 }

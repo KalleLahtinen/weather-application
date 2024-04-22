@@ -1,6 +1,5 @@
 package fi.tuni.prog3.weatherapp;
 
-import java.time.Duration;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -10,10 +9,8 @@ import javafx.scene.layout.VBox;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import static java.time.temporal.TemporalQueries.zoneId;
 import java.util.Map;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -138,14 +135,16 @@ public final class ForecastViewHourlySection {
             // Retrieve the hour as an integer between 0 and 23
             int hour = zonedDateTime.getHour();
             int timeToNextDay = 24 - hour;
+            double secondDayStart = 96.0 / (96 - timeToNextDay) - 1;
             
-            double scrollTo = (1 - (96 - timeToNextDay) / 96.0) * currentDayIndex;
+            double scrollTo = secondDayStart + (0.25 * (currentDayIndex - 1));
             scrollPane.setHvalue(scrollTo);
+            
+            System.out.println("timeToNextDay: " + timeToNextDay);
             System.out.println("Scroll to proportion: " + scrollTo);
             
         } else {
             scrollPane.setHvalue(1);
         }
-        //             double scrollTo = (96.0 / (96 - timeToNextDay)) - 1;
     }
 }

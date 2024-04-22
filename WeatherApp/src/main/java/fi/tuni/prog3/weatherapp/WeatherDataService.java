@@ -12,8 +12,8 @@ import java.time.Instant;
 import java.util.Map;
 
 /**
- * Class for interracting with OpenWeatherMap API and returning weather data
- * author Roope Kärkkäinen & Kalle Lahtinen
+ * Class for interacting with OpenWeatherMap API and returning weather data
+ * @author Roope Kärkkäinen & Kalle Lahtinen
  */
 public class WeatherDataService implements iAPI {
     
@@ -45,7 +45,8 @@ public class WeatherDataService implements iAPI {
             return cityName;
         
         } catch (IOException | IndexOutOfBoundsException e) {
-            e.printStackTrace();
+            String errorMessage = "Error fetching city information from " + query;
+            LoggingInformation.logError(errorMessage, e);
             return null;
         }
     }
@@ -74,7 +75,8 @@ public class WeatherDataService implements iAPI {
             return coords;
         
         } catch (IOException | IndexOutOfBoundsException e) {
-            e.printStackTrace();
+            String errorMessage = "Error fetching location information from " + loc;
+            LoggingInformation.logError(errorMessage, e);
             return null;
         }
     }
@@ -100,7 +102,9 @@ public class WeatherDataService implements iAPI {
             return WeatherParser.parseDailyForecast(jsonResponse, units);
             
         } catch (IOException e) {
-            e.printStackTrace();
+            String errorMessage = "Error fetching daily forecast for " 
+                    + loc + " in " + units;
+            LoggingInformation.logError(errorMessage, e);
             return null;
         }
     }
@@ -125,15 +129,17 @@ public class WeatherDataService implements iAPI {
             return WeatherParser.parseHourlyForecast(jsonResponse, units);
             
         } catch (IOException e) {
-            e.printStackTrace();
+            String errorMessage = "Error fetching hourly forecast for " + loc 
+                    + " in " + units;
+            LoggingInformation.logError(errorMessage, e);
             return null;
         }
     }
 
     /**
-     * A method for fetching and returning a Json API response in string format
-     * @param apiUrl The API's url for fetching Json responses
-     * @return A Json API response containing in string format
+     * A method for fetching and returning a JSON API response in string format
+     * @param apiUrl The API's URL for fetching JSON responses
+     * @return A JSON API response containing in string format
      * @throws IOException On issues during HTTP connection
      */
     public String fetchDataFromAPI(String apiUrl) throws IOException {

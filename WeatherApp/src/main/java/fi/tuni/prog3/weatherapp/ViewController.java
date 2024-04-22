@@ -39,15 +39,15 @@ public final class ViewController {
             throw new IllegalArgumentException("No view for index: " + index);
         }
     }
-    
-    private final MainViewBuilder mainViewBuilder;
-    private final WeatherDataService weatherDataService;
     private StackPane viewContainer; // Holds the views
     private View currentView = View.FORECAST; // Default to the FORECAST view being visible
-    private String currentCity;
-    private String currentUnits;
     
+    private final MainViewBuilder mainViewBuilder;
     private final ForecastViewController forecastView;
+    
+    private final WeatherDataService weatherDataService = new WeatherDataService();
+    private final MeasurementSystem measurementSystem;
+    private final ApplicationStateManager appState = new ApplicationStateManager();
 
     /**
      * Constructs a ViewController with the specified main view builder.
@@ -59,12 +59,12 @@ public final class ViewController {
      */
     public ViewController(MainViewBuilder builder, MeasurementSystem measurementSystem) {
         this.mainViewBuilder = builder;
-        weatherDataService = new WeatherDataService();
-        currentCity = "Helsinki";      // Get this from history
-        currentUnits = "metric";       // Get this from history
+        this.measurementSystem = measurementSystem;
+                
         forecastView = new ForecastViewController(measurementSystem,
-                weatherDataService.getDailyForecast(currentCity, currentUnits),
-                weatherDataService.getHourlyForecast(currentCity, currentUnits));
+                weatherDataService.getDailyForecast(appState.currentCity, appState.getUnits()),
+                weatherDataService.getHourlyForecast(appState.currentCity, appState.getUnits()));
+        
         initViewContainer();
     }
 
@@ -129,11 +129,11 @@ public final class ViewController {
     public void searchHandler(String query) {
         String city = weatherDataService.getCity(query);
         if (city != null) {
-            currentCity = city;
-            mainViewBuilder.updateCityLabel(currentCity);
+            appState.setCurrentCity(city);
+            mainViewBuilder.updateCityLabel(city);
             
-            forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(currentCity, currentUnits));
-            forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(currentCity, currentUnits));
+            forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(city, appState.getUnits()));
+            forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(city, appState.getUnits()));
         }
     }
 }

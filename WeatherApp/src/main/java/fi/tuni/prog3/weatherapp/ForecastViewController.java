@@ -65,6 +65,7 @@ public final class ForecastViewController {
     public ForecastViewController(MeasurementSystem measurementSystem,
                         Map<Instant, DailyWeather> newDailyWeathers, 
                         Map<Instant, HourlyWeather> newHourlyWeathers) {
+        // Make a bindable ObjectProperty from current MeasurementSystem
         this.measurementSystem.set(measurementSystem);
         
         // Keep track of which day is selected
@@ -133,6 +134,7 @@ public final class ForecastViewController {
     
     /**
      * Updates the highlight styling to the selected day.
+     * 
      * @param oldIndex The old selection's index.
      * @param newIndex The new selection's index.
      */

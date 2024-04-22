@@ -9,20 +9,20 @@ import java.util.List;
  */
 public class ApplicationStateManager {
     public String units;
-    public String currentTown;
+    public String currentCity;
     public List<String> history;
     public List<String> favouriteCities;
 
     public ApplicationStateManager(String units, String currentTown, List<String> history, List<String> favourites) {
         this.units = units;
-        this.currentTown = currentTown;
+        this.currentCity = currentTown;
         this.history = history;
         this.favouriteCities = favourites;
     }
     
     public ApplicationStateManager() {
         this.units = "metric";
-        this.currentTown = "Helsinki";
+        this.currentCity = "Helsinki";
         this.history = new ArrayList<>();
         this.favouriteCities = new ArrayList<>();
     }
@@ -99,12 +99,12 @@ public class ApplicationStateManager {
         this.units = units;
     }
 
-    public String getCurrentTown() {
-        return currentTown;
+    public String getCurrentCity() {
+        return currentCity;
     }
 
-    public void setCurrentTown(String currentTown) {
-        this.currentTown = currentTown;
+    public void setCurrentCity(String currentCity) {
+        this.currentCity = currentCity;
     }
 
     public List<String> getHistory() {

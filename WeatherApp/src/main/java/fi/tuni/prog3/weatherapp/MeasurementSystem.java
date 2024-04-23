@@ -51,7 +51,8 @@ public final class MeasurementSystem {
             }
             case "imperial" -> {
                 tempUnit.set("°F");
-                rainUnit.set("inch");
+                // OpenWeatherMap only supports mm for rain amount
+                rainUnit.set("mm");
                 windUnit.set("mph");
             }
             default -> {

@@ -128,7 +128,10 @@ public final class ForecastViewHourlySection {
         return hourBox;
     }
     
-    public void scrollToHour() {
+    /**
+     * Moves the hourly weather's scroll bar to the beginning of the selected day.
+     */
+    public void scrollToSelectedHour() {
         Integer currentDayIndex = fv.currentDayIndex.get();
         
         Instant earliestHour = fv.hourlyWeathers.get().keySet().stream()
@@ -149,9 +152,6 @@ public final class ForecastViewHourlySection {
             
             double scrollTo = secondDayStart + (0.25 * (currentDayIndex - 1));
             scrollPane.setHvalue(scrollTo);
-            
-            System.out.println("timeToNextDay: " + timeToNextDay);
-            System.out.println("Scroll to proportion: " + scrollTo);
             
         } else {
             scrollPane.setHvalue(1);

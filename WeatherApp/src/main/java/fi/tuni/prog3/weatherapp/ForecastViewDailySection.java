@@ -81,7 +81,7 @@ public class ForecastViewDailySection {
             final int index = i;
             dayBox.setOnMouseClicked(event -> {
                 forecastView.currentDayIndex.set(index);
-                forecastView.hourlySection.scrollToHour();
+                forecastView.hourlySection.scrollToSelectedHour();
             });
         }
 

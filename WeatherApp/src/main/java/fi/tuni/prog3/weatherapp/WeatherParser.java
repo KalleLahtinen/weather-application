@@ -94,6 +94,11 @@ public class WeatherParser {
                     weather.get("icon").getAsString(),
                     // Take into consideration places with no rain
                     rain != null ? rain.get("1h").getAsDouble() : 0.0,
+                    // Get weather icon id
+                    WeatherIconManager.getIconCode(
+                            element.getAsJsonArray("weather").get(0)
+                            .getAsJsonObject().get("id").getAsInt(), true),
+                    // Also save the used units of measurement in object
                     units
             );
             weatherData.put(date, hourlyWeather);

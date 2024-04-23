@@ -16,6 +16,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /*
     ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
@@ -57,7 +59,7 @@ public final class ForecastViewHourlySection {
         scrollPane = new ScrollPane(hoursBox);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToHeight(false);
         // Ensure that the HBox can extend beyond the width of the ScrollPane
         scrollPane.setFitToWidth(false);
         
@@ -97,6 +99,12 @@ public final class ForecastViewHourlySection {
 
         Label hourLabel = new Label(DateTimeFormatter.ofPattern("HH").format(hour.atZone(ZoneId.systemDefault())));
         hourLabel.getStyleClass().add("forecast-hour");
+        
+        Text hourlyWeatherIcon = new Text();
+        hourlyWeatherIcon.setFont(new Font("Weather Icons", 30));
+        hourlyWeatherIcon.textProperty().bind(Bindings.format("%s",
+                Bindings.selectString(weatherProp, "iconCode")));
+        hourlyWeatherIcon.setId("hourlyWeatherIcon");
 
         Label tempLabel = new Label();
         tempLabel.textProperty().bind(Bindings.format("%.0f", Bindings.selectDouble(weatherProp, "temperature")));
@@ -111,10 +119,10 @@ public final class ForecastViewHourlySection {
         rainLabel.getStyleClass().add("forecast-basic");
 
         Label humidityLabel = new Label();
-        humidityLabel.textProperty().bind(Bindings.format("%d", Bindings.selectInteger(weatherProp, "humidity")));
+        humidityLabel.textProperty().bind(Bindings.format("%d%%", Bindings.selectInteger(weatherProp, "humidity")));
         humidityLabel.getStyleClass().add("forecast-basic");
 
-        hourBox.getChildren().addAll(hourLabel, tempLabel, windLabel, rainLabel, humidityLabel);
+        hourBox.getChildren().addAll(hourLabel, hourlyWeatherIcon, tempLabel, windLabel, rainLabel, humidityLabel);
         return hourBox;
     }
     

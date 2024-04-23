@@ -38,27 +38,25 @@ public class ForecastViewCurrentSection {
         Text currentWeatherText = new Text("Current Weather");
         currentWeatherText.getStyleClass().add("bold-text");
         
+        // Create a container for weather icon and day temperature
         HBox tempBox = new HBox();
         tempBox.setAlignment(Pos.CENTER);
         
         Text weatherIconText = new Text();
         weatherIconText.setFont(new Font("Weather Icons", 50));
-        weatherIconText.textProperty().
-                bind(Bindings.format("%s",
+        weatherIconText.textProperty().bind(Bindings.format("%s",
                 Bindings.selectString(forecastView.todayWeather, "iconCode")));
         HBox.setMargin(weatherIconText, new Insets(0, 15, 0, 0)); // Top, Right, Bottom, Left
         weatherIconText.setId("weatherIconText");
         
         // Day Temperature Text
         Text dayTemperatureText = new Text();
-        dayTemperatureText.textProperty().
-                bind(Bindings.format("%.1f",
+        dayTemperatureText.textProperty().bind(Bindings.format("%.1f",
                 Bindings.selectDouble(forecastView.todayWeather, "dayTemp")));
         dayTemperatureText.setId("dayTemperatureText");
         
         Text dayDegreeText = new Text();
-        dayDegreeText.textProperty().
-                bind(Bindings.format("%s",
+        dayDegreeText.textProperty().bind(Bindings.format("%s",
                 Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
         dayDegreeText.setTranslateY(-12);
         dayDegreeText.setId("dayDegreeText");
@@ -67,8 +65,7 @@ public class ForecastViewCurrentSection {
                 
         // Feels Like Temperature Text
         Text feelsLikeText = new Text();
-        feelsLikeText.textProperty().
-                bind(Bindings.format("Feels like: %.1f %s",
+        feelsLikeText.textProperty().bind(Bindings.format("Feels like: %.1f %s",
                 Bindings.selectDouble(forecastView.todayWeather, "dayFeelsLike"),
                 Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
         feelsLikeText.getStyleClass().add("detail-text");
@@ -78,21 +75,20 @@ public class ForecastViewCurrentSection {
         detailBox.setAlignment(Pos.CENTER);
         
         Text rainAmountText = new Text();
-        rainAmountText.textProperty().
-                bind(Bindings.format("Rain: %.1f %s",
+        rainAmountText.textProperty().bind(Bindings.format("Rain: %.1f %s",
                 Bindings.selectDouble(forecastView.todayWeather, "rainVolume"),
                 Bindings.selectString(forecastView.measurementSystem, "rainUnit")));
         rainAmountText.getStyleClass().add("detail-text");
         
         Text windSpeedText = new Text();
-        windSpeedText.textProperty().
-                bind(Bindings.format("Wind Speed: %.1f %s",
+        windSpeedText.textProperty().bind(Bindings.format("Wind Speed: %.1f %s",
                 Bindings.selectDouble(forecastView.todayWeather, "windSpeed"),
                 Bindings.selectString(forecastView.measurementSystem, "windUnit")));
         windSpeedText.getStyleClass().add("detail-text");
         
         detailBox.getChildren().addAll(rainAmountText, windSpeedText);
         
+        // Add all created elements to current weather container
         CurrWeatherBox.getChildren().addAll(currentWeatherText, tempBox, feelsLikeText, detailBox);
         
         return CurrWeatherBox;

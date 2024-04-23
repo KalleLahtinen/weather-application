@@ -40,16 +40,16 @@
     -fx-font-size: 14px;
 }
 
-#weatherIconText {
+#currentWeatherIcon {
     -fx-font-size: 60px;
     -fx-font-weight: bold;
 }
 
-#dayTemperatureText {
+#currentTemperature {
     -fx-font-size: 60px;
 }
 
-#dayDegreeText {
+#currentDegree {
     -fx-font-size: 40px;
 }
 

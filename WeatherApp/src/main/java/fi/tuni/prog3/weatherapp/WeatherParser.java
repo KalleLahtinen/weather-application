@@ -40,9 +40,15 @@ public class WeatherParser {
                     temp.get("max").getAsDouble(), 
                     feelsLike.get("day").getAsDouble(), 
                     day.get("speed").getAsDouble(), 
-                    day.has("rain") ? day.get("rain").getAsDouble() : 0.0, 
+                    day.has("rain") ? day.get("rain").getAsDouble() : 0.0,
+                    // Get weather description
                     day.getAsJsonArray("weather").get(0)
-                    .getAsJsonObject().get("description").getAsString(), 
+                    .getAsJsonObject().get("description").getAsString(),
+                    // Get weather icon id
+                    WeatherIconManager.getIconCode(
+                            day.getAsJsonArray("weather").get(0)
+                            .getAsJsonObject().get("id").getAsInt(), true),
+                    // Also save the used units of measurement in object
                     units
             );
             weatherMap.put(date, weather);

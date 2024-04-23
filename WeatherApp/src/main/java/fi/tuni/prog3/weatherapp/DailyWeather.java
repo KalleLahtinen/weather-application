@@ -5,6 +5,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import java.time.Instant;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * This class represents detailed daily weather data, encapsulating various weather parameters.
@@ -20,6 +22,7 @@ public class DailyWeather {
     private final DoubleProperty windSpeed = new SimpleDoubleProperty();
     private final DoubleProperty rainVolume = new SimpleDoubleProperty();
     private final StringProperty description = new SimpleStringProperty();
+    private final ObjectProperty<String> iconCode = new SimpleObjectProperty<>();
     private final String units;
     
     /**
@@ -33,12 +36,13 @@ public class DailyWeather {
      * @param windSpeed The wind speed in {@code units}.
      * @param rainVolume The volume of rainfall in {@code units}.
      * @param description A textual description of the weather conditions.
+     * @param iconCode A textual representation of the associated weather icon.
      * @param units The units of measurement the data is represented in.
      *              (metric, imperial, standard ( = Kelvin in temperature))
      */
     public DailyWeather(Instant date, double dayTemp, double minTemp, double maxTemp, 
                         double dayFeelsLike, double windSpeed, double rainVolume, 
-                        String description, String units) {
+                        String description, String iconCode, String units) {
         this.date = date;
         this.dayTemp.set(dayTemp);
         this.minTemp.set(minTemp);
@@ -47,6 +51,7 @@ public class DailyWeather {
         this.windSpeed.set(windSpeed);
         this.rainVolume.set(rainVolume);
         this.description.set(description);
+        this.iconCode.set(iconCode);
         this.units = units;
     }
 
@@ -112,6 +117,14 @@ public class DailyWeather {
      */
     public StringProperty descriptionProperty() {
         return description;
+    }
+    
+    /**
+     * Returns the property for the iconCode string.
+     * @return the property for the iconCode string
+     */
+    public ObjectProperty<String> iconCodeProperty() {
+        return iconCode;
     }
 
     /**

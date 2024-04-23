@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /*
@@ -42,6 +43,13 @@ public class ForecastViewCurrentSection {
                 Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
         dayTemperatureText.getStyleClass().add("bold-text");
         CurrWeatherBox.getChildren().add(dayTemperatureText);
+        
+        Text weatherIconText = new Text();
+        weatherIconText.setFont(new Font("Weather Icons", 40)); // Ensure the font is correctly loaded
+        weatherIconText.textProperty().
+                bind(Bindings.format("%s",
+                Bindings.selectString(forecastView.todayWeather, "iconCode")));
+        CurrWeatherBox.getChildren().add(weatherIconText);
         
         // Feels Like Temperature Text
         Text feelsLikeText = new Text();

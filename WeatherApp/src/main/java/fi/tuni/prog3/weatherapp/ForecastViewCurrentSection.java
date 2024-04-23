@@ -42,26 +42,26 @@ public class ForecastViewCurrentSection {
         HBox tempBox = new HBox();
         tempBox.setAlignment(Pos.CENTER);
         
-        Text weatherIconText = new Text();
-        weatherIconText.setFont(new Font("Weather Icons", 50));
-        weatherIconText.textProperty().bind(Bindings.format("%s",
+        Text currentWeatherIcon = new Text();
+        currentWeatherIcon.setFont(new Font("Weather Icons", 50));
+        currentWeatherIcon.textProperty().bind(Bindings.format("%s",
                 Bindings.selectString(forecastView.todayWeather, "iconCode")));
-        HBox.setMargin(weatherIconText, new Insets(0, 15, 0, 0)); // Top, Right, Bottom, Left
-        weatherIconText.setId("weatherIconText");
+        HBox.setMargin(currentWeatherIcon, new Insets(0, 15, 0, 0)); // Top, Right, Bottom, Left
+        currentWeatherIcon.setId("currentWeatherIcon");
         
         // Day Temperature Text
-        Text dayTemperatureText = new Text();
-        dayTemperatureText.textProperty().bind(Bindings.format("%.1f",
+        Text currentTemperature = new Text();
+        currentTemperature.textProperty().bind(Bindings.format("%.1f",
                 Bindings.selectDouble(forecastView.todayWeather, "dayTemp")));
-        dayTemperatureText.setId("dayTemperatureText");
+        currentTemperature.setId("currentTemperature");
         
-        Text dayDegreeText = new Text();
-        dayDegreeText.textProperty().bind(Bindings.format("%s",
+        Text currentDegree = new Text();
+        currentDegree.textProperty().bind(Bindings.format("%s",
                 Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
-        dayDegreeText.setTranslateY(-12);
-        dayDegreeText.setId("dayDegreeText");
+        currentDegree.setTranslateY(-12);
+        currentDegree.setId("currentDegree");
         
-        tempBox.getChildren().addAll(weatherIconText, dayTemperatureText, dayDegreeText);
+        tempBox.getChildren().addAll(currentWeatherIcon, currentTemperature, currentDegree);
                 
         // Feels Like Temperature Text
         Text feelsLikeText = new Text();

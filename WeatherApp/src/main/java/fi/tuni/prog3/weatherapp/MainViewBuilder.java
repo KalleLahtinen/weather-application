@@ -1,5 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -76,11 +77,12 @@ public class MainViewBuilder {
         // Create a view selector at bottom of layout
         createBottomTabBar();
 
-        Scene scene = new Scene(rootLayout, 400, 300);
+        Scene scene = new Scene(rootLayout);
         // Link CSS file for formatting
         scene.getStylesheets().add(getClass().getResource("/fi/tuni/prog3/weatherapp/styles.css").toExternalForm());
-        stage.setMinWidth(615);
-        stage.setMinHeight(500);
+        stage.setWidth(616);
+        stage.setHeight(685);
+        stage.setResizable(false);
         stage.setScene(scene);
     }
 
@@ -130,6 +132,7 @@ public class MainViewBuilder {
     */
     private void createBottomTabBar() {
         HBox bottomToolbar = new HBox(10); // Spacing between buttons
+        bottomToolbar.setPadding(new Insets(15, 0, 15, 0)); // Top, Right, Bottom, Left
         bottomToolbar.setAlignment(Pos.CENTER);
         
         Button btnView1, btnView2, btnView3; // Buttons to switch views

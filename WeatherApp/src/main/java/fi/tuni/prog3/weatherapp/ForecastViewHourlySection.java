@@ -16,6 +16,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -94,6 +95,7 @@ public final class ForecastViewHourlySection {
      */
     private VBox createHourBox(Instant hour, ObjectProperty<HourlyWeather> weatherProp) {
         VBox hourBox = new VBox(6);
+        hourBox.setPadding(new Insets(7, 0, 7, 0));
         hourBox.setPrefWidth(hourWidth);
         hourBox.setAlignment(Pos.CENTER);
 
@@ -119,7 +121,7 @@ public final class ForecastViewHourlySection {
         rainLabel.getStyleClass().add("forecast-basic");
 
         Label humidityLabel = new Label();
-        humidityLabel.textProperty().bind(Bindings.format("%d%%", Bindings.selectInteger(weatherProp, "humidity")));
+        humidityLabel.textProperty().bind(Bindings.format("%d", Bindings.selectInteger(weatherProp, "humidity")));
         humidityLabel.getStyleClass().add("forecast-basic");
 
         hourBox.getChildren().addAll(hourLabel, hourlyWeatherIcon, tempLabel, windLabel, rainLabel, humidityLabel);

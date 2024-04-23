@@ -35,49 +35,65 @@ public class ForecastViewCurrentSection {
         CurrWeatherBox.setPadding(new Insets(10));
         CurrWeatherBox.getStyleClass().add("curr-box");
         
-        // Day Temperature Text
-        Text dayTemperatureText = new Text();
-        dayTemperatureText.textProperty().
-                bind(Bindings.format("%.1f%s",
-                Bindings.selectDouble(forecastView.todayWeather, "dayTemp"),
-                Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
-        dayTemperatureText.getStyleClass().add("bold-text");
-        CurrWeatherBox.getChildren().add(dayTemperatureText);
+        Text currentWeatherText = new Text("Current Weather");
+        currentWeatherText.getStyleClass().add("bold-text");
+        
+        HBox tempBox = new HBox();
+        tempBox.setAlignment(Pos.CENTER);
         
         Text weatherIconText = new Text();
-        weatherIconText.setFont(new Font("Weather Icons", 40)); // Ensure the font is correctly loaded
+        weatherIconText.setFont(new Font("Weather Icons", 50));
         weatherIconText.textProperty().
                 bind(Bindings.format("%s",
                 Bindings.selectString(forecastView.todayWeather, "iconCode")));
-        CurrWeatherBox.getChildren().add(weatherIconText);
+        HBox.setMargin(weatherIconText, new Insets(0, 15, 0, 0)); // Top, Right, Bottom, Left
+        weatherIconText.setId("weatherIconText");
         
+        // Day Temperature Text
+        Text dayTemperatureText = new Text();
+        dayTemperatureText.textProperty().
+                bind(Bindings.format("%.1f",
+                Bindings.selectDouble(forecastView.todayWeather, "dayTemp")));
+        dayTemperatureText.setId("dayTemperatureText");
+        
+        Text dayDegreeText = new Text();
+        dayDegreeText.textProperty().
+                bind(Bindings.format("%s",
+                Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
+        dayDegreeText.setTranslateY(-12);
+        dayDegreeText.setId("dayDegreeText");
+        
+        tempBox.getChildren().addAll(weatherIconText, dayTemperatureText, dayDegreeText);
+                
         // Feels Like Temperature Text
         Text feelsLikeText = new Text();
         feelsLikeText.textProperty().
-                bind(Bindings.format("Feels like: %.1f%s",
+                bind(Bindings.format("Feels like: %.1f %s",
                 Bindings.selectDouble(forecastView.todayWeather, "dayFeelsLike"),
                 Bindings.selectString(forecastView.measurementSystem, "tempUnit")));
-        feelsLikeText.getStyleClass().add("normal-text");
-        CurrWeatherBox.getChildren().add(feelsLikeText);
+        feelsLikeText.getStyleClass().add("detail-text");
         
         // HBox for additional weather data
-        HBox hbox = new HBox(15);
-        hbox.setAlignment(Pos.CENTER);
+        HBox detailBox = new HBox(15);
+        detailBox.setAlignment(Pos.CENTER);
         
         Text rainAmountText = new Text();
         rainAmountText.textProperty().
                 bind(Bindings.format("Rain: %.1f %s",
                 Bindings.selectDouble(forecastView.todayWeather, "rainVolume"),
                 Bindings.selectString(forecastView.measurementSystem, "rainUnit")));
+        rainAmountText.getStyleClass().add("detail-text");
         
         Text windSpeedText = new Text();
         windSpeedText.textProperty().
                 bind(Bindings.format("Wind Speed: %.1f %s",
                 Bindings.selectDouble(forecastView.todayWeather, "windSpeed"),
                 Bindings.selectString(forecastView.measurementSystem, "windUnit")));
+        windSpeedText.getStyleClass().add("detail-text");
         
-        hbox.getChildren().addAll(rainAmountText, windSpeedText);
-        CurrWeatherBox.getChildren().add(hbox);
+        detailBox.getChildren().addAll(rainAmountText, windSpeedText);
+        
+        CurrWeatherBox.getChildren().addAll(currentWeatherText, tempBox, feelsLikeText, detailBox);
         
         return CurrWeatherBox;
     }

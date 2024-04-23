@@ -50,13 +50,16 @@ public class ApplicationStateManager {
      * @return true if the city is added successfully, false otherwise.
      */
     public boolean addFavoriteCity(String city) {
-       // TODO: If size 10 etc.
-       if (favouriteCities.size() == 10) {
-           favouriteCities.remove(favouriteCities.get(0));
-       }
+        // TODO: If size 10 etc.
+        if (favouriteCities.size() == 10) {
+            favouriteCities.remove(favouriteCities.get(0));
+        }
        
+        // Move city to start of list if already on it
         if (favouriteCities.contains(city)) {
             removeFavoriteCity(city);
+            favouriteCities.add(city);
+        } else {
             favouriteCities.add(city);
         }
         return true;
@@ -74,6 +77,14 @@ public class ApplicationStateManager {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Returns a boolean indicating if current city is in favourites..
+     * @return a boolean indicating if current city is in favourites.
+     */
+    public boolean isCurrentCityFavourited() {
+        return favouriteCities.contains(currentCity);
     }
     
     

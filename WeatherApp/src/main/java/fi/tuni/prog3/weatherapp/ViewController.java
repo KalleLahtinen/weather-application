@@ -126,7 +126,7 @@ public final class ViewController {
     /**
      * Updates all weather views with a new API call using current selections.
      */
-    public void updateWeather() {
+    public void updateWeatherData() {
         forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(
                 appState.currentCity, appState.getUnits()));
         forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(
@@ -144,7 +144,8 @@ public final class ViewController {
         if (city != null) {
             appState.setCurrentCity(city);
             mainViewBuilder.updateCityLabel(city);
-            updateWeather();
+            updateWeatherData();
+            mainViewBuilder.starToggle.setFavorited(appState.isCurrentCityFavourited());
         }
     }
 }

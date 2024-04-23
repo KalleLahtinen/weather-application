@@ -14,6 +14,12 @@
     -fx-font-weight: bold;
 }
 
+#cityTextLabel {
+    -fx-font-family: "Cambria";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
 .curr-box {
     -fx-background-color: #fae49f;
 }
@@ -79,4 +85,5 @@
 .toggle-switch {
     /* Left padding to push the control towards the center of it's internal container' */
     -fx-padding: 0 0 0 20px;
+    -fx-cursor: hand; /* Changes cursor to a pointer when hovering */
 }

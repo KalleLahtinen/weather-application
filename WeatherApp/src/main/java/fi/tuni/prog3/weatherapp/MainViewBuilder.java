@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -35,6 +36,7 @@ public class MainViewBuilder {
     private Label cityTextLabel; // For dynamic text updates
     private BorderPane rootLayout; // The main layout for the elements
     public StackPane viewContainer; // This will hold the views to enable transition effects
+    public FavouriteStarToggle starToggle;
 
     /**
      * Constructs a new MainController with a reference to the primary stage.
@@ -49,6 +51,7 @@ public class MainViewBuilder {
         appState = fileHandler.readFromFile();
         measurementSystem = new MeasurementSystem(appState.getUnits());
         viewController = new ViewController(this, measurementSystem, appState);
+        starToggle = new FavouriteStarToggle(appState);
         
         // Save the appState object to file when application is closed
         stage.setOnCloseRequest(event -> {
@@ -102,6 +105,9 @@ public class MainViewBuilder {
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
         cityTextLabel = new Label(appState.getCurrentCity());
+        cityTextLabel.setId("cityTextLabel");
+        
+        ToggleButton favouriteStar = starToggle.getToggleButton();
 
         // Use Regions as flexible spacers
         Region leftSpacer = new Region();
@@ -110,15 +116,11 @@ public class MainViewBuilder {
         HBox.setHgrow(leftSpacer, Priority.SOMETIMES);
         HBox.setHgrow(rightSpacer, Priority.SOMETIMES);
 
-        // Use an HBox to center the label
-        HBox labelContainer = new HBox(cityTextLabel);
-        labelContainer.setAlignment(Pos.CENTER);
-
         // Set the maximum width to Double.MAX_VALUE to allow the spacer to grow indefinitely.
         leftSpacer.setMaxWidth(Double.MAX_VALUE);
         rightSpacer.setMaxWidth(Double.MAX_VALUE);
 
-        toolbar.getItems().addAll(unitToggle, leftSpacer, labelContainer, rightSpacer, searchBar);
+        toolbar.getItems().addAll(unitToggle, leftSpacer, cityTextLabel, favouriteStar, rightSpacer, searchBar);
         
         rootLayout.setTop(toolbar);
     }

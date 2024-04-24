@@ -87,3 +87,8 @@
     -fx-padding: 0 0 0 20px;
     -fx-cursor: hand; /* Changes cursor to a pointer when hovering */
 }
+
+.list-title  {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;  
+}

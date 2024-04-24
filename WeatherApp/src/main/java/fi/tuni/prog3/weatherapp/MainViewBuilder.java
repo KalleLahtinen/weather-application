@@ -52,6 +52,7 @@ public class MainViewBuilder {
         measurementSystem = new MeasurementSystem(appState.getUnits());
         viewController = new ViewController(this, measurementSystem, appState);
         starToggle = new FavouriteStarToggle(appState);
+        starToggle.setFavorited(appState.isCurrentCityFavourited());
         
         // Save the appState object to file when application is closed
         stage.setOnCloseRequest(event -> {
@@ -137,19 +138,17 @@ public class MainViewBuilder {
         bottomToolbar.setPadding(new Insets(15, 0, 15, 0)); // Top, Right, Bottom, Left
         bottomToolbar.setAlignment(Pos.CENTER);
         
-        Button btnView1, btnView2, btnView3; // Buttons to switch views
+        Button btnView1, btnView2; // Buttons to switch views
 
         // Initialize buttons
-        btnView1 = new Button("View 1");
-        btnView2 = new Button("View 2");
-        btnView3 = new Button("View 3");
+        btnView1 = new Button("Forecast");
+        btnView2 = new Button("Favourites & Search History");
 
         // Button actions
         btnView1.setOnAction(e -> viewController.switchView(ViewController.View.FORECAST));
-        btnView2.setOnAction(e -> viewController.switchView(ViewController.View.WEATHERMAP));
-        btnView3.setOnAction(e -> viewController.switchView(ViewController.View.HISTORY));
+        btnView2.setOnAction(e -> viewController.switchView(ViewController.View.CITY_LISTS));
 
-        bottomToolbar.getChildren().addAll(btnView1, btnView2, btnView3);
+        bottomToolbar.getChildren().addAll(btnView1, btnView2);
         rootLayout.setBottom(bottomToolbar);
     }
 

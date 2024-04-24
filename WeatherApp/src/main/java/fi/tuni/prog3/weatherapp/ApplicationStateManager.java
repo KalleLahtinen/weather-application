@@ -1,7 +1,9 @@
 package fi.tuni.prog3.weatherapp;
 
-import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 
 /**
  * Manages the application state including measurement units, current city, 
@@ -12,8 +14,8 @@ import java.util.List;
 public class ApplicationStateManager {
     public String units;
     public String currentCity;
-    public List<String> history;
-    public List<String> favouriteCities;
+    public ListProperty<String> history;
+    public ListProperty<String> favourites;
 
     /**
      * Constructs an ApplicationStateManager with specified initial values.
@@ -26,8 +28,8 @@ public class ApplicationStateManager {
     public ApplicationStateManager(String units, String currentTown, List<String> history, List<String> favourites) {
         this.units = units;
         this.currentCity = currentTown;
-        this.history = history;
-        this.favouriteCities = favourites;
+        this.history = new SimpleListProperty<>(FXCollections.observableArrayList(history));
+        this.favourites = new SimpleListProperty<>(FXCollections.observableArrayList(favourites));
     }
     
     /**
@@ -38,8 +40,8 @@ public class ApplicationStateManager {
     public ApplicationStateManager() {
         this.units = "metric";
         this.currentCity = "Helsinki";
-        this.history = new ArrayList<>();
-        this.favouriteCities = new ArrayList<>();
+        this.history = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.favourites = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     /**
@@ -50,17 +52,16 @@ public class ApplicationStateManager {
      * @return true if the city is added successfully, false otherwise.
      */
     public boolean addFavoriteCity(String city) {
-        // TODO: If size 10 etc.
-        if (favouriteCities.size() == 10) {
-            favouriteCities.remove(favouriteCities.get(0));
+        if (favourites.size() == 10) {
+            favourites.remove(favourites.get(0));
         }
        
         // Move city to start of list if already on it
-        if (favouriteCities.contains(city)) {
+        if (favourites.contains(city)) {
             removeFavoriteCity(city);
-            favouriteCities.add(city);
+            favourites.add(city);
         } else {
-            favouriteCities.add(city);
+            favourites.add(city);
         }
         return true;
     }
@@ -72,8 +73,8 @@ public class ApplicationStateManager {
      * doesn't exist in favorites.
      */
     public boolean removeFavoriteCity(String city) {
-        if (favouriteCities.contains(city)) {
-            favouriteCities.remove(city);
+        if (favourites.contains(city)) {
+            favourites.remove(city);
             return true;
         }
         return false;
@@ -84,9 +85,8 @@ public class ApplicationStateManager {
      * @return a boolean indicating if current city is in favourites.
      */
     public boolean isCurrentCityFavourited() {
-        return favouriteCities.contains(currentCity);
+        return favourites.contains(currentCity);
     }
-    
     
     /**
      * Method to add a city to the search history.
@@ -100,9 +100,7 @@ public class ApplicationStateManager {
         if (history.size() == 10) {
             // Remove oldest entry if history is full
             history.remove(history.get(0));
-        }
-        
-        // Add new city to history
+        }    
         history.add(city);
     }
     
@@ -146,21 +144,21 @@ public class ApplicationStateManager {
     public void setCurrentCity(String currentCity) {
         this.currentCity = currentCity;
     }
-
+    
     /**
-     * Gets the search history list.
-     * @return a list of cities representing the user's search history.
+     * Returns the property for the search history list.
+     * @return the property for the search history list
      */
-    public List<String> getHistory() {
+    public ListProperty<String> historyProperty() {
         return history;
     }
 
     /**
-     * Sets the search history list.
-     * @param history a list of cities to set as the search history.
+     * Returns the property for the favourited city list.
+     * @return the property for the favourited city list
      */
-    public void setHistory(List<String> history) {
-        this.history = history;
+    public ListProperty<String> favouritesProperty() {
+        return favourites;
     }
 
     /**
@@ -168,14 +166,6 @@ public class ApplicationStateManager {
      * @return a list of cities marked as favorites by the user.
      */
     public List<String> getFavourites() {
-        return favouriteCities;
-    }
-
-    /**
-     * Sets the list of favorite cities.
-     * @param favourites a list of cities to be marked as favorites.
-     */
-    public void setFavourites(List<String> favourites) {
-        this.favouriteCities = favourites;
+        return favourites.get();
     }
 }

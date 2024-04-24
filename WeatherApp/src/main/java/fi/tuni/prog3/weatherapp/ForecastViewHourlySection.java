@@ -16,6 +16,9 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /*
     ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
@@ -57,7 +60,7 @@ public final class ForecastViewHourlySection {
         scrollPane = new ScrollPane(hoursBox);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToHeight(false);
         // Ensure that the HBox can extend beyond the width of the ScrollPane
         scrollPane.setFitToWidth(false);
         
@@ -92,11 +95,18 @@ public final class ForecastViewHourlySection {
      */
     private VBox createHourBox(Instant hour, ObjectProperty<HourlyWeather> weatherProp) {
         VBox hourBox = new VBox(6);
+        hourBox.setPadding(new Insets(7, 0, 7, 0));
         hourBox.setPrefWidth(hourWidth);
         hourBox.setAlignment(Pos.CENTER);
 
         Label hourLabel = new Label(DateTimeFormatter.ofPattern("HH").format(hour.atZone(ZoneId.systemDefault())));
         hourLabel.getStyleClass().add("forecast-hour");
+        
+        Text hourlyWeatherIcon = new Text();
+        hourlyWeatherIcon.setFont(new Font("Weather Icons", 30));
+        hourlyWeatherIcon.textProperty().bind(Bindings.format("%s",
+                Bindings.selectString(weatherProp, "iconCode")));
+        hourlyWeatherIcon.setId("hourlyWeatherIcon");
 
         Label tempLabel = new Label();
         tempLabel.textProperty().bind(Bindings.format("%.0f", Bindings.selectDouble(weatherProp, "temperature")));
@@ -114,11 +124,14 @@ public final class ForecastViewHourlySection {
         humidityLabel.textProperty().bind(Bindings.format("%d", Bindings.selectInteger(weatherProp, "humidity")));
         humidityLabel.getStyleClass().add("forecast-basic");
 
-        hourBox.getChildren().addAll(hourLabel, tempLabel, windLabel, rainLabel, humidityLabel);
+        hourBox.getChildren().addAll(hourLabel, hourlyWeatherIcon, tempLabel, windLabel, rainLabel, humidityLabel);
         return hourBox;
     }
     
-    public void scrollToHour() {
+    /**
+     * Moves the hourly weather's scroll bar to the beginning of the selected day.
+     */
+    public void scrollToSelectedHour() {
         Integer currentDayIndex = fv.currentDayIndex.get();
         
         Instant earliestHour = fv.hourlyWeathers.get().keySet().stream()
@@ -139,9 +152,6 @@ public final class ForecastViewHourlySection {
             
             double scrollTo = secondDayStart + (0.25 * (currentDayIndex - 1));
             scrollPane.setHvalue(scrollTo);
-            
-            System.out.println("timeToNextDay: " + timeToNextDay);
-            System.out.println("Scroll to proportion: " + scrollTo);
             
         } else {
             scrollPane.setHvalue(1);

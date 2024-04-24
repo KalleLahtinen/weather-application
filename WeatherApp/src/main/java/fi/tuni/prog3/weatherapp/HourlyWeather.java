@@ -28,6 +28,7 @@ public class HourlyWeather {
     private final StringProperty weatherDescription = new SimpleStringProperty();
     private final StringProperty weatherIcon = new SimpleStringProperty();
     private final DoubleProperty rain1h = new SimpleDoubleProperty();
+    private final ObjectProperty<String> iconCode = new SimpleObjectProperty<>();
     private final StringProperty units = new SimpleStringProperty();
 
     /**
@@ -43,12 +44,13 @@ public class HourlyWeather {
      * @param weatherDescription A textual description of the weather
      * @param weatherIcon An identifier for an icon representing the weather conditions
      * @param rain1h The volume of rain in the last hour in {@code units}.
+     * @param iconCode A textual representation of the associated weather icon.
      * @param units The units of measurement the data is represented in.
      *              (metric, imperial, standard ( = Kelvin in temperature))
      */
     public HourlyWeather(Instant date, double temperature, double feelsLike, int pressure, 
             int humidity, double windSpeed, int windDirection, 
-            String weatherDescription, String weatherIcon, double rain1h, String units) {
+            String weatherDescription, String weatherIcon, double rain1h, String iconCode, String units) {
         this.date.set(date);
         this.temperature.set(temperature);
         this.feelsLike.set(feelsLike);
@@ -59,6 +61,7 @@ public class HourlyWeather {
         this.weatherDescription.set(weatherDescription);
         this.weatherIcon.set(weatherIcon);
         this.rain1h.set(rain1h);
+        this.iconCode.set(iconCode);
         this.units.set(units);
     }
 
@@ -140,6 +143,14 @@ public class HourlyWeather {
      */
     public DoubleProperty rain1hProperty() {
         return rain1h;
+    }
+    
+    /**
+     * Returns the property for the iconCode string.
+     * @return the property for the iconCode string
+     */
+    public ObjectProperty<String> iconCodeProperty() {
+        return iconCode;
     }
 
     /**

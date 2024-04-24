@@ -40,12 +40,29 @@
     -fx-font-size: 14px;
 }
 
+#currentWeatherIcon {
+    -fx-font-size: 60px;
+    -fx-font-weight: bold;
+}
+
+#currentTemperature {
+    -fx-font-size: 60px;
+}
+
+#currentDegree {
+    -fx-font-size: 40px;
+}
+
 .forecast-hour {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
 .forecast-basic {
+    -fx-font-size: 14px;
+}
+
+.detail-text {
     -fx-font-size: 14px;
 }
 

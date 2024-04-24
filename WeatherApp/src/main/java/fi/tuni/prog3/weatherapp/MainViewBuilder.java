@@ -27,9 +27,11 @@ import javafx.stage.Stage;
  */
 public class MainViewBuilder {
     private final Stage stage;
-    private final ViewController viewController;
+    private final ReadAndWriteToFile fileHandler = new ReadAndWriteToFile();
+    public ApplicationStateManager appState;
+    public final ViewController viewController;
+    public final MeasurementSystem measurementSystem;
     private Label cityTextLabel; // For dynamic text updates
-    private TextField searchBar;
     private BorderPane rootLayout; // The main layout for the elements
     public StackPane viewContainer; // This will hold the views to enable transition effects
 
@@ -42,7 +44,15 @@ public class MainViewBuilder {
      */
     public MainViewBuilder(Stage stage) {
         this.stage = stage;
-        viewController = new ViewController(this);
+
+        appState = fileHandler.readFromFile();
+        measurementSystem = new MeasurementSystem(appState.getUnits());
+        viewController = new ViewController(this, measurementSystem, appState);
+        
+        // Save the appState object to file when application is closed
+        stage.setOnCloseRequest(event -> {
+            fileHandler.writeToFile(appState);
+        });
     }
 
     /**
@@ -69,6 +79,8 @@ public class MainViewBuilder {
         Scene scene = new Scene(rootLayout, 400, 300);
         // Link CSS file for formatting
         scene.getStylesheets().add(getClass().getResource("/fi/tuni/prog3/weatherapp/styles.css").toExternalForm());
+        stage.setMinWidth(615);
+        stage.setMinHeight(500);
         stage.setScene(scene);
     }
 
@@ -82,12 +94,12 @@ public class MainViewBuilder {
     private void createToolbar() {
         ToolBar toolbar = new ToolBar();
         
-        Button exampleButton = new Button("Placeholder");
+        HBox unitToggle = Utils.createUnitToggle(this);
 
-        searchBar = Utils.createSearchBarWithSuggestions();
+        TextField searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
-        cityTextLabel = new Label("City here");
+        cityTextLabel = new Label(appState.getCurrentCity());
 
         // Use Regions as flexible spacers
         Region leftSpacer = new Region();
@@ -104,7 +116,7 @@ public class MainViewBuilder {
         leftSpacer.setMaxWidth(Double.MAX_VALUE);
         rightSpacer.setMaxWidth(Double.MAX_VALUE);
 
-        toolbar.getItems().addAll(exampleButton, leftSpacer, labelContainer, rightSpacer, searchBar);
+        toolbar.getItems().addAll(unitToggle, leftSpacer, labelContainer, rightSpacer, searchBar);
         
         rootLayout.setTop(toolbar);
     }

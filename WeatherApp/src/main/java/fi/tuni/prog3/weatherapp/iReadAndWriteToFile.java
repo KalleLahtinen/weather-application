@@ -1,7 +1,5 @@
 package fi.tuni.prog3.weatherapp;
 
-import java.util.List;
-
 /**
  * Interface with methods to read from a file and write to a file.
  */
@@ -9,17 +7,16 @@ public interface iReadAndWriteToFile {
 
     /**
      * Reads JSON from the given file.
-     * @param fileName name of the file to read from.
-     * @return true if the read was successful, otherwise false.
-     * @throws Exception if the method e.g, cannot find the file.
+     * 
+     * @return A ApplicationStateManager object created based on read file, 
+     *         a fresh instance if file could not be read.
      */
-    public void readFromFile(String fileName) throws Exception;
+    public ApplicationStateManager readFromFile();
 
     /**
      * Write the student progress as JSON into the given file.
-     * @param fileName name of the file to write to.
-     * @return true if the write was successful, otherwise false.
-     * @throws Exception if the method e.g., cannot write to a file.
+     * 
+     * @param appState The ApplicationStateManager object to be written to {@code fileName}.
      */
-    public void writeToFile(String fileName) throws Exception;
+    public void writeToFile(ApplicationStateManager appState);
 }

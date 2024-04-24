@@ -93,7 +93,7 @@ public class WeatherDataService implements iAPI {
             Coordinate coords = getCoordinates(loc);          
             String url = String.format("%s?lat=%s&lon=%s&appid=%s&units=%s&cnt=%s", 
                     DAILY_FORECAST_API, coords.getLatitude(), coords.getLongitude(), 
-                    API_KEY, "metric", 6);
+                    API_KEY, units, 6);
             
             // Fetch data from API
             String jsonResponse = fetchDataFromAPI(url);

@@ -17,10 +17,15 @@ public class WeatherIconManager {
             "/fi/tuni/prog3/weatherapp/weathericons-regular-webfont.ttf";
 
     static {
-        // Load the font only once when the class is loaded
-        Font.loadFont(WeatherIconManager.class.getResourceAsStream(FONT_PATH), 40);
+        try {
+            // Load the font only once when the class is loaded
+            Font.loadFont(WeatherIconManager.class.getResourceAsStream(FONT_PATH), 40);
+        } catch (Exception e) {
+            String errorMessage = "Error loading font: " + e.getMessage();
+            LoggingInformation.logError(errorMessage, e);
+        }
     }
-
+        
     /**
      * Static dictionary to hold mappings from weather condition codes 
      * to their respective icon Unicode characters.
@@ -94,12 +99,17 @@ public class WeatherIconManager {
      * Retrieves the appropriate weather icon code based on the weather condition code and day/night status.
      * 
      * @param conditionCode the weather condition code as provided by the OpenWeatherMap API
-     * @param isDayTime boolean flag indicating whether it is day (true) or night (false)
+     * @param isDayTime Boolean flag indicating whether it is day (true) or night (false)
      * @return a string representing the Unicode character for the corresponding weather icon. 
      *         If no specific icon matches, a default icon is returned.
      */
     public static String getIconCode(int conditionCode, boolean isDayTime) {
-        String icon = ICON_CODE_MAP.getOrDefault(conditionCode, "\uf07b"); // default icon
+        // Check if the condition code is within the expected range
+        if (!ICON_CODE_MAP.containsKey(conditionCode)) {
+            return "\uf07b"; // Default icon
+        }
+        
+        String icon = ICON_CODE_MAP.getOrDefault(conditionCode, "\uf07b");
         if (!isDayTime) {
             if (icon.equals("\uf00d")) { // clear sky
                 return "\uf02e"; // clear sky night

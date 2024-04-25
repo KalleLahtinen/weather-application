@@ -4,7 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import org.controlsfx.control.ToggleSwitch;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
@@ -83,11 +86,11 @@ public class Utils {
             if (newValue == true) {
                 mwBuilder.measurementSystem.changeSystem("imperial");
                 mwBuilder.appState.setUnits("imperial");
-                mwBuilder.viewController.updateWeather();
+                mwBuilder.viewController.updateWeatherData();
             } else {
                 mwBuilder.measurementSystem.changeSystem("metric");
                 mwBuilder.appState.setUnits("metric");
-                mwBuilder.viewController.updateWeather();
+                mwBuilder.viewController.updateWeatherData();
             }
         });
         

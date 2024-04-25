@@ -77,10 +77,12 @@
                 <configuration>
                     <mainClass>fi.tuni.prog3.weatherapp.WeatherApp</mainClass>
                     <options>
-                        // The org.controlsfx.controls library needs access 
-                        // to javafx.event to work
+                        <!-- The org.controlsfx.controls library needs access to javafx.event to work -->
                         <option>--add-exports</option>
                         <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+                        <!-- Gson needs access to JavaFX properties for custom serialization to work -->
+                        <option>--add-opens</option>
+                        <option>javafx.base/javafx.beans.property=com.google.gson</option>
                      </options>
                 </configuration>
                 <executions>

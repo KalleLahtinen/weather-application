@@ -1,5 +1,7 @@
 
 /* 
+    CSS styling for weather application
+
     Author: Kalle Lahtinen
 */
 
@@ -14,17 +16,23 @@
     -fx-font-weight: bold;
 }
 
+#cityTextLabel {
+    -fx-font-family: "Cambria";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
 .curr-box {
     -fx-background-color: #fae49f;
 }
 
 .day-box {
-    -fx-cursor: hand; /* Changes cursor to a pointer when hovering */
+    -fx-cursor: hand;
     -fx-background-color: transparent;
     -fx-alignment: center;
     -fx-padding: 10;
-    -fx-min-width: 120px;   /* Minimum width */
-    -fx-min-height: 150px;  /* Minimum height */
+    -fx-min-width: 120px;
+    -fx-min-height: 150px;
 }
 
 .selected-day {
@@ -79,4 +87,40 @@
 .toggle-switch {
     /* Left padding to push the control towards the center of it's internal container' */
     -fx-padding: 0 0 0 20px;
+    -fx-cursor: hand;
+}
+
+.list-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent; /* This line is for very subtle focus color used in some JavaFX themes */
+}
+
+.list-cell {
+    -fx-background-color: white; /* Set your desired color */
+    -fx-padding: 10 10 0 10;
+}
+
+.list-cell:filled:selected, .list-cell:filled:selected:hover {
+    -fx-background-color: -fx-selection-bar; /* color for selected item */
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.list-cell:empty {
+    -fx-background-color: white;
+}
+
+.list-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;  
+}
+
+.list-row {
+    -fx-font-size: 17px
+}
+
+#list-remove-btn {
+    -fx-background-color: transparent; 
+    -fx-text-fill: gray;
+    -fx-font-weight: bold;  
+    -fx-cursor: hand;
 }

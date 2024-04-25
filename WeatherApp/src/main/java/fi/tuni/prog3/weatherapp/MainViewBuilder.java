@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -35,6 +36,7 @@ public class MainViewBuilder {
     private Label cityTextLabel; // For dynamic text updates
     private BorderPane rootLayout; // The main layout for the elements
     public StackPane viewContainer; // This will hold the views to enable transition effects
+    public FavouriteStarToggle starToggle;
 
     /**
      * Constructs a new MainController with a reference to the primary stage.
@@ -49,6 +51,8 @@ public class MainViewBuilder {
         appState = fileHandler.readFromFile();
         measurementSystem = new MeasurementSystem(appState.getUnits());
         viewController = new ViewController(this, measurementSystem, appState);
+        starToggle = new FavouriteStarToggle(appState);
+        starToggle.setFavorited(appState.isCurrentCityFavourited());
         
         // Save the appState object to file when application is closed
         stage.setOnCloseRequest(event -> {
@@ -101,7 +105,11 @@ public class MainViewBuilder {
         TextField searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
-        cityTextLabel = new Label(appState.getCurrentCity());
+        cityTextLabel = new Label();
+        cityTextLabel.textProperty().bind(appState.currentCity);
+        cityTextLabel.setId("cityTextLabel");
+        
+        ToggleButton favouriteStar = starToggle.getToggleButton();
 
         // Use Regions as flexible spacers
         Region leftSpacer = new Region();
@@ -110,15 +118,11 @@ public class MainViewBuilder {
         HBox.setHgrow(leftSpacer, Priority.SOMETIMES);
         HBox.setHgrow(rightSpacer, Priority.SOMETIMES);
 
-        // Use an HBox to center the label
-        HBox labelContainer = new HBox(cityTextLabel);
-        labelContainer.setAlignment(Pos.CENTER);
-
         // Set the maximum width to Double.MAX_VALUE to allow the spacer to grow indefinitely.
         leftSpacer.setMaxWidth(Double.MAX_VALUE);
         rightSpacer.setMaxWidth(Double.MAX_VALUE);
 
-        toolbar.getItems().addAll(unitToggle, leftSpacer, labelContainer, rightSpacer, searchBar);
+        toolbar.getItems().addAll(unitToggle, leftSpacer, cityTextLabel, favouriteStar, rightSpacer, searchBar);
         
         rootLayout.setTop(toolbar);
     }
@@ -135,29 +139,17 @@ public class MainViewBuilder {
         bottomToolbar.setPadding(new Insets(15, 0, 15, 0)); // Top, Right, Bottom, Left
         bottomToolbar.setAlignment(Pos.CENTER);
         
-        Button btnView1, btnView2, btnView3; // Buttons to switch views
+        Button btnView1, btnView2; // Buttons to switch views
 
         // Initialize buttons
-        btnView1 = new Button("View 1");
-        btnView2 = new Button("View 2");
-        btnView3 = new Button("View 3");
+        btnView1 = new Button("Forecast");
+        btnView2 = new Button("Favourites & Search History");
 
         // Button actions
         btnView1.setOnAction(e -> viewController.switchView(ViewController.View.FORECAST));
-        btnView2.setOnAction(e -> viewController.switchView(ViewController.View.WEATHERMAP));
-        btnView3.setOnAction(e -> viewController.switchView(ViewController.View.HISTORY));
+        btnView2.setOnAction(e -> viewController.switchView(ViewController.View.CITY_LISTS));
 
-        bottomToolbar.getChildren().addAll(btnView1, btnView2, btnView3);
+        bottomToolbar.getChildren().addAll(btnView1, btnView2);
         rootLayout.setBottom(bottomToolbar);
-    }
-
-    /**
-     * Updates the text displayed on the city label within the toolbar.
-     * This allows for dynamic updates based on user actions or other inputs.
-     *
-     * @param newText The new text to display on the city label.
-     */
-    public void updateCityLabel(String newText) {
-        cityTextLabel.setText(newText);
     }
 }

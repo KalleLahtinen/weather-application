@@ -1,7 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
-import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -18,9 +17,7 @@ public final class ViewController {
      */
     public enum View {
         FORECAST,
-        WEATHERMAP,
-        HISTORY,
-        FAVOURITES,
+        CITY_LISTS,
         NO_VIEW;
 
         /**
@@ -48,25 +45,27 @@ public final class ViewController {
     private final WeatherDataService weatherDataService = new WeatherDataService();
     private final MeasurementSystem measurementSystem;
     private final ApplicationStateManager appState;
+    private final CityListManager cityListManager;
 
     /**
      * Constructs a ViewController with the specified main view builder.
      * Initializes the forecast view with data for the default city and unit.
      * 
-     * @param builder the main view builder used for creating and managing UI components.
+     * @param mwBuilder the main view builder used for creating and managing UI components.
      * @param measurementSystem the MeasurementSystem object keeping track of 
      *        current system of measurement and measurement unit properties.
      * @param appState The ApplicationStateManager object containing session data.
      */
-    public ViewController(MainViewBuilder builder, MeasurementSystem measurementSystem, 
+    public ViewController(MainViewBuilder mwBuilder, MeasurementSystem measurementSystem, 
                           ApplicationStateManager appState) {
-        this.mainViewBuilder = builder;
+        this.mainViewBuilder = mwBuilder;
         this.measurementSystem = measurementSystem;
         this.appState = appState;
+        this.cityListManager = new CityListManager(mwBuilder, appState);
                 
         forecastView = new ForecastViewController(measurementSystem,
-                weatherDataService.getDailyForecast(appState.currentCity, appState.getUnits()),
-                weatherDataService.getHourlyForecast(appState.currentCity, appState.getUnits()));
+                weatherDataService.getDailyForecast(appState.getCurrentCity(), appState.getUnits()),
+                weatherDataService.getHourlyForecast(appState.getCurrentCity(), appState.getUnits()));
         
         initViewContainer();
     }
@@ -86,10 +85,9 @@ public final class ViewController {
         // Create the views
         viewContainer = new StackPane();
         VBox forecast = this.forecastView.getView();
-        Node view2Content = new Label("View 2 Content"); // Replace with actual view
-        Node view3Content = new Label("View 3 Content"); // Replace with actual view
+        HBox cityLists = this.cityListManager.getView();
         
-        viewContainer.getChildren().addAll(forecast, view2Content, view3Content);
+        viewContainer.getChildren().addAll(forecast, cityLists);
         switchView(currentView);
                 
         return viewContainer;
@@ -124,13 +122,24 @@ public final class ViewController {
     }
     
     /**
+     * Changes the current city to {@code city} and updates application.
+     * 
+     * @param city the city to be set as current.
+     */
+    public void changeCurrentCity(String city) {
+        appState.setCurrentCity(city);
+        updateWeatherData();
+        mainViewBuilder.starToggle.setFavorited(appState.isCurrentCityFavourited());
+    }
+    
+    /**
      * Updates all weather views with a new API call using current selections.
      */
-    public void updateWeather() {
+    public void updateWeatherData() {
         forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(
-                appState.currentCity, appState.getUnits()));
+                appState.getCurrentCity(), appState.getUnits()));
         forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(
-                appState.currentCity, appState.getUnits()));
+                appState.getCurrentCity(), appState.getUnits()));
     }
     
     /**
@@ -142,9 +151,8 @@ public final class ViewController {
     public void searchHandler(String query) {
         String city = weatherDataService.getCity(query);
         if (city != null) {
-            appState.setCurrentCity(city);
-            mainViewBuilder.updateCityLabel(city);
-            updateWeather();
+            changeCurrentCity(city);
+            appState.addCityToHistory(city);
         }
     }
 }

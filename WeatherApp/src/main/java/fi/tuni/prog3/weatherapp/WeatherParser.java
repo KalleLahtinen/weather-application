@@ -8,13 +8,15 @@ import java.util.Map;
 import java.time.Instant;
 
 /**
- * A class containing parse functions for turning a Json response into weather objects
- * author Roope Kärkkäinen & Kalle Lahtinen
+ * A class containing parse functions for turning a JSON response into weather 
+ * objects.
+ * 
+ * @author Roope Kärkkäinen and Kalle Lahtinen
  */
 public class WeatherParser {
     /**
-     * A method for parsing a Json string into individual DailyWeather objects
-     * @param jsonResponse The Json response string containing weather data
+     * A method for parsing a JSON string into individual DailyWeather objects
+     * @param jsonResponse The JSON response string containing weather data
      * @param units The units of measurement the data is to be represented in.
      * @return A Map of DailyWeather objects sorted by time as Instant
      */
@@ -57,8 +59,8 @@ public class WeatherParser {
     }
     
     /**
-     * A method for parsing a Json string into individual HourlyWeather objects
-     * @param jsonResponse The Json response string containing weather data
+     * A method for parsing a JSON string into individual HourlyWeather objects
+     * @param jsonResponse The JSON response string containing weather data
      * @param units The units of measurement the data is to be represented in.
      * @return A Map of HourlyWeather objects sorted by time as Instant
      */

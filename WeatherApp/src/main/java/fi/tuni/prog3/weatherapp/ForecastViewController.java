@@ -28,34 +28,71 @@ import javafx.scene.layout.HBox;
  * Class for creating the applications forecast view, encapsulating 
  * current, daily and hourly forecasts.
  * 
+ * This class manages the forecast view, including current, daily, and hourly 
+ * sections, and handles the display of weather forecast data.
+ * 
  * @author Kalle Lahtinen
  */
 public final class ForecastViewController {
     // Property values that update binded elements when value changes
+    
+    /**
+     * Represents the current weather for today.
+     */
     public final ObjectProperty<DailyWeather> todayWeather = 
             new SimpleObjectProperty<>();
     
+    /**
+     * Represents a map of daily weather forecasts keyed by date.
+     */
     public final MapProperty<Instant, DailyWeather> dailyWeathers = 
             new SimpleMapProperty<>(FXCollections.observableHashMap());
     
+    /**
+     * Represents a map of hourly weather forecasts keyed by time.
+     */
     public final MapProperty<Instant, HourlyWeather> hourlyWeathers =
             new SimpleMapProperty<>(FXCollections.observableHashMap());
     
+    /**
+     * Represents the index of the currently selected day.
+     */
     public final IntegerProperty currentDayIndex = new SimpleIntegerProperty(-1);
 
+    /**
+     * Represents the list of ObjectProperty instances for displayed days.
+     */
     public final List<ObjectProperty<DailyWeather>> displayedDays = new ArrayList<>();
     
+    /**
+     * Represents the current measurement system.
+     */
     public final ObjectProperty<MeasurementSystem> measurementSystem =
         new SimpleObjectProperty<>();; 
     
+    /**
+     * Represents the current section of the forecast view.
+     */
     public ForecastViewCurrentSection currentSection;
+    
+    /**
+     * Represents the daily section of the forecast view.
+     */
     public ForecastViewDailySection dailySection;
+    
+    /**
+     * Represents the hourly section of the forecast view.
+     */
     public ForecastViewHourlySection hourlySection;
     
+    /**
+     * Represents the main view of the forecast.
+     */
     public final VBox view;
 
     /**
-     * Constructs a ForecastView instance with the given daily and hourly weather data maps.
+     * Constructs a ForecastView instance with the given daily and hourly 
+     * weather data maps.
      * 
      * @param measurementSystem the MeasurementSystem object keeping track of 
      *        current system of measurement and measurement unit properties.

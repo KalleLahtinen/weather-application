@@ -57,6 +57,7 @@ public class DailyWeather {
 
     /**
      * Returns the date of this DailyWeather object.
+     * 
      * @return the date as an Instant
      */
     public Instant getDate() {
@@ -65,6 +66,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the average day temperature.
+     * 
      * @return the day temperature property
      */
     public DoubleProperty dayTempProperty() {
@@ -73,6 +75,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the minimum temperature.
+     * 
      * @return the minimum temperature property
      */
     public DoubleProperty minTempProperty() {
@@ -81,6 +84,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the maximum temperature.
+     * 
      * @return the maximum temperature property
      */
     public DoubleProperty maxTempProperty() {
@@ -89,6 +93,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the feels-like temperature.
+     * 
      * @return the day feels-like temperature property
      */
     public DoubleProperty dayFeelsLikeProperty() {
@@ -97,6 +102,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the wind speed.
+     * 
      * @return the wind speed property
      */
     public DoubleProperty windSpeedProperty() {
@@ -105,6 +111,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the rain volume.
+     * 
      * @return the rain volume property
      */
     public DoubleProperty rainVolumeProperty() {
@@ -113,6 +120,7 @@ public class DailyWeather {
 
     /**
      * Returns the property for the weather description.
+     * 
      * @return the description property
      */
     public StringProperty descriptionProperty() {
@@ -121,6 +129,7 @@ public class DailyWeather {
     
     /**
      * Returns the property for the iconCode string.
+     * 
      * @return the property for the iconCode string
      */
     public ObjectProperty<String> iconCodeProperty() {
@@ -129,6 +138,7 @@ public class DailyWeather {
 
     /**
      * Returns the units of measurement this object uses.
+     * 
      * @return the units of measurement this object uses
      */
     public String getUnits() {

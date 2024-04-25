@@ -10,9 +10,13 @@ import java.util.List;
  * @author Roope Kärkkäinen
  */
 public class ApplicationStateManager {
+    /** The measurement units used in the application. */
     public String units;
+    /** The current city selected in the application. */
     public String currentCity;
+    /** The list of cities in the search history. */
     public List<String> history;
+    /** The list of favorite cities marked by the user. */
     public List<String> favouriteCities;
 
     /**
@@ -46,6 +50,7 @@ public class ApplicationStateManager {
      * Adds a city to the list of favorite cities.
      * Checks if the city already exists in the list and if the list has 
      * reached its maximum capacity.
+     * 
      * @param city The city to add to favorites.
      * @return true if the city is added successfully, false otherwise.
      */
@@ -64,6 +69,7 @@ public class ApplicationStateManager {
 
     /**
      * Removes a city from the list of favorite cities.
+     * 
      * @param city The city to remove from favorites.
      * @return true if the city is removed successfully, false if the city 
      * doesn't exist in favorites.
@@ -79,6 +85,7 @@ public class ApplicationStateManager {
     
     /**
      * Method to add a city to the search history.
+     * 
      * @param city The city to add to history.
      */
     public void addCityToHistory(String city) {
@@ -87,18 +94,18 @@ public class ApplicationStateManager {
         }
 
         if (history.size() == 10) {
-            // Remove oldest entry if history is full
             history.remove(history.get(0));
         }
         
-        // Add new city to history
         history.add(city);
     }
     
     /**
      * Method to remove a city from the search history.
+     * 
      * @param city The city to remove from history.
-     * @return True if the city is removed successfully, false if it doesn't exist in history.
+     * @return True if the city is removed successfully, false if it doesn't 
+     * exist in history.
      */
     public boolean removeCityFromHistory(String city) {
         return history.remove(city);
@@ -106,7 +113,9 @@ public class ApplicationStateManager {
     
     /**
     * Provides the current measurement units.
-    * @return the current measurement units used in the application, such as "metric" or "imperial".
+    * 
+    * @return the current measurement units used in the application, such as 
+    * "metric" or "imperial".
     */
     public String getUnits() {
         return units;
@@ -114,7 +123,9 @@ public class ApplicationStateManager {
 
     /**
      * Sets the measurement units.
-     * @param units the measurement units to set, such as "metric" or "imperial".
+     * 
+     * @param units the measurement units to set, such as "metric" or 
+     * "imperial".
      */
     public void setUnits(String units) {
         this.units = units;
@@ -122,6 +133,7 @@ public class ApplicationStateManager {
 
     /**
      * Retrieves the currently selected city.
+     * 
      * @return the current city.
      */
     public String getCurrentCity() {
@@ -130,6 +142,7 @@ public class ApplicationStateManager {
 
     /**
      * Sets the currently selected city.
+     * 
      * @param currentCity the city to set as the current city.
      */
     public void setCurrentCity(String currentCity) {
@@ -138,6 +151,7 @@ public class ApplicationStateManager {
 
     /**
      * Gets the search history list.
+     * 
      * @return a list of cities representing the user's search history.
      */
     public List<String> getHistory() {
@@ -146,6 +160,7 @@ public class ApplicationStateManager {
 
     /**
      * Sets the search history list.
+     * 
      * @param history a list of cities to set as the search history.
      */
     public void setHistory(List<String> history) {
@@ -154,6 +169,7 @@ public class ApplicationStateManager {
 
     /**
      * Retrieves the list of favorite cities.
+     * 
      * @return a list of cities marked as favorites by the user.
      */
     public List<String> getFavourites() {
@@ -162,6 +178,7 @@ public class ApplicationStateManager {
 
     /**
      * Sets the list of favorite cities.
+     * 
      * @param favourites a list of cities to be marked as favorites.
      */
     public void setFavourites(List<String> favourites) {

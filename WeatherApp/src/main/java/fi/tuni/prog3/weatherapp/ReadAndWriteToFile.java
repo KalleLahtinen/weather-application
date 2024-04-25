@@ -15,7 +15,7 @@ import javafx.beans.property.StringProperty;
 /**
  * Class for reading and writing favorite cities and history to/from JSON files.
  * 
- * @author Roope Kärkkäinen & Kalle Lahtinen
+ * @author Roope Kärkkäinen and Kalle Lahtinen
  */
 public class ReadAndWriteToFile implements iReadAndWriteToFile {
     /**

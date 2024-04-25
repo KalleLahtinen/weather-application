@@ -9,6 +9,7 @@ public class Coordinate {
 
     /**
      * Constructs a Coordinate object with specified latitude and longitude.
+     * 
      * @param latitude the latitude of the coordinate, expressed as a double
      * @param longitude the longitude of the coordinate, expressed as a double
      */
@@ -19,6 +20,7 @@ public class Coordinate {
 
     /**
      * Returns the latitude of this coordinate.
+     * 
      * @return the latitude as a double
      */
     public double getLatitude() {
@@ -27,6 +29,7 @@ public class Coordinate {
 
     /**
      * Returns the longitude of this coordinate.
+     * 
      * @return the longitude as a double
      */
     public double getLongitude() {

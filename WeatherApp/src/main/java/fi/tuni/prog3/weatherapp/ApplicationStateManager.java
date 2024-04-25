@@ -14,9 +14,13 @@ import javafx.collections.FXCollections;
  * @author Roope Kärkkäinen
  */
 public class ApplicationStateManager {
+    /** The measurement units used in the application. */
     public String units;
+    /** The current city selected in the application. */
     public StringProperty currentCity;
+    /** The list of cities in the search history. */
     public ListProperty<String> history;
+    /** The list of favorite cities marked by the user. */
     public ListProperty<String> favourites;
 
     /**
@@ -50,6 +54,7 @@ public class ApplicationStateManager {
      * Adds a city to the list of favorite cities.
      * Checks if the city already exists in the list and if the list has 
      * reached its maximum capacity.
+     * 
      * @param city The city to add to favorites.
      * @return true if the city is added successfully, false otherwise.
      */
@@ -70,6 +75,7 @@ public class ApplicationStateManager {
 
     /**
      * Removes a city from the list of favorite cities.
+     * 
      * @param city The city to remove from favorites.
      * @return true if the city is removed successfully, false if the city 
      * doesn't exist in favorites.
@@ -92,6 +98,7 @@ public class ApplicationStateManager {
     
     /**
      * Method to add a city to the search history.
+     * 
      * @param city The city to add to history.
      */
     public void addCityToHistory(String city) {
@@ -100,7 +107,6 @@ public class ApplicationStateManager {
         }
 
         if (history.size() == 10) {
-            // Remove oldest entry if history is full
             history.remove(history.get(0));
         }    
         history.add(city);
@@ -108,8 +114,10 @@ public class ApplicationStateManager {
     
     /**
      * Method to remove a city from the search history.
+     * 
      * @param city The city to remove from history.
-     * @return True if the city is removed successfully, false if it doesn't exist in history.
+     * @return True if the city is removed successfully, false if it doesn't 
+     * exist in history.
      */
     public boolean removeCityFromHistory(String city) {
         return history.remove(city);
@@ -117,7 +125,9 @@ public class ApplicationStateManager {
     
     /**
     * Provides the current measurement units.
-    * @return the current measurement units used in the application, such as "metric" or "imperial".
+    * 
+    * @return the current measurement units used in the application, such as 
+    * "metric" or "imperial".
     */
     public String getUnits() {
         return units;
@@ -125,7 +135,9 @@ public class ApplicationStateManager {
 
     /**
      * Sets the measurement units.
-     * @param units the measurement units to set, such as "metric" or "imperial".
+     * 
+     * @param units the measurement units to set, such as "metric" or 
+     * "imperial".
      */
     public void setUnits(String units) {
         this.units = units;
@@ -133,6 +145,7 @@ public class ApplicationStateManager {
 
     /**
      * Retrieves the currently selected city.
+     * 
      * @return the current city.
      */
     public String getCurrentCity() {
@@ -141,6 +154,7 @@ public class ApplicationStateManager {
 
     /**
      * Sets the currently selected city.
+     * 
      * @param city the city to set as the current city.
      */
     public void setCurrentCity(String city) {
@@ -149,6 +163,7 @@ public class ApplicationStateManager {
     
     /**
      * Returns the property for the currently selected city.
+     * 
      * @return the property for the currently selected city.
      */
     public StringProperty currentCityProperty() {
@@ -157,6 +172,7 @@ public class ApplicationStateManager {
     
     /**
      * Returns the property for the search history list.
+     * 
      * @return the property for the search history list
      */
     public ListProperty<String> historyProperty() {
@@ -173,6 +189,7 @@ public class ApplicationStateManager {
 
     /**
      * Retrieves the list of favorite cities.
+     * 
      * @return a list of cities marked as favorites by the user.
      */
     public List<String> getFavourites() {

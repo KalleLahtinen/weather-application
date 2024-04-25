@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 
 /**
  * A class for creating the current weather section of the forecast view with 
- * styling and values binded to corresponding data in forecastView.
+ * styling and values bound to corresponding data in forecastView.
  * 
  * @author Kalle Lahtinen
  */

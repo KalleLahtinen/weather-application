@@ -13,7 +13,8 @@ import java.util.Map;
 
 /**
  * Class for interacting with OpenWeatherMap API and returning weather data
- * @author Roope Kärkkäinen & Kalle Lahtinen
+ * 
+ * @author Roope Kärkkäinen and Kalle Lahtinen
  */
 public class WeatherDataService implements iAPI {
     
@@ -53,6 +54,7 @@ public class WeatherDataService implements iAPI {
     
     /**
      * Get coordinates for a location by name.
+     * 
      * @param loc Name of the location for which weather should be fetched.
      * @return The coordinates as a Coordinate object
      */
@@ -83,6 +85,7 @@ public class WeatherDataService implements iAPI {
     
     /**
      * Returns a daily forecast for the given location.
+     * 
      * @param loc Name of the location for which weather should be fetched.
      * @param units The units of measurement the data is to be represented in.
      * @return A forecast as a map of Instant and DailyWeather pairs.
@@ -111,6 +114,7 @@ public class WeatherDataService implements iAPI {
     
     /**
      * Returns a hourly forecast for the given location.
+     * 
      * @param loc Name of the location for which weather should be fetched.
      * @param units The units of measurement the data is to be represented in.
      * @return A map of Instant and HourlyWeather pairs.
@@ -122,7 +126,6 @@ public class WeatherDataService implements iAPI {
             String url = String.format("%s?lat=%s&lon=%s&appid=%s&units=%s", HOURLY_FORECAST_API, 
                     coords.getLatitude(), coords.getLongitude(), API_KEY, units);
             
-            // Fetch data from API
             String jsonResponse = fetchDataFromAPI(url);
 
             // Parse and return location data
@@ -158,7 +161,6 @@ public class WeatherDataService implements iAPI {
         }
         connection.disconnect();
 
-        // Return API response
         return response.toString();
     }
 }

@@ -13,6 +13,7 @@ public class City {
     
     /**
      * Constructor to create a City object with the specified city name.
+     * 
      * @param city The name of the city.
      */
     public City(String city) {
@@ -21,6 +22,7 @@ public class City {
     
     /**
      * Returns the name of the city.
+     * 
      * @return The name of the city.
      */
     public String getCity() {

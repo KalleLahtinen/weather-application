@@ -52,19 +52,17 @@ public class ApplicationStateManager {
      * reached its maximum capacity.
      * 
      * @param city The city to add to favorites.
-     * @return true if the city is added successfully, false otherwise.
      */
-    public boolean addFavoriteCity(String city) {
-       // TODO: If size 10 etc.
-       if (favouriteCities.size() == 10) {
-           favouriteCities.remove(favouriteCities.get(0));
-       }
-       
-        if (favouriteCities.contains(city)) {
-            removeFavoriteCity(city);
+    public void addFavoriteCity(String city) {
+        if (favouriteCities.size() == 10) {
+            favouriteCities.remove(favouriteCities.get(0));
             favouriteCities.add(city);
-        }
-        return true;
+        } else if (favouriteCities.contains(city)) {
+             removeFavoriteCity(city);
+             favouriteCities.add(city);
+        } else {
+            favouriteCities.add(city);
+        }     
     }
 
     /**

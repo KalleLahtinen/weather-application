@@ -3,6 +3,8 @@ package fi.tuni.prog3.weatherapp;
 import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 
 /**
@@ -13,7 +15,7 @@ import javafx.collections.FXCollections;
  */
 public class ApplicationStateManager {
     public String units;
-    public String currentCity;
+    public StringProperty currentCity;
     public ListProperty<String> history;
     public ListProperty<String> favourites;
 
@@ -27,7 +29,7 @@ public class ApplicationStateManager {
      */
     public ApplicationStateManager(String units, String currentTown, List<String> history, List<String> favourites) {
         this.units = units;
-        this.currentCity = currentTown;
+        this.currentCity = new SimpleStringProperty(currentTown);
         this.history = new SimpleListProperty<>(FXCollections.observableArrayList(history));
         this.favourites = new SimpleListProperty<>(FXCollections.observableArrayList(favourites));
     }
@@ -39,7 +41,7 @@ public class ApplicationStateManager {
      */
     public ApplicationStateManager() {
         this.units = "metric";
-        this.currentCity = "Helsinki";
+        this.currentCity = new SimpleStringProperty("Helsinki");
         this.history = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.favourites = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
@@ -85,7 +87,7 @@ public class ApplicationStateManager {
      * @return a boolean indicating if current city is in favourites.
      */
     public boolean isCurrentCityFavourited() {
-        return favourites.contains(currentCity);
+        return favourites.contains(this.getCurrentCity());
     }
     
     /**
@@ -134,15 +136,23 @@ public class ApplicationStateManager {
      * @return the current city.
      */
     public String getCurrentCity() {
-        return currentCity;
+        return currentCity.get();
     }
 
     /**
      * Sets the currently selected city.
-     * @param currentCity the city to set as the current city.
+     * @param city the city to set as the current city.
      */
-    public void setCurrentCity(String currentCity) {
-        this.currentCity = currentCity;
+    public void setCurrentCity(String city) {
+        this.currentCity.set(city);
+    }
+    
+    /**
+     * Returns the property for the currently selected city.
+     * @return the property for the currently selected city.
+     */
+    public StringProperty currentCityProperty() {
+        return currentCity;
     }
     
     /**

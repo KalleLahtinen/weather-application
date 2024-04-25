@@ -105,7 +105,8 @@ public class MainViewBuilder {
         TextField searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
-        cityTextLabel = new Label(appState.getCurrentCity());
+        cityTextLabel = new Label();
+        cityTextLabel.textProperty().bind(appState.currentCity);
         cityTextLabel.setId("cityTextLabel");
         
         ToggleButton favouriteStar = starToggle.getToggleButton();
@@ -150,15 +151,5 @@ public class MainViewBuilder {
 
         bottomToolbar.getChildren().addAll(btnView1, btnView2);
         rootLayout.setBottom(bottomToolbar);
-    }
-
-    /**
-     * Updates the text displayed on the city label within the toolbar.
-     * This allows for dynamic updates based on user actions or other inputs.
-     *
-     * @param newText The new text to display on the city label.
-     */
-    public void updateCityLabel(String newText) {
-        cityTextLabel.setText(newText);
     }
 }

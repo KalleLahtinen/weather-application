@@ -64,8 +64,8 @@ public final class ViewController {
         this.cityListManager = new CityListManager(mwBuilder, appState);
                 
         forecastView = new ForecastViewController(measurementSystem,
-                weatherDataService.getDailyForecast(appState.currentCity, appState.getUnits()),
-                weatherDataService.getHourlyForecast(appState.currentCity, appState.getUnits()));
+                weatherDataService.getDailyForecast(appState.getCurrentCity(), appState.getUnits()),
+                weatherDataService.getHourlyForecast(appState.getCurrentCity(), appState.getUnits()));
         
         initViewContainer();
     }
@@ -127,7 +127,7 @@ public final class ViewController {
      * @param city the city to be set as current.
      */
     public void changeCurrentCity(String city) {
-        mainViewBuilder.updateCityLabel(city);
+        appState.setCurrentCity(city);
         updateWeatherData();
         mainViewBuilder.starToggle.setFavorited(appState.isCurrentCityFavourited());
     }
@@ -137,9 +137,9 @@ public final class ViewController {
      */
     public void updateWeatherData() {
         forecastView.updateHourlyWeathers(weatherDataService.getHourlyForecast(
-                appState.currentCity, appState.getUnits()));
+                appState.getCurrentCity(), appState.getUnits()));
         forecastView.updateDailyWeathers(weatherDataService.getDailyForecast(
-                appState.currentCity, appState.getUnits()));
+                appState.getCurrentCity(), appState.getUnits()));
     }
     
     /**
@@ -151,7 +151,6 @@ public final class ViewController {
     public void searchHandler(String query) {
         String city = weatherDataService.getCity(query);
         if (city != null) {
-            appState.setCurrentCity(city);
             changeCurrentCity(city);
             appState.addCityToHistory(city);
         }

@@ -136,7 +136,7 @@ public class CityListManager {
                 if (selectedItem != null) {
                     onItemClick.accept(selectedItem);
                 }
-                otherListView.getSelectionModel().clearSelection();
+                //otherListView.getSelectionModel().clearSelection();
             }
         });
     }

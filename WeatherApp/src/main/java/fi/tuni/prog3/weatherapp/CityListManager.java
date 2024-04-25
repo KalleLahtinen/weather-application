@@ -1,5 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
+import java.util.function.Consumer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -7,6 +8,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -35,17 +37,35 @@ public class CityListManager {
         this.appState = appState;
         createCityListView();
     }
+    
+    private void setupClickHandler(ListView<String> listView, Consumer<String> onItemClick) {
+        listView.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    onItemClick.accept(selectedItem);
+                }
+            }
+        });
+    }
 
     /**
      * Initializes and arranges the city list views within a horizontal box layout.
+     * List elements are bound to the data properties in ApplicationStateManager object.
      */
     private void createCityListView() {
         historyListView = new ListView<>();
         favouriteListView = new ListView<>();
 
-        // Bind the ListView's items to the properties in ApplicationStateManager
         historyListView.itemsProperty().bind(appState.historyProperty());
         favouriteListView.itemsProperty().bind(appState.favouritesProperty());
+        
+        setupClickHandler(historyListView, city -> {
+            mwBuilder.viewController.changeCurrentCity(city);
+        });
+        setupClickHandler(favouriteListView, city -> {
+            mwBuilder.viewController.changeCurrentCity(city);
+        });
 
         VBox historyBox = createListBox(historyListView, "Search History");
         VBox favouriteBox = createListBoxWithDelete(favouriteListView, "Favourited Cities");

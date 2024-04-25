@@ -1,7 +1,11 @@
 package fi.tuni.prog3.weatherapp;
 
-import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 
 /**
  * Manages the application state including measurement units, current city, 
@@ -13,11 +17,11 @@ public class ApplicationStateManager {
     /** The measurement units used in the application. */
     public String units;
     /** The current city selected in the application. */
-    public String currentCity;
+    public StringProperty currentCity;
     /** The list of cities in the search history. */
-    public List<String> history;
+    public ListProperty<String> history;
     /** The list of favorite cities marked by the user. */
-    public List<String> favouriteCities;
+    public ListProperty<String> favourites;
 
     /**
      * Constructs an ApplicationStateManager with specified initial values.
@@ -29,9 +33,9 @@ public class ApplicationStateManager {
      */
     public ApplicationStateManager(String units, String currentTown, List<String> history, List<String> favourites) {
         this.units = units;
-        this.currentCity = currentTown;
-        this.history = history;
-        this.favouriteCities = favourites;
+        this.currentCity = new SimpleStringProperty(currentTown);
+        this.history = new SimpleListProperty<>(FXCollections.observableArrayList(history));
+        this.favourites = new SimpleListProperty<>(FXCollections.observableArrayList(favourites));
     }
     
     /**
@@ -41,9 +45,9 @@ public class ApplicationStateManager {
      */
     public ApplicationStateManager() {
         this.units = "metric";
-        this.currentCity = "Helsinki";
-        this.history = new ArrayList<>();
-        this.favouriteCities = new ArrayList<>();
+        this.currentCity = new SimpleStringProperty("Helsinki");
+        this.history = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.favourites = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     /**
@@ -55,14 +59,16 @@ public class ApplicationStateManager {
      * @return true if the city is added successfully, false otherwise.
      */
     public boolean addFavoriteCity(String city) {
-       // TODO: If size 10 etc.
-       if (favouriteCities.size() == 10) {
-           favouriteCities.remove(favouriteCities.get(0));
-       }
+        if (favourites.size() == 10) {
+            favourites.remove(favourites.get(0));
+        }
        
-        if (favouriteCities.contains(city)) {
+        // Move city to start of list if already on it
+        if (favourites.contains(city)) {
             removeFavoriteCity(city);
-            favouriteCities.add(city);
+            favourites.add(city);
+        } else {
+            favourites.add(city);
         }
         return true;
     }
@@ -75,13 +81,20 @@ public class ApplicationStateManager {
      * doesn't exist in favorites.
      */
     public boolean removeFavoriteCity(String city) {
-        if (favouriteCities.contains(city)) {
-            favouriteCities.remove(city);
+        if (favourites.contains(city)) {
+            favourites.remove(city);
             return true;
         }
         return false;
     }
     
+    /**
+     * Returns a boolean indicating if current city is in favourites..
+     * @return a boolean indicating if current city is in favourites.
+     */
+    public boolean isCurrentCityFavourited() {
+        return favourites.contains(this.getCurrentCity());
+    }
     
     /**
      * Method to add a city to the search history.
@@ -95,8 +108,7 @@ public class ApplicationStateManager {
 
         if (history.size() == 10) {
             history.remove(history.get(0));
-        }
-        
+        }    
         history.add(city);
     }
     
@@ -137,34 +149,42 @@ public class ApplicationStateManager {
      * @return the current city.
      */
     public String getCurrentCity() {
-        return currentCity;
+        return currentCity.get();
     }
 
     /**
      * Sets the currently selected city.
      * 
-     * @param currentCity the city to set as the current city.
+     * @param city the city to set as the current city.
      */
-    public void setCurrentCity(String currentCity) {
-        this.currentCity = currentCity;
+    public void setCurrentCity(String city) {
+        this.currentCity.set(city);
     }
-
+    
     /**
-     * Gets the search history list.
+     * Returns the property for the currently selected city.
      * 
-     * @return a list of cities representing the user's search history.
+     * @return the property for the currently selected city.
      */
-    public List<String> getHistory() {
+    public StringProperty currentCityProperty() {
+        return currentCity;
+    }
+    
+    /**
+     * Returns the property for the search history list.
+     * 
+     * @return the property for the search history list
+     */
+    public ListProperty<String> historyProperty() {
         return history;
     }
 
     /**
-     * Sets the search history list.
-     * 
-     * @param history a list of cities to set as the search history.
+     * Returns the property for the favourited city list.
+     * @return the property for the favourited city list
      */
-    public void setHistory(List<String> history) {
-        this.history = history;
+    public ListProperty<String> favouritesProperty() {
+        return favourites;
     }
 
     /**
@@ -173,15 +193,6 @@ public class ApplicationStateManager {
      * @return a list of cities marked as favorites by the user.
      */
     public List<String> getFavourites() {
-        return favouriteCities;
-    }
-
-    /**
-     * Sets the list of favorite cities.
-     * 
-     * @param favourites a list of cities to be marked as favorites.
-     */
-    public void setFavourites(List<String> favourites) {
-        this.favouriteCities = favourites;
+        return favourites.get();
     }
 }

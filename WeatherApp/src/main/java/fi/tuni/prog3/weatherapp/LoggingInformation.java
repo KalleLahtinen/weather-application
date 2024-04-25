@@ -1,5 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
+import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * A class for logging information, including errors, and saving errors to a file.
+ * 
  * @author Roope Kärkkäinen
  */
 public class LoggingInformation {
@@ -33,7 +35,13 @@ public class LoggingInformation {
      * @param exception The exception causing the error.
      */
     private static void saveErrorToFile(String message, Throwable exception) {
-        String fileName = "error_" + LocalDateTime.now() + ".log";
+        // Create a directory named "errors" if it doesn't exist
+        File directory = new File("errors");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        
+        String fileName = "errors/error_" + LocalDateTime.now() + ".log";
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
             writer.println("Timestamp: " + LocalDateTime.now());
             writer.println("Message: " + message);

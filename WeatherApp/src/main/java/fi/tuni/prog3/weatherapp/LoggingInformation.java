@@ -21,16 +21,17 @@ public class LoggingInformation {
     /**
      * Logs an error message with the specified message and exception.
      * Saves the error to a file.
+     * 
      * @param message The error message.
      * @param exception The exception causing the error.
      */
     public static void logError(String message, Throwable exception) {
-        logger.error(message, exception);
         saveErrorToFile(message, exception);
     }
 
     /**
      * Saves the error message and exception to a file.
+     * 
      * @param message The error message.
      * @param exception The exception causing the error.
      */

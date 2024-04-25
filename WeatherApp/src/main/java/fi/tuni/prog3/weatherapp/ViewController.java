@@ -155,6 +155,7 @@ public final class ViewController {
         if (city != null) {
             appState.setCurrentCity(city);
             changeCurrentCity(city);
+            appState.addCityToHistory(city);
         }
     }
 }

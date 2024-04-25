@@ -22,7 +22,7 @@ import javafx.beans.property.StringProperty;
 public class ReadAndWriteToFile implements iReadAndWriteToFile {
     /**
      * A GsonBuilder class that can (de)serialize JavaFX properties. 
-     * An exclusion strategy is implemented to prevent Gson from trying to 
+     * An exclusion strategy is implemented to prevent GSON from trying to 
      * access JavaFX fields in cannot, possible due to the Java 9 Module System, 
      * which restricts access between modules by default.
      */

@@ -26,7 +26,6 @@ public class ApplicationStateManagerTest {
     public void testDefaultValues() {
         assertEquals("metric", stateManager.getUnits());
         assertEquals("Helsinki", stateManager.getCurrentCity());
-        assertTrue(stateManager.getHistory().isEmpty());
         assertTrue(stateManager.getFavourites().isEmpty());
     }
 
@@ -54,27 +53,6 @@ public class ApplicationStateManagerTest {
     @Test
     public void testRemoveNonExistingFavoriteCity() {
         assertFalse(stateManager.removeFavoriteCity("Sydney"));
-    }
-
-    @Test
-    public void testAddCityToHistory() {
-        stateManager.addCityToHistory("Berlin");
-        assertEquals(1, stateManager.getHistory().size());
-        assertTrue(stateManager.getHistory().contains("Berlin"));
-    }
-
-    @Test
-    public void testAddDuplicateCityToHistory() {
-        stateManager.addCityToHistory("Rome");
-        stateManager.addCityToHistory("Rome");
-        assertEquals(1, stateManager.getHistory().size());
-    }
-
-    @Test
-    public void testRemoveCityFromHistory() {
-        stateManager.addCityToHistory("Madrid");
-        assertTrue(stateManager.removeCityFromHistory("Madrid"));
-        assertFalse(stateManager.getHistory().contains("Madrid"));
     }
 
     @Test

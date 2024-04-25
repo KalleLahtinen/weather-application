@@ -1,7 +1,6 @@
 package fi.tuni.prog3.weatherapp;
 
 import java.util.function.Consumer;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -136,7 +135,7 @@ public class CityListManager {
                 if (selectedItem != null) {
                     onItemClick.accept(selectedItem);
                 }
-                //otherListView.getSelectionModel().clearSelection();
+                otherListView.getSelectionModel().clearSelection();
             }
         });
     }

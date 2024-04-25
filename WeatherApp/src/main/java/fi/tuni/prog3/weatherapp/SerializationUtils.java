@@ -52,7 +52,7 @@ public class SerializationUtils {
     */
     public static class ListPropertyDeserializer implements JsonDeserializer<ListProperty<String>> {
         /**
-        * Deserializes the specified JsonArray into a ListProperty<String>.
+        * Deserializes the specified JsonArray into a {code ListProperty<String>}.
         * 
         * @param json The JSON being deserialized, expected to be a JsonArray.
         * @param typeOfT The type of the Object to deserialize to.

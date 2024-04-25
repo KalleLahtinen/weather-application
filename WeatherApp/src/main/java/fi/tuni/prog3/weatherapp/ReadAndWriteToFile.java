@@ -48,7 +48,8 @@ public class ReadAndWriteToFile implements iReadAndWriteToFile {
     }
     
     /**
-     * Method to read application state from a JSON file.
+     * Method to read application state from a JSON file. Uses custom GsonBuilder 
+     * that can convert JavaFX properties to regular types and vice versa.
      * 
      * @return A ApplicationStateManager object created based on read file, 
      *         a fresh instance if file could not be read.
@@ -72,7 +73,8 @@ public class ReadAndWriteToFile implements iReadAndWriteToFile {
     }
     
     /**
-     * Method to write application state to a JSON file.
+     * Method to write application state to a JSON file. Uses custom GsonBuilder 
+     * that can convert JavaFX properties to regular types and vice versa.
      */
     @Override
     public void writeToFile(ApplicationStateManager appState) {

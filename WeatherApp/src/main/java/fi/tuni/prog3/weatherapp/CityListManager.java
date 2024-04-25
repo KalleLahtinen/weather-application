@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
@@ -78,11 +80,20 @@ public class CityListManager {
      */
     private VBox createListBoxWithDelete(ListView<String> listView, String title) {
         listView.setCellFactory(param -> new ListCell<String>() {
-            Button removeButton = new Button("X");
-            HBox hbox = new HBox(new Label(), removeButton);
+            Label label = new Label();
+            Region spacer = new Region();
+            Button removeButton = new Button("X");     
+            HBox hbox = new HBox(label, spacer, removeButton);
 
             {
-                hbox.setSpacing(10);
+                label.getStyleClass().add("list-text");
+                
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+                hbox.setAlignment(Pos.CENTER);
+                spacer.setMaxWidth(Double.MAX_VALUE);
+                
+                removeButton.setId("list-remove-btn");
+                removeButton.getStyleClass().add("list-text");
                 removeButton.setOnAction(event -> {
                     appState.removeFavoriteCity(getItem());
                     mwBuilder.starToggle.setFavorited(appState.isCurrentCityFavourited());
@@ -95,9 +106,11 @@ public class CityListManager {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
+                    setPrefHeight(35);
                 } else {
                     ((Label) hbox.getChildren().get(0)).setText(item);
                     setGraphic(hbox);
+                    setPrefHeight(35);
                 }
             }
         });

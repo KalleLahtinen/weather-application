@@ -148,9 +148,9 @@ public final class ForecastViewHourlySection {
             // Retrieve the hour as an integer between 0 and 23
             int hour = zonedDateTime.getHour();
             int timeToNextDay = 24 - hour;
-            double secondDayStart = 96.0 / (96 - timeToNextDay) - 1;
+            double secondDayStart = (96.0 / (96 - timeToNextDay) - 1) + 0.16667;
             
-            double scrollTo = secondDayStart + (0.25 * (currentDayIndex - 1));
+            double scrollTo = secondDayStart + (0.3125 * (currentDayIndex - 1));
             scrollPane.setHvalue(scrollTo);
             
         } else {

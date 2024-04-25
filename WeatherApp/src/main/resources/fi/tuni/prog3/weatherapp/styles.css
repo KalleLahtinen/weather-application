@@ -97,7 +97,7 @@
 
 .list-cell {
     -fx-background-color: white; /* Set your desired color */
-    -fx-padding: 0 10 0 10;
+    -fx-padding: 10 10 0 10;
 }
 
 .list-cell:filled:selected, .list-cell:filled:selected:hover {
@@ -114,7 +114,7 @@
     -fx-font-weight: bold;  
 }
 
-.list-text {
+.list-row {
     -fx-font-size: 17px
 }
 

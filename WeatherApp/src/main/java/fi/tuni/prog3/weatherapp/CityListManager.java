@@ -1,6 +1,7 @@
 package fi.tuni.prog3.weatherapp;
 
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -37,17 +38,6 @@ public class CityListManager {
         this.appState = appState;
         createCityListView();
     }
-    
-    private void setupClickHandler(ListView<String> listView, Consumer<String> onItemClick) {
-        listView.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                String selectedItem = listView.getSelectionModel().getSelectedItem();
-                if (selectedItem != null) {
-                    onItemClick.accept(selectedItem);
-                }
-            }
-        });
-    }
 
     /**
      * Initializes and arranges the city list views within a horizontal box layout.
@@ -55,15 +45,18 @@ public class CityListManager {
      */
     private void createCityListView() {
         historyListView = new ListView<>();
+        historyListView.getStyleClass().add("list-row");
+        
         favouriteListView = new ListView<>();
+        favouriteListView.getStyleClass().add("list-row");
 
         historyListView.itemsProperty().bind(appState.historyProperty());
         favouriteListView.itemsProperty().bind(appState.favouritesProperty());
         
-        setupClickHandler(historyListView, city -> {
+        setupClickHandler(historyListView, favouriteListView, city -> {
             mwBuilder.viewController.changeCurrentCity(city);
         });
-        setupClickHandler(favouriteListView, city -> {
+        setupClickHandler(favouriteListView, historyListView, city -> {
             mwBuilder.viewController.changeCurrentCity(city);
         });
 
@@ -106,8 +99,6 @@ public class CityListManager {
             HBox hbox = new HBox(label, spacer, removeButton);
 
             {
-                label.getStyleClass().add("list-text");
-                
                 HBox.setHgrow(spacer, Priority.ALWAYS);
                 hbox.setAlignment(Pos.CENTER);
                 spacer.setMaxWidth(Double.MAX_VALUE);
@@ -136,6 +127,18 @@ public class CityListManager {
         });
 
         return createListBox(listView, title);
+    }
+    
+    private void setupClickHandler(ListView<String> listView, ListView<String> otherListView, Consumer<String> onItemClick) {
+        listView.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    onItemClick.accept(selectedItem);
+                }
+                otherListView.getSelectionModel().clearSelection();
+            }
+        });
     }
 
     /**

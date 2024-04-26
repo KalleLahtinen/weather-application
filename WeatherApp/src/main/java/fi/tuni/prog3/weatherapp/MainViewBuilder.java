@@ -57,6 +57,9 @@ public class MainViewBuilder {
 
     /** Toggle button for marking the current city as a favorite. */
     public FavouriteStarToggle starToggle;
+    
+    /** A search field for looking up a city */
+    public TextField searchBar;
 
 
     /**
@@ -123,7 +126,7 @@ public class MainViewBuilder {
         
         HBox unitToggle = Utils.createUnitToggle(this);
 
-        TextField searchBar = Utils.createSearchBarWithSuggestions();
+        searchBar = Utils.createSearchBarWithSuggestions();
         searchBar.setOnAction(e -> viewController.searchHandler(searchBar.getText()));
 
         cityTextLabel = new Label();

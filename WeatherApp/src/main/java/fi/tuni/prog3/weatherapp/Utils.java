@@ -52,7 +52,12 @@ public class Utils {
 
         // Bind auto-completion to the searchField
         AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchField, suggestions);
-        autoCompletionBinding.setMinWidth(50); // Adjust the width of the suggestions popup
+        autoCompletionBinding.setMinWidth(50);
+        
+        // Turn text color back to normal on edit after possible invalid search
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchField.setStyle("-fx-text-fill: black;");
+        });
 
         return searchField;
     }

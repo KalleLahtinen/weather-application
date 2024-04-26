@@ -36,9 +36,13 @@ public class WeatherDataService implements iAPI {
             try {
                 String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, query, API_KEY);
                 String jsonResponse = fetchDataFromAPI(url);
-
+                
                 // Parse JSON response
                 JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+                
+                if (jsonArray.size() == 0) {
+                    return null;
+                }
 
                 // Extract city name in English
                 JsonObject locationObject = jsonArray.get(0).getAsJsonObject();

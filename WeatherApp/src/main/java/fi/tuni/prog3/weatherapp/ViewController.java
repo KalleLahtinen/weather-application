@@ -144,7 +144,8 @@ public final class ViewController {
     
     /**
      * Handles the search operation initiated by the user. Updates all views with
-     * the new city's weather data if the city exists.
+     * the new city's weather data if the city is found with this name in some language. 
+     * If city is not found, the search field is colored red.
      *
      * @param query the search query entered by the user, typically a city name.
      */
@@ -153,6 +154,8 @@ public final class ViewController {
         if (city != null) {
             changeCurrentCity(city);
             appState.addCityToHistory(city);
+        } else {
+            mainViewBuilder.searchBar.setStyle("-fx-text-fill: red;");
         }
     }
 }

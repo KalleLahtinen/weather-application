@@ -20,6 +20,14 @@ import javafx.beans.property.StringProperty;
  * @author Roope Kärkkäinen and Kalle Lahtinen
  */
 public class ReadAndWriteToFile implements iReadAndWriteToFile {
+    
+    /**
+     * Default constructor for ReadAndWriteToFile class
+     */
+    public ReadAndWriteToFile() {
+        // Default constuctor implementation
+    }
+    
     /**
      * A GsonBuilder class that can (de)serialize JavaFX properties. 
      * An exclusion strategy is implemented to prevent GSON from trying to 
@@ -27,6 +35,19 @@ public class ReadAndWriteToFile implements iReadAndWriteToFile {
      * which restricts access between modules by default.
      */
     public class GsonConfiguration {
+        
+        /**
+         * Default constructor for GsonConfiguration class
+         */
+        public GsonConfiguration() {
+            // Default constuctor implementation
+        }
+        
+        /**
+         * Creates a GSON object with default configuration settings.
+         *
+         * @return A GSON object with default configuration.
+         */
         public static Gson create() {
             ExclusionStrategy exclusionStrategy = new ExclusionStrategy() {
                 @Override

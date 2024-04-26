@@ -24,6 +24,14 @@ import javafx.scene.text.Text;
 public class ForecastViewCurrentSection {
     
     /**
+     * Default constructor for ForecastViewCurrentSection class.
+     */
+    public ForecastViewCurrentSection() {
+        // Default constructor implementation
+    }
+
+    
+    /**
      * Creates and returns a VBox containing weather information for the current day.
      * This includes temperature, "feels like" temperature, rain volume, and wind speed.
      *

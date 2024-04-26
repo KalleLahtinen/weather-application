@@ -17,6 +17,13 @@ import org.controlsfx.control.textfield.TextFields;
  * A class for the utility functions of the Weatherapp application.
  */
 public class Utils {
+    
+    /**
+     * Default constructor for Utils class
+     */
+    public Utils() {
+        // Default constuctor implementation
+    }
 
     /**
      * Creates and returns a TextField with autocomplete suggestions and a clear button.

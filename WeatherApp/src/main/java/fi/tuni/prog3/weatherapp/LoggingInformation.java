@@ -19,6 +19,13 @@ public class LoggingInformation {
     private static final String ERROR_LOG_FILE = "error.log";
 
     /**
+     * Default constructor for LoggingInformation class
+     */
+    public LoggingInformation() {
+        // Default constuctor implementation
+    }
+    
+    /**
      * Logs an error message with the specified message and exception.
      * Saves the error to a file.
      * 

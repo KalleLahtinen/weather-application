@@ -24,10 +24,25 @@ import java.lang.reflect.Type;
 public class SerializationUtils {
 
     /**
+     * Default constructor for SerializationUtils class
+     */
+    public SerializationUtils() {
+        // Default constuctor implementation
+    }
+    
+    /**
     * Custom JsonSerializer for {@code ListProperty<String>}.
     * This serializer converts a ListProperty containing strings into a JSON array.
     */
     public static class ListPropertySerializer implements JsonSerializer<ListProperty<String>> {
+        
+        /**
+         * Default constructor for ListPropertySerializer class
+         */
+        public ListPropertySerializer() {
+            // Default constuctor implementation
+        }
+        
         /**
         * Serializes the source {@code ListProperty<String>} to a JsonArray.
         * 
@@ -52,8 +67,13 @@ public class SerializationUtils {
     */
     public static class ListPropertyDeserializer implements JsonDeserializer<ListProperty<String>> {
         /**
-        * Deserializes the specified JsonArray into a {code ListProperty<String>}.
-        * 
+         * Default constructor for ListPropertyDeserializer class
+         */
+        public ListPropertyDeserializer() {
+            // Default constuctor implementation
+        }
+        
+        /**
         * @param json The JSON being deserialized, expected to be a JsonArray.
         * @param typeOfT The type of the Object to deserialize to.
         * @param context Deserialization context. This provides a way for custom deserializers to access the Gson instance during deserialization.
@@ -76,6 +96,13 @@ public class SerializationUtils {
     * This serializer converts a StringProperty into a JSON element.
     */
    public static class StringPropertySerializer implements JsonSerializer<StringProperty> {
+        /**
+         * Default constructor for StringPropertySerializer class
+         */
+        public StringPropertySerializer() {
+            // Default constuctor implementation
+        }
+        
        /**
         * Serializes the source StringProperty to a JsonElement.
         * 
@@ -95,6 +122,14 @@ public class SerializationUtils {
     * This deserializer converts a JsonElement into a StringProperty.
     */
    public static class StringPropertyDeserializer implements JsonDeserializer<StringProperty> {
+        /**
+         * Default constructor for StringPropertyDeserializer class
+         */
+        public StringPropertyDeserializer() {
+            // Default constuctor implementation
+        }
+       
+       
        /**
         * Deserializes the specified JsonElement into a StringProperty.
         * 

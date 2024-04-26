@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * A class for logging information, including errors, and saving errors to a file.
@@ -49,7 +50,11 @@ public class LoggingInformation {
             directory.mkdir();
         }
         
-        String fileName = "errors/error_" + LocalDateTime.now() + ".log";
+        // Format current time in a file-friendly manner
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        
+        String fileName = "errors/error_" + formattedDateTime  + ".log";
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
             writer.println("Timestamp: " + LocalDateTime.now());
             writer.println("Message: " + message);

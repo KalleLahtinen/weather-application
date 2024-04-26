@@ -66,7 +66,7 @@ public class ApplicationStateManager {
      * @return true if the city is added successfully, false otherwise.
      */
     public boolean addFavoriteCity(String city) {
-        if (favourites.size() == 10) {
+        if (favourites.size() >= 8) {
             favourites.remove(favourites.get(0));
         }
        
@@ -114,7 +114,7 @@ public class ApplicationStateManager {
             history.remove(city);
         }
 
-        if (history.size() == 10) {
+        if (history.size() >= 8) {
             history.remove(history.get(0));
         }    
         history.add(city);

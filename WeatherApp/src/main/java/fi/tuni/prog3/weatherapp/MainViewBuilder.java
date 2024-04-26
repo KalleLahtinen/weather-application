@@ -28,15 +28,36 @@ import javafx.stage.Stage;
  * @author Kalle Lahtinen
  */
 public class MainViewBuilder {
+    /** The primary stage of the JavaFX application. */
     private final Stage stage;
+
+    /** Handles reading from and writing to files for data persistence. */
     private final ReadAndWriteToFile fileHandler = new ReadAndWriteToFile();
+
+    /**
+     * Manages the application state including measurement units, current city, 
+     * and lists of favorite cities and city search history.
+     */
     public ApplicationStateManager appState;
+
+    /** Controls the application's views and their interactions. */
     public final ViewController viewController;
+
+    /** Manages the measurement system used in the application. */
     public final MeasurementSystem measurementSystem;
-    private Label cityTextLabel; // For dynamic text updates
-    private BorderPane rootLayout; // The main layout for the elements
-    public StackPane viewContainer; // This will hold the views to enable transition effects
+
+    /** Label used for displaying dynamic text updates related to the current city. */
+    private Label cityTextLabel;
+
+    /** The root layout for the main application window. */
+    private BorderPane rootLayout;
+
+    /** Container for holding views to enable transition effects. */
+    public StackPane viewContainer;
+
+    /** Toggle button for marking the current city as a favorite. */
     public FavouriteStarToggle starToggle;
+
 
     /**
      * Constructs a new MainController with a reference to the primary stage.

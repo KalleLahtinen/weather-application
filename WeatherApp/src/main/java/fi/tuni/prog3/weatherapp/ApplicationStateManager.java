@@ -89,8 +89,9 @@ public class ApplicationStateManager {
     }
     
     /**
-     * Returns a boolean indicating if current city is in favourites..
-     * @return a boolean indicating if current city is in favourites.
+     * Returns a Boolean indicating if current city is in favorites.
+     * 
+     * @return a Boolean indicating if current city is in favorites.
      */
     public boolean isCurrentCityFavourited() {
         return favourites.contains(this.getCurrentCity());
@@ -161,28 +162,14 @@ public class ApplicationStateManager {
         this.currentCity.set(city);
     }
     
-    /**
-     * Returns the property for the currently selected city.
-     * 
-     * @return the property for the currently selected city.
-     */
     public StringProperty currentCityProperty() {
         return currentCity;
     }
-    
-    /**
-     * Returns the property for the search history list.
-     * 
-     * @return the property for the search history list
-     */
+
     public ListProperty<String> historyProperty() {
         return history;
     }
 
-    /**
-     * Returns the property for the favourited city list.
-     * @return the property for the favourited city list
-     */
     public ListProperty<String> favouritesProperty() {
         return favourites;
     }

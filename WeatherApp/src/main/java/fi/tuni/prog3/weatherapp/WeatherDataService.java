@@ -32,24 +32,27 @@ public class WeatherDataService implements iAPI {
      * @return The name of the queried city if found, null otherwise.
      */
     public String getCity(String query) {
-        try {
-            String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, query, API_KEY);
-            String jsonResponse = fetchDataFromAPI(url);
-            
-            // Parse JSON response
-            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
-            
-            // Extract city name in English
-            JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
-            String cityName = locationObject.get("name").getAsString();
-            
-            return cityName;
-        
-        } catch (IOException | IndexOutOfBoundsException e) {
-            String errorMessage = "Error fetching city information from " + query;
-            LoggingInformation.logError(errorMessage, e);
-            return null;
+        if (query.length() > 0) {
+            try {
+                String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, query, API_KEY);
+                String jsonResponse = fetchDataFromAPI(url);
+
+                // Parse JSON response
+                JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+
+                // Extract city name in English
+                JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
+                String cityName = locationObject.get("name").getAsString();
+
+                return cityName;
+
+            } catch (IOException | IndexOutOfBoundsException e) {
+                String errorMessage = "Error fetching city information from " + query;
+                LoggingInformation.logError(errorMessage, e);
+                return null;
+            }
         }
+        return null;
     }
     
     /**
@@ -60,27 +63,30 @@ public class WeatherDataService implements iAPI {
      */
     @Override
     public Coordinate getCoordinates(String loc) {
-        try {
-            String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, loc, API_KEY);
-            String jsonResponse = fetchDataFromAPI(url);
-            
-            // Parse JSON response
-            JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
-            
-            // Extract latitude and longitude
-            JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
+        if (loc.length() > 0) {
+            try {
+                String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, loc, API_KEY);
+                String jsonResponse = fetchDataFromAPI(url);
 
-            double latitude = locationObject.get("lat").getAsDouble();
-            double longitude = locationObject.get("lon").getAsDouble();
-            Coordinate coords = new Coordinate(latitude, longitude);
-            
-            return coords;
-        
-        } catch (IOException | IndexOutOfBoundsException e) {
-            String errorMessage = "Error fetching location information from " + loc;
-            LoggingInformation.logError(errorMessage, e);
-            return null;
+                // Parse JSON response
+                JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+
+                // Extract latitude and longitude
+                JsonObject locationObject = jsonArray.get(0).getAsJsonObject();
+
+                double latitude = locationObject.get("lat").getAsDouble();
+                double longitude = locationObject.get("lon").getAsDouble();
+                Coordinate coords = new Coordinate(latitude, longitude);
+
+                return coords;
+
+            } catch (IOException | IndexOutOfBoundsException e) {
+                String errorMessage = "Error fetching location information from " + loc;
+                LoggingInformation.logError(errorMessage, e);
+                return null;
+            }           
         }
+        return null;
     }
     
     /**

@@ -29,6 +29,18 @@ import javafx.scene.text.Text;
 public class ForecastViewDailySection {
     private HBox daysBox;
     
+    /**
+     * Default constructor for ForecastViewDailySection class.
+     */
+    public ForecastViewDailySection() {
+       // Default constructor implementation
+    }
+
+    /**
+     * Retrieves the HBox containing the daily weather information.
+     * 
+     * @return the HBox containing the daily weather information.
+     */
     public HBox getDaysBox() {
         return daysBox;
     }

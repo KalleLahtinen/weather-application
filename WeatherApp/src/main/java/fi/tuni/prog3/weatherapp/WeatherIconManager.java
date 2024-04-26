@@ -4,6 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.text.Font;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to brainstorm possible ways of implementation, format the mapping values, 
+    refactor code and create Javadoc comments.
+*/
+
 /**
  * Manages weather icons based on the weather condition codes provided by the OpenWeatherMap API.
  * This class maps weather condition codes to their corresponding icon codes, which are Unicode 

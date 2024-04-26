@@ -16,6 +16,13 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import java.lang.reflect.Type;
 
+/*
+    ChatGPT 3.5 and Gemini were heavily utilized in the creation and documentation 
+    of this class to learn about the need for custom serialization for JavaFX properties,
+    generate and iterate these methods and then troubleshoot the problems caused 
+    by restricted access between java packages. Oh, and Javadoc comments.
+*/
+
 /**
  * An utility class that contains custom (de)serializers for JavaFX properties.
  * 
@@ -39,9 +46,7 @@ public class SerializationUtils {
         /**
          * Default constructor for ListPropertySerializer class
          */
-        public ListPropertySerializer() {
-            // Default constuctor implementation
-        }
+        public ListPropertySerializer() {}
         
         /**
         * Serializes the source {@code ListProperty<String>} to a JsonArray.
@@ -69,9 +74,7 @@ public class SerializationUtils {
         /**
          * Default constructor for ListPropertyDeserializer class
          */
-        public ListPropertyDeserializer() {
-            // Default constuctor implementation
-        }
+        public ListPropertyDeserializer() {}
         
         /**
         * @param json The JSON being deserialized, expected to be a JsonArray.
@@ -99,9 +102,7 @@ public class SerializationUtils {
         /**
          * Default constructor for StringPropertySerializer class
          */
-        public StringPropertySerializer() {
-            // Default constuctor implementation
-        }
+        public StringPropertySerializer() {}
         
        /**
         * Serializes the source StringProperty to a JsonElement.
@@ -125,9 +126,7 @@ public class SerializationUtils {
         /**
          * Default constructor for StringPropertyDeserializer class
          */
-        public StringPropertyDeserializer() {
-            // Default constuctor implementation
-        }
+        public StringPropertyDeserializer() {}
        
        
        /**

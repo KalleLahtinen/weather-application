@@ -7,6 +7,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 
+/*
+    ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
+    courses of action, best practises, JavaFX features and then iterating 
+    code to make work more efficient. This made it possible to focus on 
+    the bigger picture and architecture, with cleaner class division and code.
+ */
+
 /**
  * Manages the application state including measurement units, current city, 
  * and lists of favorite cities and city search history.
@@ -162,14 +169,29 @@ public class ApplicationStateManager {
         this.currentCity.set(city);
     }
     
+    /**
+     * Retrieves the property for the current city.
+     * 
+     * @return the property for the current city string.
+     */
     public StringProperty currentCityProperty() {
         return currentCity;
     }
 
+    /**
+     * Retrieves the property for the search history list.
+     * 
+     * @return the property for the list of last 10 searches made by user.
+     */
     public ListProperty<String> historyProperty() {
         return history;
     }
 
+    /**
+     * Retrieves the property for the favourite cities list.
+     * 
+     * @return the property for the list of cities marked as favourite by user.
+     */
     public ListProperty<String> favouritesProperty() {
         return favourites;
     }

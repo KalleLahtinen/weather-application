@@ -3,12 +3,16 @@ package fi.tuni.prog3.weatherapp;
 import java.io.File;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+/*
+    ChatGPT 3.5 was mainly used in the creation of this class as help with 
+    troubleshooting and generating Javadoc comments.
+*/
 
 /**
  * A class for logging information, including errors, and saving errors to a file.
@@ -22,9 +26,7 @@ public class LoggingInformation {
     /**
      * Default constructor for LoggingInformation class
      */
-    public LoggingInformation() {
-        // Default constuctor implementation
-    }
+    public LoggingInformation() {}
     
     /**
      * Logs an error message with the specified message and exception.

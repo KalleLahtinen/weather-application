@@ -96,7 +96,7 @@
 }
 
 .list-cell {
-    -fx-background-color: white; /* Set your desired color */
+    -fx-background-color: white;
     -fx-padding: 10 10 0 10;
 }
 

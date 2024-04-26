@@ -4,14 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import org.controlsfx.control.ToggleSwitch;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to brainstorm possible ways of implementation, refactor code and create Javadoc comments.
+*/
 
 /**
  * A class for the utility functions of the Weatherapp application.
@@ -46,11 +47,9 @@ public class Utils {
                 "Beijing",
                 "Cape Town");
 
-        // Create a clearable TextField
         TextField searchField = TextFields.createClearableTextField();
         searchField.setPromptText("Search for city");
 
-        // Bind auto-completion to the searchField
         AutoCompletionBinding<String> autoCompletionBinding = TextFields.bindAutoCompletion(searchField, suggestions);
         autoCompletionBinding.setMinWidth(50);
         
@@ -71,7 +70,6 @@ public class Utils {
      * @return A ToggleSwitch with the labels "Metric" and "Imperial".
      */
     public static HBox createUnitToggle(MainViewBuilder mwBuilder) {
-        // Create the ToggleSwitch
         ToggleSwitch toggleSwitch = new ToggleSwitch();
         toggleSwitch.getStyleClass().add("toggle-switch");
         
@@ -81,7 +79,6 @@ public class Utils {
             toggleSwitch.setSelected(false);
         }
 
-        // Create labels for Metric and Imperial
         Label labelLeft = new Label("Metric");
         Label labelRight = new Label("Imperial");
 
@@ -89,7 +86,6 @@ public class Utils {
         labelLeft.getStyleClass().add("switch-label-left");
         labelRight.getStyleClass().add("switch-label-right");
 
-        // Align labels and switch in a horizontal box
         HBox toggleBox = new HBox(labelLeft, toggleSwitch, labelRight);        
         toggleBox.setAlignment(Pos.CENTER);
         

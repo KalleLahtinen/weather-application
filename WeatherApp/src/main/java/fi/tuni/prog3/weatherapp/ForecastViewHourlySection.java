@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
 
 /*
     ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
-    courses of action, best practises, javaFX features and then iterating 
+    courses of action, best practises, JavaFX features and then iterating 
     code to make work more efficient. This made it possible to focus on 
     the bigger picture and architecture, with cleaner class division and code.
  */

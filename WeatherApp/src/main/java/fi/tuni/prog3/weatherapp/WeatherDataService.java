@@ -11,6 +11,11 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.Map;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to brainstorm possible ways of implementation, refactor code and create Javadoc comments.
+*/
+
 /**
  * Class for interacting with OpenWeatherMap API and returning weather data
  * 
@@ -37,7 +42,6 @@ public class WeatherDataService implements iAPI {
                 String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, query, API_KEY);
                 String jsonResponse = fetchDataFromAPI(url);
                 
-                // Parse JSON response
                 JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
                 
                 if (jsonArray.size() == 0) {
@@ -72,7 +76,6 @@ public class WeatherDataService implements iAPI {
                 String url = String.format("%s?q=%s&limit=1&appid=%s", GEOLOCATION_API, loc, API_KEY);
                 String jsonResponse = fetchDataFromAPI(url);
 
-                // Parse JSON response
                 JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
 
                 // Extract latitude and longitude
@@ -138,7 +141,6 @@ public class WeatherDataService implements iAPI {
             
             String jsonResponse = fetchDataFromAPI(url);
 
-            // Parse and return location data
             return WeatherParser.parseHourlyForecast(jsonResponse, units);
             
         } catch (IOException e) {
@@ -161,7 +163,6 @@ public class WeatherDataService implements iAPI {
         connection.setRequestMethod("GET");
         
         StringBuilder response;
-        // Use try-with-resources to close stream
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String inputLine;
             response = new StringBuilder();

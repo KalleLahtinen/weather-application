@@ -4,6 +4,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to brainstorm possible ways of implementation, refactor code and create Javadoc comments.
+*/
 
 /**
  * Manages the views and the switching mechanism for different weather-related views
@@ -82,7 +86,6 @@ public final class ViewController {
             rememberCurrentView();
         }
 
-        // Create the views
         viewContainer = new StackPane();
         VBox forecast = this.forecastView.getView();
         HBox cityLists = this.cityListManager.getView();

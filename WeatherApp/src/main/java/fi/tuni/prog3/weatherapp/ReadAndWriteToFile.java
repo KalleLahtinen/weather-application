@@ -14,6 +14,12 @@ import java.io.Reader;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.StringProperty;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to learn about the need for custom serialization for JavaFX properties and 
+    how you can extend a GsonBuilder for new types. Oh, and Javadoc comments.
+*/
+
 /**
  * Class for reading and writing favorite cities and history to/from JSON files.
  * 
@@ -24,9 +30,7 @@ public class ReadAndWriteToFile implements iReadAndWriteToFile {
     /**
      * Default constructor for ReadAndWriteToFile class
      */
-    public ReadAndWriteToFile() {
-        // Default constuctor implementation
-    }
+    public ReadAndWriteToFile() {}
     
     /**
      * A GsonBuilder class that can (de)serialize JavaFX properties. 
@@ -39,14 +43,12 @@ public class ReadAndWriteToFile implements iReadAndWriteToFile {
         /**
          * Default constructor for GsonConfiguration class
          */
-        public GsonConfiguration() {
-            // Default constuctor implementation
-        }
+        public GsonConfiguration() {}
         
         /**
-         * Creates a GSON object with default configuration settings.
+         * Creates a GSON object with custom handling for JavaFX properties.
          *
-         * @return A GSON object with default configuration.
+         * @return A GSON object with custom handling for JavaFX properties.
          */
         public static Gson create() {
             ExclusionStrategy exclusionStrategy = new ExclusionStrategy() {

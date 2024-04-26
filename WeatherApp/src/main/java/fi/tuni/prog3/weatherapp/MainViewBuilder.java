@@ -15,6 +15,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to brainstorm possible ways of implementation, refactor code and create Javadoc comments.
+*/
 
 /**
  * A builder for the main application window in the WeatherApp application.
@@ -106,7 +110,6 @@ public class MainViewBuilder {
         createBottomTabBar();
 
         Scene scene = new Scene(rootLayout);
-        // Link CSS file for formatting
         scene.getStylesheets().add(getClass().getResource("/fi/tuni/prog3/weatherapp/styles.css").toExternalForm());
         stage.setWidth(616);
         stage.setHeight(685);
@@ -165,11 +168,9 @@ public class MainViewBuilder {
         
         Button btnView1, btnView2; // Buttons to switch views
 
-        // Initialize buttons
         btnView1 = new Button("Forecast");
         btnView2 = new Button("Favourites & Search History");
 
-        // Button actions
         btnView1.setOnAction(e -> viewController.switchView(ViewController.View.FORECAST));
         btnView2.setOnAction(e -> viewController.switchView(ViewController.View.CITY_LISTS));
 

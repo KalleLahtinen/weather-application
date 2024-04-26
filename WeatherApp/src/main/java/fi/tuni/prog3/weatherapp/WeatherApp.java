@@ -3,6 +3,12 @@ package fi.tuni.prog3.weatherapp;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/*
+    ChatGPT 3.5 was heavily utilized in brainstorming the best class division and
+    architecture for the project, aiming to make educated design decisions
+    with the use of MVC architecture and property binding with SPOT.
+*/
+
 /**
  * JavaFX Weather Application.
  */

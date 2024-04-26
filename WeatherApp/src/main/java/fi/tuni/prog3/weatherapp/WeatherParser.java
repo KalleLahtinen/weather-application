@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.time.Instant;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to refactor code and create Javadoc comments.
+*/
+
 /**
  * A class containing parse functions for turning a JSON response into weather 
  * objects.
@@ -18,6 +23,7 @@ public class WeatherParser {
      * A method for parsing a JSON string into individual DailyWeather objects
      * @param jsonResponse The JSON response string containing weather data
      * @param units The units of measurement the data is to be represented in.
+     * 
      * @return A Map of DailyWeather objects sorted by time as Instant
      */
     public static Map<Instant, DailyWeather> parseDailyForecast(String jsonResponse, String units) {
@@ -62,6 +68,7 @@ public class WeatherParser {
      * A method for parsing a JSON string into individual HourlyWeather objects
      * @param jsonResponse The JSON response string containing weather data
      * @param units The units of measurement the data is to be represented in.
+     * 
      * @return A Map of HourlyWeather objects sorted by time as Instant
      */
     public static Map<Instant, HourlyWeather> parseHourlyForecast(String jsonResponse, String units) {

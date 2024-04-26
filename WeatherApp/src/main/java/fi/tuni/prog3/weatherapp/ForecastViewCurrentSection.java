@@ -26,9 +26,7 @@ public class ForecastViewCurrentSection {
     /**
      * Default constructor for ForecastViewCurrentSection class.
      */
-    public ForecastViewCurrentSection() {
-        // Default constructor implementation
-    }
+    public ForecastViewCurrentSection() {}
 
     
     /**

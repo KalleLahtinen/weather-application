@@ -4,8 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /*
-    ChatGPT 3.5 was mainly used in the creation of this class for help with 
-    troubleshooting and generating javadoc-comments.
+    ChatGPT 3.5 was mainly used in the creation of this class as help with 
+    troubleshooting and generating Javadoc comments.
 */
 
 /**

@@ -1,5 +1,9 @@
 package fi.tuni.prog3.weatherapp;
 
+/*
+    ChatGPT 3.5 was used to generate and add Javadoc comments to this class.
+*/
+
 /**
  * Represents a geographical coordinate with a latitude and a longitude.
  */

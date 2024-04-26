@@ -14,6 +14,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+/*
+    ChatGPT 3.5 was heavily utilized in this class to brainstorm possible 
+    courses of action, best practises, JavaFX features and then iterating 
+    code to make work more efficient. This made it possible to focus on 
+    the bigger picture and architecture, with cleaner class division and code.
+ */
+
 /**
  * Manages the display and interaction of city lists, including search history and favourite cities.
  * 

@@ -12,6 +12,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.LocalDateTime;
 
+/*
+    ChatGPT 3.5 was heavily utilized in the creation and documentation of this class 
+    to brainstorm possible ways of implementation, refactor code and create Javadoc comments.
+*/
+
 /**
  * This class represents detailed hourly weather data, encapsulating various weather parameters.
  * Properties are used for all data fields to allow easy integration with JavaFX binding mechanisms,

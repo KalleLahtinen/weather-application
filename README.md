@@ -1,1 +1,1 @@
-![Weather application demo](https://giphy.com/gifs/7SdhjQL01YqZYWu9ww)
+![Weather application demo](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGVibG0zazNvN2x2NmZqYWpka3BpdmdiaDk5NzFueXZoOHJtcjN6dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7SdhjQL01YqZYWu9ww/giphy.gif)

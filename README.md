@@ -1,5 +1,1 @@
-# Sääsovellus - Ryhmä 3478
-
-Täältä löydät toteuttamamme sääsovelluksen!
-
-![image info](weatherapp.png)
+![Weather application demo](https://giphy.com/gifs/7SdhjQL01YqZYWu9ww)
